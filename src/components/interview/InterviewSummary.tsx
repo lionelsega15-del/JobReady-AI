@@ -1,0 +1,302 @@
+import React, { useState } from 'react';
+import { Field, UserInterviewAnswer } from '../../types';
+import { INTERVIEW_QUESTIONS } from '../../data/interview-questions';
+import { 
+  CheckCircle2, AlertTriangle, XCircle, RotateCcw, Copy, 
+  Check, ArrowRight, Eye, ChevronDown, ChevronUp, Sparkles, Award
+} from 'lucide-react';
+
+interface InterviewSummaryProps {
+  field: Field;
+  answers: UserInterviewAnswer[];
+  overallScore: number;
+  onRestart: () => void;
+  onSelectOtherField: () => void;
+  onGoToColorblind: () => void;
+}
+
+export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
+  field,
+  answers,
+  overallScore,
+  onRestart,
+  onSelectOtherField,
+  onGoToColorblind,
+}) => {
+  const [copied, setCopied] = useState<boolean>(false);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
+
+  const getScoreBadge = (score: number) => {
+    if (score >= 80) {
+      return {
+        label: 'Sangat Siap Kerja',
+        color: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+        desc: 'Kompetensi jawaban terstruktur, relevan dengan kebutuhan industri, dan menunjukkan penguasaan materi yang matang.',
+      };
+    }
+    if (score >= 55) {
+      return {
+        label: 'Cukup Siap (Perlu Pemantapan)',
+        color: 'bg-amber-100 text-amber-800 border-amber-300',
+        desc: 'Konsep dasar sudah baik, namun perlu memperkaya contoh kasus nyata dan terminologi teknis kejuruan.',
+      };
+    }
+    return {
+      label: 'Perlu Latihan Tambahan',
+      color: 'bg-rose-100 text-rose-800 border-rose-300',
+      desc: 'Jawaban masih terlalu ringkas atau belum menyentuh inti kompetensi. Disarankan konsultasi dengan Guru BK.',
+    };
+  };
+
+  const badgeInfo = getScoreBadge(overallScore);
+
+  const copyToClipboard = () => {
+    const textReport = [
+      `=== LAPORAN EVALUASI WAWANCARA KERJA — JOBREADY AI ===`,
+      `Bidang: ${field.name}`,
+      `Skor Rata-Rata: ${overallScore}/100 (${badgeInfo.label})`,
+      `Tanggal: ${new Date().toLocaleDateString('id-ID')}`,
+      `----------------------------------------------------`,
+      ...answers.map((a, idx) => {
+        return [
+          `\n[Pertanyaan ${idx + 1}]: ${a.questionText}`,
+          `Jawaban Siswa: "${a.userAnswer}"`,
+          `Skor: ${a.feedback.score}/100 (${a.feedback.summary})`,
+          `Kritik/Masukan: ${a.feedback.critique}`,
+          a.feedback.strengths.length > 0 ? `Kelebihan: ${a.feedback.strengths.join('; ')}` : '',
+          a.feedback.suggestions.length > 0 ? `Saran Perbaikan: ${a.feedback.suggestions.join('; ')}` : '',
+        ].filter(Boolean).join('\n');
+      }),
+      `\n----------------------------------------------------`,
+      `Catatan: Laporan ini dibuat otomatis secara rule-based untuk simulasi edukatif LIDM VII 2026.`,
+    ].join('\n');
+
+    navigator.clipboard.writeText(textReport).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    });
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-6">
+      {/* Score Header Card */}
+      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm text-center relative overflow-hidden">
+        <div className="max-w-xl mx-auto">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-800 text-xs font-semibold mb-3">
+            <Award className="w-4 h-4 text-blue-600" />
+            Laporan Hasil Simulasi Sesi
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
+            {field.name}
+          </h2>
+
+          <div className="my-6">
+            <div className="inline-flex items-baseline gap-1">
+              <span className="text-5xl sm:text-6xl font-extrabold text-blue-700 tracking-tight">
+                {overallScore}
+              </span>
+              <span className="text-slate-400 font-semibold text-lg sm:text-xl">/100</span>
+            </div>
+
+            <div className="mt-3">
+              <span
+                className={`inline-block px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border ${badgeInfo.color}`}
+              >
+                {badgeInfo.label}
+              </span>
+            </div>
+            <p className="text-slate-600 text-xs sm:text-sm mt-3 max-w-md mx-auto">
+              {badgeInfo.desc}
+            </p>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-slate-100">
+            <button
+              onClick={copyToClipboard}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition"
+            >
+              {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+              <span>{copied ? 'Tersalin ke Clipboard!' : 'Salin Laporan Teks'}</span>
+            </button>
+
+            <button
+              onClick={onRestart}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>Coba Lagi Bidang Ini</span>
+            </button>
+
+            <button
+              onClick={onSelectOtherField}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition"
+            >
+              <span>Pilih Bidang Lain</span>
+            </button>
+
+            <button
+              onClick={onGoToColorblind}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition shadow-sm"
+            >
+              <Eye className="w-4 h-4" />
+              <span>Lanjut Latihan Tes Buta Warna</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Per Question Details */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <span>Rincian Evaluasi & Feedback Jawaban</span>
+          <span className="text-xs font-normal text-slate-500">
+            ({answers.length} Pertanyaan)
+          </span>
+        </h3>
+
+        {answers.map((item, idx) => {
+          const isExpanded = expandedIndex === idx;
+          const questionDetail = INTERVIEW_QUESTIONS.find(q => q.id === item.questionId);
+
+          return (
+            <div
+              key={item.questionId}
+              className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm transition"
+            >
+              {/* Question Header Accordion Trigger */}
+              <button
+                type="button"
+                onClick={() => setExpandedIndex(isExpanded ? null : idx)}
+                className="w-full text-left p-4 sm:p-5 flex items-start justify-between gap-4 hover:bg-slate-50/70 transition"
+              >
+                <div className="flex items-start gap-3">
+                  <div
+                    className={`w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 mt-0.5 ${
+                      item.feedback.score >= 80
+                        ? 'bg-emerald-100 text-emerald-800'
+                        : item.feedback.score >= 50
+                        ? 'bg-amber-100 text-amber-800'
+                        : 'bg-rose-100 text-rose-800'
+                    }`}
+                  >
+                    {idx + 1}
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-slate-900 text-sm sm:text-base leading-snug">
+                      {item.questionText}
+                    </h4>
+                    <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                      <span className="text-xs font-bold text-slate-700">
+                        Skor: {item.feedback.score}/100
+                      </span>
+                      <span className="text-xs text-slate-400">•</span>
+                      <span className="text-xs text-slate-500">
+                        {item.feedback.summary}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="shrink-0 text-slate-400 pt-1">
+                  {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+                </div>
+              </button>
+
+              {/* Expanded Content */}
+              {isExpanded && (
+                <div className="px-4 sm:px-6 pb-6 pt-2 border-t border-slate-100 space-y-4 text-xs sm:text-sm">
+                  {/* User Answer */}
+                  <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <span className="font-semibold text-slate-700 block mb-1">
+                      Jawaban yang Anda Berikan:
+                    </span>
+                    <p className="text-slate-800 italic leading-relaxed whitespace-pre-wrap">
+                      "{item.userAnswer}"
+                    </p>
+                    <div className="text-[11px] text-slate-400 mt-2">
+                      Panjang: {item.userAnswer.length} karakter ({item.feedback.wordCount} kata)
+                    </div>
+                  </div>
+
+                  {/* Feedback Critique */}
+                  <div className="space-y-3">
+                    <div>
+                      <span className="font-semibold text-slate-900 block mb-1">
+                        Analisis Pewawancara (Rule-Based):
+                      </span>
+                      <p className="text-slate-600 leading-relaxed">
+                        {item.feedback.critique}
+                      </p>
+                    </div>
+
+                    {/* Matched Keywords */}
+                    {item.feedback.matchedKeywords.length > 0 && (
+                      <div>
+                        <span className="text-slate-600 font-medium block mb-1.5">
+                          Kata Kunci Teridentifikasi:
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {item.feedback.matchedKeywords.map((kw, i) => (
+                            <span
+                              key={i}
+                              className="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-xs font-semibold border border-blue-200"
+                            >
+                              ✓ {kw}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Strengths */}
+                    {item.feedback.strengths.length > 0 && (
+                      <div className="bg-emerald-50/70 p-3 rounded-lg border border-emerald-200 text-emerald-900">
+                        <span className="font-semibold text-emerald-950 block mb-1">
+                          Kekuatan Jawaban:
+                        </span>
+                        <ul className="list-disc list-inside space-y-0.5 text-xs text-emerald-800">
+                          {item.feedback.strengths.map((str, sIdx) => (
+                            <li key={sIdx}>{str}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Suggestions */}
+                    {item.feedback.suggestions.length > 0 && (
+                      <div className="bg-amber-50/70 p-3 rounded-lg border border-amber-200 text-amber-900">
+                        <span className="font-semibold text-amber-950 block mb-1">
+                          Saran Pembinaan (Untuk Siswa & Guru BK):
+                        </span>
+                        <ul className="list-disc list-inside space-y-0.5 text-xs text-amber-800">
+                          {item.feedback.suggestions.map((sug, sIdx) => (
+                            <li key={sIdx}>{sug}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {/* Sample Answer Benchmark */}
+                    {questionDetail && (
+                      <div className="p-3.5 rounded-lg bg-blue-50/60 border border-blue-200 text-blue-950">
+                        <div className="flex items-center gap-1 font-semibold text-blue-900 mb-1">
+                          <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                          <span>Tolok Ukur Jawaban Ideal:</span>
+                        </div>
+                        <p className="text-xs text-blue-900/90 leading-relaxed italic">
+                          "{questionDetail.sampleIdealAnswer}"
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
