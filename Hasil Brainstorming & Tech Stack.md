@@ -1,5 +1,5 @@
 # Hasil Brainstorming & Tech Stack
-# JobReady AI — LIDM VII/2026 (ITDP)
+# JobReady — Platform Kesiapan Kerja Siswa Kejuruan
 
 ---
 

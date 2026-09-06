@@ -75,20 +75,20 @@ export const ColorblindTestPage: React.FC<ColorblindTestPageProps> = ({ onNaviga
               </div>
             </div>
 
-            <div className="flex items-start gap-2 pt-2 text-xs text-amber-800 bg-amber-50 p-3 rounded-lg border border-amber-200">
-              <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5" />
-              <span>
-                <strong>Klausul Integritas:</strong> Tes ini berbasis vektor SVG murni buatan tim JobReady AI untuk tujuan simulasi latihan dan pembelajaran mandiri, bukan pengganti buku plat Ishihara berlisensi resmi di faskes.
+            <div className="flex items-start gap-2 pt-2 text-xs text-amber-900 bg-amber-50 p-3.5 rounded-xl border border-amber-200/80">
+              <ShieldAlert className="w-4 h-4 shrink-0 mt-0.5 text-amber-700" />
+              <span className="leading-relaxed">
+                <strong>Klausul Transparansi:</strong> Tes ini berbasis vektor grafis SVG prosedural untuk tujuan simulasi latihan dan pembelajaran mandiri, bukan pengganti buku plat Ishihara berlisensi resmi di fasilitas kesehatan.
               </span>
             </div>
           </div>
 
           <button
             onClick={handleStart}
-            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base transition shadow-md shadow-emerald-600/20 active:scale-[0.99]"
+            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base transition shadow-sm hover:shadow-md active:scale-[0.99] cursor-pointer"
           >
             <Play className="w-5 h-5 fill-current" />
-            <span>Mulai Tes (10 Soal)</span>
+            <span>Mulai Tes (10 Plat Ishihara)</span>
           </button>
         </div>
       )}

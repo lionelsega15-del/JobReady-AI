@@ -3,7 +3,7 @@ import { Field, UserInterviewAnswer } from '../../types';
 import { INTERVIEW_QUESTIONS } from '../../data/interview-questions';
 import { 
   CheckCircle2, AlertTriangle, XCircle, RotateCcw, Copy, 
-  Check, ArrowRight, Eye, ChevronDown, ChevronUp, Sparkles, Award
+  Check, ArrowRight, Eye, ChevronDown, ChevronUp, Award, Printer, FileText
 } from 'lucide-react';
 
 interface InterviewSummaryProps {
@@ -52,7 +52,7 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
 
   const copyToClipboard = () => {
     const textReport = [
-      `=== LAPORAN EVALUASI WAWANCARA KERJA — JOBREADY AI ===`,
+      `=== LAPORAN EVALUASI SIMULASI WAWANCARA — JOBREADY ===`,
       `Bidang: ${field.name}`,
       `Skor Rata-Rata: ${overallScore}/100 (${badgeInfo.label})`,
       `Tanggal: ${new Date().toLocaleDateString('id-ID')}`,
@@ -62,13 +62,13 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
           `\n[Pertanyaan ${idx + 1}]: ${a.questionText}`,
           `Jawaban Siswa: "${a.userAnswer}"`,
           `Skor: ${a.feedback.score}/100 (${a.feedback.summary})`,
-          `Kritik/Masukan: ${a.feedback.critique}`,
+          `Evaluasi: ${a.feedback.critique}`,
           a.feedback.strengths.length > 0 ? `Kelebihan: ${a.feedback.strengths.join('; ')}` : '',
           a.feedback.suggestions.length > 0 ? `Saran Perbaikan: ${a.feedback.suggestions.join('; ')}` : '',
         ].filter(Boolean).join('\n');
       }),
       `\n----------------------------------------------------`,
-      `Catatan: Laporan ini dibuat otomatis secara rule-based untuk simulasi edukatif LIDM VII 2026.`,
+      `Catatan: Laporan ini disusun berdasarkan rubrik penilaian format STAR dan kata kunci kompetensi kejuruan untuk evaluasi mandiri.`,
     ].join('\n');
 
     navigator.clipboard.writeText(textReport).then(() => {
@@ -78,13 +78,13 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 w-full">
       {/* Score Header Card */}
-      <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-sm text-center relative overflow-hidden">
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-sm text-center relative overflow-hidden">
         <div className="max-w-xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-800 text-xs font-semibold mb-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-800 text-xs font-semibold mb-3 border border-blue-200/70">
             <Award className="w-4 h-4 text-blue-600" />
-            Laporan Hasil Simulasi Sesi
+            Laporan Hasil Evaluasi Wawancara
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
@@ -106,42 +106,50 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
                 {badgeInfo.label}
               </span>
             </div>
-            <p className="text-slate-600 text-xs sm:text-sm mt-3 max-w-md mx-auto">
+            <p className="text-slate-600 text-xs sm:text-sm mt-3 max-w-md mx-auto leading-relaxed">
               {badgeInfo.desc}
             </p>
           </div>
 
           {/* Quick Actions */}
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-slate-100">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 pt-4 border-t border-slate-100">
             <button
               onClick={copyToClipboard}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition cursor-pointer shadow-2xs"
             >
               {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
-              <span>{copied ? 'Tersalin ke Clipboard!' : 'Salin Laporan Teks'}</span>
+              <span>{copied ? 'Tersalin!' : 'Salin Laporan'}</span>
+            </button>
+
+            <button
+              onClick={() => window.print()}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+            >
+              <Printer className="w-4 h-4 text-slate-600" />
+              <span>Cetak / PDF</span>
             </button>
 
             <button
               onClick={onRestart}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition cursor-pointer shadow-2xs"
             >
               <RotateCcw className="w-4 h-4" />
-              <span>Coba Lagi Bidang Ini</span>
+              <span>Ulangi Sesi</span>
             </button>
 
             <button
               onClick={onSelectOtherField}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition cursor-pointer shadow-2xs"
             >
               <span>Pilih Bidang Lain</span>
             </button>
 
             <button
               onClick={onGoToColorblind}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition shadow-sm"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition shadow-2xs cursor-pointer"
             >
               <Eye className="w-4 h-4" />
-              <span>Lanjut Latihan Tes Buta Warna</span>
+              <span>Lanjut Tes Buta Warna</span>
             </button>
           </div>
         </div>
@@ -163,13 +171,13 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
           return (
             <div
               key={item.questionId}
-              className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm transition"
+              className="bg-white rounded-xl border border-slate-200/90 overflow-hidden shadow-2xs transition"
             >
               {/* Question Header Accordion Trigger */}
               <button
                 type="button"
                 onClick={() => setExpandedIndex(isExpanded ? null : idx)}
-                className="w-full text-left p-4 sm:p-5 flex items-start justify-between gap-4 hover:bg-slate-50/70 transition"
+                className="w-full text-left p-4 sm:p-5 flex items-start justify-between gap-4 hover:bg-slate-50/70 transition cursor-pointer"
               >
                 <div className="flex items-start gap-3">
                   <div
@@ -210,7 +218,7 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
                   {/* User Answer */}
                   <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
                     <span className="font-semibold text-slate-700 block mb-1">
-                      Jawaban yang Anda Berikan:
+                      Jawaban Anda:
                     </span>
                     <p className="text-slate-800 italic leading-relaxed whitespace-pre-wrap">
                       "{item.userAnswer}"
@@ -224,7 +232,7 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
                   <div className="space-y-3">
                     <div>
                       <span className="font-semibold text-slate-900 block mb-1">
-                        Analisis Pewawancara (Rule-Based):
+                        Analisis Pewawancara Industri:
                       </span>
                       <p className="text-slate-600 leading-relaxed">
                         {item.feedback.critique}
@@ -235,7 +243,7 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
                     {item.feedback.matchedKeywords.length > 0 && (
                       <div>
                         <span className="text-slate-600 font-medium block mb-1.5">
-                          Kata Kunci Teridentifikasi:
+                          Kata Kunci Teknis Teridentifikasi:
                         </span>
                         <div className="flex flex-wrap gap-1.5">
                           {item.feedback.matchedKeywords.map((kw, i) => (
@@ -254,7 +262,7 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
                     {item.feedback.strengths.length > 0 && (
                       <div className="bg-emerald-50/70 p-3 rounded-lg border border-emerald-200 text-emerald-900">
                         <span className="font-semibold text-emerald-950 block mb-1">
-                          Kekuatan Jawaban:
+                          Kelebihan Jawaban:
                         </span>
                         <ul className="list-disc list-inside space-y-0.5 text-xs text-emerald-800">
                           {item.feedback.strengths.map((str, sIdx) => (
@@ -281,9 +289,9 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
                     {/* Sample Answer Benchmark */}
                     {questionDetail && (
                       <div className="p-3.5 rounded-lg bg-blue-50/60 border border-blue-200 text-blue-950">
-                        <div className="flex items-center gap-1 font-semibold text-blue-900 mb-1">
-                          <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                          <span>Tolok Ukur Jawaban Ideal:</span>
+                        <div className="flex items-center gap-1.5 font-semibold text-blue-900 mb-1">
+                          <Award className="w-4 h-4 text-blue-600" />
+                          <span>Tolok Ukur Jawaban Praktisi Industri:</span>
                         </div>
                         <p className="text-xs text-blue-900/90 leading-relaxed italic">
                           "{questionDetail.sampleIdealAnswer}"

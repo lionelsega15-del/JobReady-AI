@@ -1,10 +1,10 @@
 # Product Requirements Document (PRD)
 # JobReady AI
 
-**Kompetisi:** LIDM VII/2026 — Cabang Inovasi Teknologi Digital Pendidikan (ITDP)
-**Subtema:** Teknologi Digital untuk Ekosistem Pendidikan Berdampak dan Berintegritas
+**Kategori:** Inovasi Teknologi Digital Pendidikan
+**Fokus:** Kesiapan Kerja & Asesmen Vokasi Mandiri
 **Lingkup Karya:** Mikro (inovasi sistem/teknologi informasi dalam pembelajaran)
-**Versi Dokumen:** 2.0 (Diperluas)
+**Versi Dokumen:** 2.0
 
 ---
 
@@ -421,7 +421,7 @@ interface ColorblindSessionState {
 
 ## 20. Rencana Video Demo (≤ 3 Menit)
 
-Sesuai ketentuan LIDM, video harus menggambarkan proses pengembangan dengan pencapaian minimal 50%, mencantumkan intro dan subtitle, format MP4 720p.
+Video demonstrasi menggambarkan alur penggunaan platform secara ringkas dan lugas, format MP4 720p.
 
 **Struktur saran:**
 1. Intro (5–10 detik): judul karya + logo tim/sekolah/kampus
@@ -437,9 +437,9 @@ Sesuai ketentuan LIDM, video harus menggambarkan proses pengembangan dengan penc
 - **BKK:** Bursa Kerja Khusus, unit di SMK yang bertugas menyalurkan lulusan ke dunia kerja.
 - **BK:** Bimbingan Konseling, layanan pendampingan siswa di sekolah termasuk bimbingan karier.
 - **PKL:** Praktik Kerja Lapangan, program magang wajib bagi siswa SMK.
-- **Rule-based feedback:** Sistem pemberian umpan balik berdasarkan aturan logika sederhana (bukan model AI generatif).
+- **Rule-based feedback:** Sistem pemberian umpan balik berdasarkan aturan logika terstruktur (bukan model AI generatif).
 - **SPA (Single Page Application):** Arsitektur aplikasi web yang berjalan dalam satu halaman tanpa reload penuh saat berpindah tampilan.
 
 ---
 
-*Dokumen ini adalah blueprint kerja lengkap untuk pengembangan prototipe JobReady AI dan penyusunan proposal LIDM VII/2026 cabang ITDP.*
+*Dokumen ini adalah blueprint kerja lengkap untuk pengembangan prototipe JobReady.*
