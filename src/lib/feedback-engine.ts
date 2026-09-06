@@ -104,3 +104,25 @@ export function evaluateInterviewAnswer(
     wordCount,
   };
 }
+
+export function getScoreBadge(score: number) {
+  if (score >= 80) {
+    return {
+      label: 'Sangat Siap Kerja',
+      color: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+      desc: 'Kompetensi jawaban terstruktur, relevan dengan kebutuhan industri, dan menunjukkan penguasaan materi yang matang.',
+    };
+  }
+  if (score >= 55) {
+    return {
+      label: 'Cukup Siap (Perlu Pemantapan)',
+      color: 'bg-amber-100 text-amber-800 border-amber-300',
+      desc: 'Konsep dasar sudah baik, namun perlu memperkaya contoh kasus nyata dan terminologi teknis kejuruan.',
+    };
+  }
+  return {
+    label: 'Perlu Latihan Tambahan',
+    color: 'bg-rose-100 text-rose-800 border-rose-300',
+    desc: 'Jawaban masih terlalu ringkas atau belum menyentuh inti kompetensi. Disarankan konsultasi dengan Guru BK.',
+  };
+}

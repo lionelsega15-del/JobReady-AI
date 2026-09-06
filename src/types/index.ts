@@ -1,4 +1,6 @@
-export type PageView = 'home' | 'interview' | 'colorblind';
+export type PageView = 'home' | 'interview' | 'colorblind' | 'history';
+
+export type InterviewMode = 'relaxed' | 'timed';
 
 export interface Field {
   id: string;
@@ -35,6 +37,25 @@ export interface UserInterviewAnswer {
   questionText: string;
   userAnswer: string;
   feedback: AnswerFeedback;
+  timeSpentSeconds?: number;
+}
+
+export interface SavedInterviewSession {
+  id: string;
+  date: string; // ISO date string
+  fieldId: string;
+  fieldName: string;
+  fieldShortName: string;
+  fieldTag: string;
+  fieldIcon: string;
+  mode: InterviewMode;
+  timerDurationSeconds?: number;
+  totalQuestions: number;
+  overallScore: number;
+  badgeLabel: string;
+  badgeColor: string;
+  totalDurationSeconds: number;
+  answers: UserInterviewAnswer[];
 }
 
 export interface InterviewSessionState {
@@ -42,6 +63,8 @@ export interface InterviewSessionState {
   currentQuestionIndex: number;
   answers: UserInterviewAnswer[];
   isCompleted: boolean;
+  mode: InterviewMode;
+  timerDurationSeconds?: number;
 }
 
 export interface ColorblindQuestion {

@@ -4,7 +4,7 @@ import { FieldSelector } from '../components/interview/FieldSelector';
 import { QuestionCard } from '../components/interview/QuestionCard';
 import { InterviewSummary } from '../components/interview/InterviewSummary';
 import { PageView } from '../types';
-import { ArrowLeft, BookOpen } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 interface InterviewPageProps {
   onNavigate: (page: PageView) => void;
@@ -20,6 +20,9 @@ export const InterviewPage: React.FC<InterviewPageProps> = ({ onNavigate }) => {
     answers,
     isCompleted,
     overallScore,
+    mode,
+    timerDurationSeconds,
+    totalSessionDuration,
     startSession,
     submitAnswer,
     resetSession,
@@ -33,17 +36,22 @@ export const InterviewPage: React.FC<InterviewPageProps> = ({ onNavigate }) => {
         <div className="mb-4">
           <button
             onClick={resetSession}
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            <span>Kembali ke Pilihan Bidang Kejuruan</span>
+            <span>Kembali ke Pilihan Bidang & Mode</span>
           </button>
         </div>
       )}
 
-      {/* Screen 1: Field Selection */}
+      {/* Screen 1: Field Selection & Mode Config */}
       {!selectedFieldId && (
-        <FieldSelector onSelectField={startSession} />
+        <FieldSelector 
+          onSelectField={(fieldId, selectedMode, duration) => {
+            startSession(fieldId, selectedMode, duration);
+          }}
+          onNavigateHistory={() => onNavigate('history')}
+        />
       )}
 
       {/* Screen 2: Active Question Card */}
@@ -53,6 +61,8 @@ export const InterviewPage: React.FC<InterviewPageProps> = ({ onNavigate }) => {
           field={selectedField}
           currentIndex={currentQuestionIndex}
           totalQuestions={totalQuestions}
+          mode={mode}
+          timerDurationSeconds={timerDurationSeconds}
           onSubmitAnswer={submitAnswer}
           onCancel={resetSession}
         />
@@ -64,9 +74,12 @@ export const InterviewPage: React.FC<InterviewPageProps> = ({ onNavigate }) => {
           field={selectedField}
           answers={answers}
           overallScore={overallScore}
+          mode={mode}
+          totalSessionDuration={totalSessionDuration}
           onRestart={restartCurrentField}
           onSelectOtherField={resetSession}
           onGoToColorblind={() => onNavigate('colorblind')}
+          onGoToHistory={() => onNavigate('history')}
         />
       )}
     </div>

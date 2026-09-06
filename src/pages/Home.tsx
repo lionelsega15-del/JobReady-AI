@@ -65,11 +65,15 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Check className="w-4 h-4 text-blue-600 stroke-[2.5]" />
-                  Format STAR Terarah
+                  Mode Timer Seleksi DUDI
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Check className="w-4 h-4 text-blue-600 stroke-[2.5]" />
-                  Latihan Bicara Suara (Mic)
+                  Format STAR Terarah
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Check className="w-4 h-4 text-indigo-600 stroke-[2.5]" />
+                  Riwayat Evaluasi Tersimpan
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Check className="w-4 h-4 text-emerald-600 stroke-[2.5]" />

@@ -1,65 +1,62 @@
 import React, { useState } from 'react';
-import { Field, UserInterviewAnswer } from '../../types';
+import { Field, UserInterviewAnswer, InterviewMode } from '../../types';
 import { INTERVIEW_QUESTIONS } from '../../data/interview-questions';
+import { getScoreBadge } from '../../lib/feedback-engine';
 import { 
   CheckCircle2, AlertTriangle, XCircle, RotateCcw, Copy, 
-  Check, ArrowRight, Eye, ChevronDown, ChevronUp, Award, Printer, FileText
+  Check, ArrowRight, Eye, ChevronDown, ChevronUp, Award, 
+  Printer, FileText, History, Clock, BookmarkCheck
 } from 'lucide-react';
 
 interface InterviewSummaryProps {
   field: Field;
   answers: UserInterviewAnswer[];
   overallScore: number;
+  mode?: InterviewMode;
+  totalSessionDuration?: number;
   onRestart: () => void;
   onSelectOtherField: () => void;
   onGoToColorblind: () => void;
+  onGoToHistory?: () => void;
 }
 
 export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
   field,
   answers,
   overallScore,
+  mode = 'timed',
+  totalSessionDuration = 0,
   onRestart,
   onSelectOtherField,
   onGoToColorblind,
+  onGoToHistory,
 }) => {
   const [copied, setCopied] = useState<boolean>(false);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
 
-  const getScoreBadge = (score: number) => {
-    if (score >= 80) {
-      return {
-        label: 'Sangat Siap Kerja',
-        color: 'bg-emerald-100 text-emerald-800 border-emerald-300',
-        desc: 'Kompetensi jawaban terstruktur, relevan dengan kebutuhan industri, dan menunjukkan penguasaan materi yang matang.',
-      };
-    }
-    if (score >= 55) {
-      return {
-        label: 'Cukup Siap (Perlu Pemantapan)',
-        color: 'bg-amber-100 text-amber-800 border-amber-300',
-        desc: 'Konsep dasar sudah baik, namun perlu memperkaya contoh kasus nyata dan terminologi teknis kejuruan.',
-      };
-    }
-    return {
-      label: 'Perlu Latihan Tambahan',
-      color: 'bg-rose-100 text-rose-800 border-rose-300',
-      desc: 'Jawaban masih terlalu ringkas atau belum menyentuh inti kompetensi. Disarankan konsultasi dengan Guru BK.',
-    };
-  };
-
   const badgeInfo = getScoreBadge(overallScore);
+
+  const formatDuration = (seconds: number) => {
+    if (seconds <= 0) return '0 dtk';
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    if (mins === 0) return `${secs} detik`;
+    return `${mins} menit ${secs > 0 ? `${secs} detik` : ''}`;
+  };
 
   const copyToClipboard = () => {
     const textReport = [
       `=== LAPORAN EVALUASI SIMULASI WAWANCARA — JOBREADY ===`,
       `Bidang: ${field.name}`,
       `Skor Rata-Rata: ${overallScore}/100 (${badgeInfo.label})`,
-      `Tanggal: ${new Date().toLocaleDateString('id-ID')}`,
+      `Mode: ${mode === 'timed' ? 'Mode Seleksi Industri (Dengan Batas Waktu)' : 'Mode Santai'}`,
+      totalSessionDuration > 0 ? `Total Durasi: ${formatDuration(totalSessionDuration)}` : '',
+      `Tanggal: ${new Date().toLocaleDateString('id-ID', { dateStyle: 'full' })}`,
       `----------------------------------------------------`,
       ...answers.map((a, idx) => {
         return [
           `\n[Pertanyaan ${idx + 1}]: ${a.questionText}`,
+          a.timeSpentSeconds ? `Waktu Menjawab: ${formatDuration(a.timeSpentSeconds)}` : '',
           `Jawaban Siswa: "${a.userAnswer}"`,
           `Skor: ${a.feedback.score}/100 (${a.feedback.summary})`,
           `Evaluasi: ${a.feedback.critique}`,
@@ -69,7 +66,7 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
       }),
       `\n----------------------------------------------------`,
       `Catatan: Laporan ini disusun berdasarkan rubrik penilaian format STAR dan kata kunci kompetensi kejuruan untuk evaluasi mandiri.`,
-    ].join('\n');
+    ].filter(Boolean).join('\n');
 
     navigator.clipboard.writeText(textReport).then(() => {
       setCopied(true);
@@ -82,16 +79,30 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
       {/* Score Header Card */}
       <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-sm text-center relative overflow-hidden">
         <div className="max-w-xl mx-auto">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-800 text-xs font-semibold mb-3 border border-blue-200/70">
-            <Award className="w-4 h-4 text-blue-600" />
-            Laporan Hasil Evaluasi Wawancara
+          {/* Tag & Mode indicator */}
+          <div className="flex flex-wrap items-center justify-center gap-2 mb-3">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-800 text-xs font-semibold border border-blue-200/70">
+              <Award className="w-4 h-4 text-blue-600" />
+              Laporan Hasil Evaluasi Wawancara
+            </span>
+
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">
+              <Clock className="w-3.5 h-3.5 text-slate-500" />
+              {mode === 'timed' ? 'Mode Seleksi Industri' : 'Mode Santai'}
+            </span>
+
+            {totalSessionDuration > 0 && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">
+                ⏱️ {formatDuration(totalSessionDuration)}
+              </span>
+            )}
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
             {field.name}
           </h2>
 
-          <div className="my-6">
+          <div className="my-5">
             <div className="inline-flex items-baseline gap-1">
               <span className="text-5xl sm:text-6xl font-extrabold text-blue-700 tracking-tight">
                 {overallScore}
@@ -111,8 +122,14 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
             </p>
           </div>
 
+          {/* Storage notification badge */}
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold mb-5">
+            <BookmarkCheck className="w-4 h-4 text-emerald-600" />
+            <span>Sesi ini telah tersimpan otomatis ke Riwayat Latihan</span>
+          </div>
+
           {/* Quick Actions */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5 pt-4 border-t border-slate-100">
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-4 border-t border-slate-100">
             <button
               onClick={copyToClipboard}
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition cursor-pointer shadow-2xs"
@@ -128,6 +145,16 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
               <Printer className="w-4 h-4 text-slate-600" />
               <span>Cetak / PDF</span>
             </button>
+
+            {onGoToHistory && (
+              <button
+                onClick={onGoToHistory}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-blue-200 bg-blue-50 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition cursor-pointer shadow-2xs"
+              >
+                <History className="w-4 h-4 text-blue-600" />
+                <span>Riwayat Latihan</span>
+              </button>
+            )}
 
             <button
               onClick={onRestart}
@@ -203,6 +230,15 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
                       <span className="text-xs text-slate-500">
                         {item.feedback.summary}
                       </span>
+                      {item.timeSpentSeconds && (
+                        <>
+                          <span className="text-xs text-slate-400">•</span>
+                          <span className="text-xs text-slate-500 flex items-center gap-1">
+                            <Clock className="w-3 h-3 text-slate-400" />
+                            {formatDuration(item.timeSpentSeconds)}
+                          </span>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -217,9 +253,16 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
                 <div className="px-4 sm:px-6 pb-6 pt-2 border-t border-slate-100 space-y-4 text-xs sm:text-sm">
                   {/* User Answer */}
                   <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                    <span className="font-semibold text-slate-700 block mb-1">
-                      Jawaban Anda:
-                    </span>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-semibold text-slate-700">
+                        Jawaban Anda:
+                      </span>
+                      {item.timeSpentSeconds && (
+                        <span className="text-[11px] text-slate-500 font-mono">
+                          Waktu jawab: {formatDuration(item.timeSpentSeconds)}
+                        </span>
+                      )}
+                    </div>
                     <p className="text-slate-800 italic leading-relaxed whitespace-pre-wrap">
                       "{item.userAnswer}"
                     </p>
