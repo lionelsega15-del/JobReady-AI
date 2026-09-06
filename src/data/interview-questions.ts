@@ -44,7 +44,10 @@ export const VOCATIONAL_FIELDS: Field[] = [
 ];
 
 export const INTERVIEW_QUESTIONS: InterviewQuestion[] = [
-  // --- OTOMOTIF / TKR ---
+
+  // ─────────────────────────────────────────────
+  // OTOMOTIF / TKR  (7 soal)
+  // ─────────────────────────────────────────────
   {
     id: 'oto-1',
     fieldId: 'otomotif',
@@ -52,7 +55,7 @@ export const INTERVIEW_QUESTIONS: InterviewQuestion[] = [
     contextTips: 'Gunakan metode STAR (Situasi, Tugas, Aksi, Hasil). Jelaskan jenis kendaraan atau komponen yang pernah kamu tangani.',
     evaluatedCompetency: 'Pengalaman Praktik & Kesiapan Kerja Nyata',
     keywords: ['bengkel', 'pkl', 'mesin', 'servis', 'oli', 'rem', 'transmisi', 'tune up', 'alat', 'sop', 'mekanik', 'pelanggan', 'troubleshooting'],
-    sampleIdealAnswer: 'Saat PKL di Bengkel Resmi Toyota selama 3 bulan, saya bertugas di divisi quick service. Saya rutin melakukan tune up mesin, penggantian oli, pengecekan sistem rem dan kelistrikan pada rata-rata 4-5 mobil per hari di bawah supervisi mekanik senior. Pengalaman ini mengasah kedisiplinan saya terhadap SOP bengkel.',
+    sampleIdealAnswer: 'Saat PKL di Bengkel Resmi Toyota selama 3 bulan, saya bertugas di divisi quick service. Saya rutin melakukan tune up mesin, penggantian oli, pengecekan sistem rem dan kelistrikan pada rata-rata 4–5 mobil per hari di bawah supervisi mekanik senior. Pengalaman ini mengasah kedisiplinan saya terhadap SOP bengkel.',
   },
   {
     id: 'oto-2',
@@ -61,7 +64,7 @@ export const INTERVIEW_QUESTIONS: InterviewQuestion[] = [
     contextTips: 'Fokus pada kejujuran, tanggung jawab, prosedur keselamatan kerja (K3), dan solusi perbaikan.',
     evaluatedCompetency: 'Integritas & Penanganan Masalah (Problem Solving)',
     keywords: ['kesalahan', 'jujur', 'lapor', 'senior', 'evaluasi', 'sop', 'k3', 'keamanan', 'perbaiki', 'solusi', 'belajar', 'tanggung jawab'],
-    sampleIdealAnswer: 'Jika saya menyadari ada kesalahan, langkah pertama saya adalah menghentikan pekerjaan dan segera melapor kepada kepala regu atau teknisi senior secara jujur. Saya tidak akan menutupi kesalahan karena keselamatan pengendara adalah prioritas utama. Setelah itu, saya minta arahan untuk membongkar ulang dan memperbaiki sesuai manual servis.',
+    sampleIdealAnswer: 'Jika saya menyadari ada kesalahan, langkah pertama saya adalah menghentikan pekerjaan dan segera melapor kepada kepala regu secara jujur. Saya tidak akan menutupi kesalahan karena keselamatan pengendara adalah prioritas utama. Setelah itu, saya minta arahan untuk membongkar ulang dan memperbaiki sesuai manual servis.',
   },
   {
     id: 'oto-3',
@@ -70,15 +73,53 @@ export const INTERVIEW_QUESTIONS: InterviewQuestion[] = [
     contextTips: 'Tunjukkan antusiasme terhadap teknologi otomotif serta keahlian teknis spesifik yang kamu kuasai.',
     evaluatedCompetency: 'Motivasi Karier & Keunggulan Kompetitif',
     keywords: ['minat', 'passion', 'teknologi', 'kelistrikan', 'injeksi', 'efi', 'diagnostik', 'disiplin', 'teliti', 'berkembang', 'kontribusi'],
-    sampleIdealAnswer: 'Sejak kecil saya menyukai mekanisme mesin, dan selama SMK saya mendalami sistem Electronic Fuel Injection (EFI) serta scanner diagnostik OBD-II. Saya tertarik bergabung karena industri otomotif terus berkembang pesat, dan saya siap mendedikasikan ketelitian serta kedisiplinan saya untuk standar kualitas perusahaan.',
+    sampleIdealAnswer: 'Sejak kecil saya menyukai mekanisme mesin, dan selama SMK saya mendalami sistem Electronic Fuel Injection (EFI) serta scanner diagnostik OBD-II. Saya tertarik bergabung karena industri otomotif terus berkembang, dan saya siap mendedikasikan ketelitian serta kedisiplinan saya untuk standar kualitas perusahaan.',
+  },
+  {
+    id: 'oto-4',
+    fieldId: 'otomotif',
+    question: 'Jelaskan prosedur Keselamatan dan Kesehatan Kerja (K3) yang wajib kamu terapkan sebelum memulai pekerjaan di bengkel!',
+    contextTips: 'Rekruter ingin tahu apakah kamu benar-benar memahami dan menerapkan budaya K3, bukan sekadar hafal teorinya.',
+    evaluatedCompetency: 'Keselamatan Kerja (K3) & Kesadaran Prosedural',
+    keywords: ['k3', 'apd', 'helm', 'sarung tangan', 'kacamata', 'wearpack', 'chock', 'ganjal', 'dongkrak', 'fire extinguisher', 'rambu', 'hazard', 'ppk', 'ppe'],
+    sampleIdealAnswer: 'Sebelum mulai bekerja, saya selalu memakai APD lengkap: wearpack, sarung tangan mekanik, dan safety shoes. Saya memeriksa kondisi alat angkat (dongkrak dan jackstand), memasang ganjal ban, serta memastikan ventilasi bengkel baik dan APAR (alat pemadam) tersedia. Saya juga mengidentifikasi potensi bahaya di area kerja terlebih dahulu.',
+  },
+  {
+    id: 'oto-5',
+    fieldId: 'otomotif',
+    question: 'Bagaimana caramu melakukan diagnosa awal ketika seorang pelanggan datang dan mengeluhkan suara aneh dari mesin mobilnya?',
+    contextTips: 'Jelaskan pendekatan sistematis: wawancara pelanggan, test drive, pemeriksaan visual, hingga penggunaan alat diagnostik.',
+    evaluatedCompetency: 'Kemampuan Diagnosa & Komunikasi dengan Pelanggan',
+    keywords: ['diagnosa', 'wawancara', 'test drive', 'visual', 'obd', 'scanner', 'suara', 'vibration', 'mesin', 'pertanyaan', 'pelanggan', 'sistematis'],
+    sampleIdealAnswer: 'Pertama saya menanyakan kepada pelanggan: kapan suara muncul, di kecepatan berapa, apakah saat dingin atau panas mesin. Lalu saya lakukan test drive singkat untuk mereproduksi gejala. Setelah itu, pemeriksaan visual di ruang mesin dan koneksi OBD-II scanner untuk membaca kode DTC. Data itu yang menjadi dasar penjelasan saya kepada pelanggan sebelum melakukan perbaikan.',
+  },
+  {
+    id: 'oto-6',
+    fieldId: 'otomotif',
+    question: 'Perkembangan kendaraan listrik (EV) semakin pesat. Apa yang kamu lakukan untuk mempersiapkan dirimu menghadapi era elektrifikasi otomotif?',
+    contextTips: 'Tunjukkan bahwa kamu proaktif belajar teknologi baru dan tidak takut berubah mengikuti perkembangan industri.',
+    evaluatedCompetency: 'Adaptabilitas Teknologi & Kemauan Belajar Berkelanjutan',
+    keywords: ['ev', 'listrik', 'hybrid', 'baterai', 'motor listrik', 'inverter', 'hv', 'tegangan tinggi', 'belajar', 'adaptasi', 'sertifikasi', 'kursus'],
+    sampleIdealAnswer: 'Saya menyadari bahwa teknisi otomotif masa depan harus menguasai sistem kendaraan listrik. Saya sudah mulai mempelajari dasar-dasar sistem HV (High Voltage), prinsip kerja motor listrik, dan manajemen baterai melalui modul belajar daring resmi Toyota dan video teknis berbahasa Inggris. Saya siap mengikuti pelatihan sertifikasi EV yang diadakan perusahaan.',
+  },
+  {
+    id: 'oto-7',
+    fieldId: 'otomotif',
+    question: 'Ceritakan situasi ketika kamu harus bekerja dalam tekanan waktu tinggi, misalnya kendaraan harus selesai sebelum jam tutup bengkel. Bagaimana caramu mengatasinya?',
+    contextTips: 'Rekruter ingin melihat kemampuan manajemen waktu, skala prioritas pekerjaan, dan kemampuan kolaborasi di bawah tekanan.',
+    evaluatedCompetency: 'Manajemen Waktu & Ketahanan Kerja Bertekanan',
+    keywords: ['deadline', 'tekanan', 'waktu', 'prioritas', 'cepat', 'teliti', 'kolaborasi', 'tim', 'fokus', 'efisien', 'delegasi'],
+    sampleIdealAnswer: 'Waktu itu saat PKL ada 3 unit masuk mendekati jam tutup. Saya bersama rekan langsung membagi tugas: saya fokus pada penggantian kampas rem yang lebih cepat, rekan mengerjakan tune up. Saya menjaga ketelitian meski bergerak cepat karena kesalahan justru memperlambat. Ketiga unit selesai 20 menit sebelum bengkel tutup tanpa ada yang terlewat.',
   },
 
-  // --- TKJ ---
+  // ─────────────────────────────────────────────
+  // TKJ  (7 soal)
+  // ─────────────────────────────────────────────
   {
     id: 'tkj-1',
     fieldId: 'tkj',
     question: 'Ceritakan pengalamanmu menangani masalah koneksi jaringan (troubleshooting LAN/WiFi) atau konfigurasi perangkat komputer!',
-    contextTips: 'Sebutkan langkah diagnostik runtut (cek fisik -> cek IP/ping -> konfigurasi gateway/DNS -> pengujian kembali).',
+    contextTips: 'Sebutkan langkah diagnostik runtut (cek fisik → cek IP/ping → konfigurasi gateway/DNS → pengujian kembali).',
     evaluatedCompetency: 'Kemampuan Analisis & Troubleshooting Jaringan',
     keywords: ['jaringan', 'lan', 'wifi', 'ip', 'ping', 'mikrotik', 'router', 'switch', 'kabel', 'crimping', 'dns', 'gateway', 'dhcp', 'troubleshooting'],
     sampleIdealAnswer: 'Saat PKL di kantor dinas, pernah terjadi putusnya koneksi satu lantai. Saya melakukan pengecekan mulai dari layer fisik switch, melakukan ping ke gateway, dan menemukan adanya konflik IP statis pada salah satu PC. Setelah saya konfigurasi ulang DHCP binding di router MikroTik dan memperbaiki kabel patch cord, jaringan kembali normal dalam 20 menit.',
@@ -99,10 +140,48 @@ export const INTERVIEW_QUESTIONS: InterviewQuestion[] = [
     contextTips: 'Hubungkan keterampilan teknis dengan kesiapan kerja tim, ketelitian dokumentasi, dan respon cepat tanggap.',
     evaluatedCompetency: 'Visi Karier & Kontribusi Tim',
     keywords: ['infrastruktur', 'uptime', 'maintenance', 'teliti', 'cepat', 'dokumentasi', 'backup', 'komunikasi', 'solusi', 'kontribusi'],
-    sampleIdealAnswer: 'Dunia IT bagi saya bukan sekadar mengonfigurasi perangkat, melainkan memastikan operasional bisnis berjalan tanpa hambatan (zero downtime). Nilai tambah saya adalah kemampuan analisis yang metodis, kebiasaan membuat dokumentasi topologi yang rapi, dan kesiapan merespon kendala teknis dengan tenang.',
+    sampleIdealAnswer: 'Dunia IT bagi saya bukan sekadar mengonfigurasi perangkat, melainkan memastikan operasional bisnis berjalan tanpa hambatan. Nilai tambah saya adalah kemampuan analisis yang metodis, kebiasaan membuat dokumentasi topologi yang rapi, dan kesiapan merespon kendala teknis dengan tenang dan terstruktur.',
+  },
+  {
+    id: 'tkj-4',
+    fieldId: 'tkj',
+    question: 'Jelaskan langkah-langkah yang kamu lakukan untuk mengamankan jaringan komputer dari ancaman siber seperti serangan brute force atau malware!',
+    contextTips: 'Rekruter ingin tahu pemahaman dasarmu tentang network security: firewall, password policy, patch update, dan segmentasi jaringan.',
+    evaluatedCompetency: 'Kesadaran Keamanan Jaringan (Network Security)',
+    keywords: ['firewall', 'password', 'update', 'patch', 'vlan', 'acl', 'antivirus', 'backup', 'enkripsi', 'vpn', 'monitoring', 'ids', 'brute force', 'keamanan'],
+    sampleIdealAnswer: 'Langkah dasar pengamanan jaringan yang selalu saya terapkan: (1) mengaktifkan firewall dan ACL pada router untuk memfilter traffic mencurigakan, (2) memisahkan jaringan melalui VLAN agar data sensitif tidak tercampur, (3) mewajibkan password kompleks dan rotasi berkala, (4) memperbarui firmware perangkat secara rutin, serta (5) melakukan backup konfigurasi dan log monitoring secara periodik.',
+  },
+  {
+    id: 'tkj-5',
+    fieldId: 'tkj',
+    question: 'Bagaimana caramu menyusun dokumentasi teknis jaringan yang baik, dan mengapa dokumentasi itu penting bagi tim IT?',
+    contextTips: 'Jawaban terbaik mencakup topologi, IP addressing plan, tabel routing, dan prosedur standar operasi (SOP).',
+    evaluatedCompetency: 'Kemampuan Dokumentasi & Standarisasi',
+    keywords: ['dokumentasi', 'topologi', 'ip address', 'tabel routing', 'sop', 'visio', 'diagram', 'rapi', 'update', 'tim', 'handover', 'referensi'],
+    sampleIdealAnswer: 'Dokumentasi yang baik mencakup diagram topologi fisik dan logis, tabel IP addressing, konfigurasi perangkat utama, dan SOP penanganan gangguan. Saya biasanya menggunakan Visio atau draw.io untuk diagram, dan menyimpannya di shared folder agar semua anggota tim bisa mengakses. Dokumentasi yang rapi mempercepat troubleshooting dan handover saat pergantian teknisi.',
+  },
+  {
+    id: 'tkj-6',
+    fieldId: 'tkj',
+    question: 'Pernah mengalami situasi di mana klien atau pengguna menyampaikan keluhan teknis dengan bahasa awam yang tidak spesifik? Bagaimana caramu menanganinya?',
+    contextTips: 'Rekruter mengukur empati, kemampuan mendengar aktif, dan cara kamu menerjemahkan masalah teknis ke dalam komunikasi yang mudah dipahami.',
+    evaluatedCompetency: 'Komunikasi Teknis & Layanan Pengguna (User Support)',
+    keywords: ['komunikasi', 'empati', 'pengguna', 'bahasa awam', 'pertanyaan', 'sabar', 'jelaskan', 'solusi', 'user friendly', 'non-teknis', 'laporan'],
+    sampleIdealAnswer: 'Saat PKL, seorang staf melaporkan "komputernya lemot". Saya mulai dengan bertanya: sejak kapan, apa yang sedang dibuka saat itu, apakah ada pesan error. Setelah saya analisis, ternyata RAM penuh akibat banyak aplikasi startup. Saya jelaskan solusinya dengan bahasa sederhana, bukan istilah teknis, sehingga pengguna paham dan tidak merasa diabaikan.',
+  },
+  {
+    id: 'tkj-7',
+    fieldId: 'tkj',
+    question: 'Apa yang kamu ketahui tentang konsep cloud computing dan bagaimana teknologi ini dapat diterapkan untuk membantu operasional bisnis?',
+    contextTips: 'Sebutkan jenis layanan cloud (IaaS, PaaS, SaaS), contoh platform, dan manfaat nyata bagi perusahaan.',
+    evaluatedCompetency: 'Pengetahuan Teknologi Terkini & Wawasan Industri',
+    keywords: ['cloud', 'aws', 'google cloud', 'azure', 'saas', 'paas', 'iaas', 'server', 'skalabilitas', 'backup', 'remote', 'efisiensi', 'data center'],
+    sampleIdealAnswer: 'Cloud computing adalah model komputasi di mana sumber daya IT (server, storage, aplikasi) disediakan melalui internet. Layanannya terbagi atas IaaS (seperti AWS EC2), PaaS (Google App Engine), dan SaaS (Google Workspace, Office 365). Manfaatnya bagi bisnis meliputi efisiensi biaya infrastruktur, skalabilitas cepat sesuai kebutuhan, aksesibilitas remote, dan backup data otomatis yang andal.',
   },
 
-  // --- TATA BOGA ---
+  // ─────────────────────────────────────────────
+  // TATA BOGA  (7 soal)
+  // ─────────────────────────────────────────────
   {
     id: 'boga-1',
     fieldId: 'tata-boga',
@@ -130,8 +209,46 @@ export const INTERVIEW_QUESTIONS: InterviewQuestion[] = [
     keywords: ['passion', 'tekanan', 'stres', 'komunikasi', 'fokus', 'tenang', 'stamina', 'kepuasan', 'pelanggan', 'kerjasama'],
     sampleIdealAnswer: 'Saya memiliki passion besar melihat kepuasan tamu saat menikmati hidangan berkualitas. Untuk menghadapi ritme dapur yang cepat, kunci saya adalah fokus, komunikasi terbuka dengan tim, dan persiapan mise en place yang matang sehingga alur memasak tetap terkontrol dan tidak panik.',
   },
+  {
+    id: 'boga-4',
+    fieldId: 'tata-boga',
+    question: 'Bagaimana langkahmu jika seorang tamu memiliki alergi makanan tertentu dan memesan menu yang mengandung bahan alergen tersebut?',
+    contextTips: 'Rekruter mengukur profesionalisme kamu dalam menjaga keselamatan tamu, koordinasi dengan staf, dan pemahaman tentang allergen management.',
+    evaluatedCompetency: 'Penanganan Alergen & Keselamatan Tamu',
+    keywords: ['alergi', 'alergen', 'komunikasi', 'chef', 'substitusi', 'konfirmasi', 'tamu', 'modifikasi', 'gluten', 'laktosa', 'kacang', 'keselamatan'],
+    sampleIdealAnswer: 'Jika seorang tamu mengumumkan alergi, saya akan segera menginformasikan ke kepala dapur dan chef yang bertugas. Kami akan mengidentifikasi alergen di seluruh menu yang dipesan, menawarkan substitusi bahan yang aman, dan menyiapkan hidangan tersebut di alat masak yang sudah dibersihkan agar tidak terkontaminasi silang. Konfirmasi ulang dilakukan sebelum hidangan keluar.',
+  },
+  {
+    id: 'boga-5',
+    fieldId: 'tata-boga',
+    question: 'Jelaskan apa yang kamu ketahui tentang teknik-teknik memasak dasar (cooking methods) dan kapan masing-masing teknik paling tepat digunakan!',
+    contextTips: 'Contoh: boiling, steaming, sauteing, braising, grilling, roasting. Sebutkan ciri khas masing-masing dan contoh masakan yang dihasilkan.',
+    evaluatedCompetency: 'Penguasaan Teknik Memasak Dasar',
+    keywords: ['boiling', 'steaming', 'sauteing', 'braising', 'grilling', 'roasting', 'frying', 'teknik', 'panas', 'tekstur', 'rasa', 'nutrisi'],
+    sampleIdealAnswer: 'Teknik memasak dipilih berdasarkan karakteristik bahan dan hasil yang diinginkan. Boiling cocok untuk pasta dan sayuran cepat; steaming menjaga nutrisi maksimal; sauteing untuk sayuran segar agar tetap renyah; braising ideal untuk daging alot agar empuk perlahan; grilling memberikan aroma smoky khas; roasting untuk unggas atau sayuran akar agar karamelisasi terjadi. Setiap teknik menghasilkan tekstur dan profil rasa yang berbeda.',
+  },
+  {
+    id: 'boga-6',
+    fieldId: 'tata-boga',
+    question: 'Pernah mengalami konflik atau perbedaan pendapat dengan rekan satu tim di dapur? Ceritakan cara kamu mengatasinya!',
+    contextTips: 'Rekruter ingin melihat kedewasaan, kemampuan komunikasi asertif, dan semangat menjaga harmoni tim dapur yang dinamis.',
+    evaluatedCompetency: 'Kerjasama Tim & Resolusi Konflik',
+    keywords: ['konflik', 'tim', 'komunikasi', 'diskusi', 'solusi', 'kompromis', 'tenang', 'empati', 'kepala dapur', 'mediasi', 'profesional'],
+    sampleIdealAnswer: 'Pernah terjadi ketidaksepahaman soal pembagian tugas mise en place yang tidak merata. Alih-alih berdiam diri atau bereaksi emosional, saya mengajak rekan berdiskusi singkat di luar area kerja agar tidak mengganggu ritme dapur. Kami menyepakati pembagian ulang yang lebih adil dan melaporkan hasilnya ke supervisor. Sejak itu kerja sama kami justru lebih solid.',
+  },
+  {
+    id: 'boga-7',
+    fieldId: 'tata-boga',
+    question: 'Bagaimana caramu menghitung Harga Pokok Penjualan (HPP) suatu hidangan dan mengapa penghitungan ini penting bagi keuntungan restoran?',
+    contextTips: 'Rekruter ingin tahu bahwa kamu tidak hanya bisa memasak, tetapi juga memahami aspek bisnis di balik dapur.',
+    evaluatedCompetency: 'Pemahaman Bisnis Kuliner & Manajemen Biaya',
+    keywords: ['hpp', 'harga pokok', 'biaya bahan', 'margin', 'porsi', 'waste', 'profit', 'menu engineering', 'harga jual', 'kalkulasi', 'efisiensi'],
+    sampleIdealAnswer: 'HPP dihitung dengan menjumlahkan total biaya bahan baku per porsi, termasuk bumbu dan bahan pendukung, lalu dibagi jumlah porsi yang dihasilkan. Idealnya HPP tidak melebihi 30–35% dari harga jual agar restoran masih memiliki marjin yang sehat untuk menutup biaya operasional dan labor. Kontrol HPP yang ketat juga mendorong kita meminimalkan food waste di dapur.',
+  },
 
-  // --- AKUNTANSI & KEUANGAN LEMBAGA (AKL) ---
+  // ─────────────────────────────────────────────
+  // AKUNTANSI & KEUANGAN LEMBAGA (AKL)  (7 soal)
+  // ─────────────────────────────────────────────
   {
     id: 'akl-1',
     fieldId: 'akl',
@@ -148,7 +265,7 @@ export const INTERVIEW_QUESTIONS: InterviewQuestion[] = [
     contextTips: 'Tekankan integritas, cross-check berkala, pencarian akar selisih, dan prinsip transparansi keuangan.',
     evaluatedCompetency: 'Ketelitian Numerik & Integritas Profesional',
     keywords: ['teliti', 'cek ulang', 'selisih', 'transparan', 'jujur', 'audit', 'verifikasi', 'bukti', 'nota', 'koreksi', 'rekonsiliasi'],
-    sampleIdealAnswer: 'Untuk mencegah salah input, saya selalu menerapkan metode verifikasi ganda antara fisik bukti kas dengan lembar kerja. Jika terjadi selisih, saya akan menelusuri kembali setiap transaksi satu per satu secara runut dari bukti fisik awal hingga menemukan pos yang tidak balance, tanpa pernah memanipulasi angka.',
+    sampleIdealAnswer: 'Untuk mencegah salah input, saya selalu menerapkan metode verifikasi ganda antara fisik bukti kas dengan lembar kerja. Jika terjadi selisih, saya menelusuri kembali setiap transaksi secara runut dari bukti fisik awal hingga menemukan pos yang tidak balance, tanpa pernah memanipulasi angka.',
   },
   {
     id: 'akl-3',
@@ -157,15 +274,53 @@ export const INTERVIEW_QUESTIONS: InterviewQuestion[] = [
     contextTips: 'Bahas kerahasiaan data keuangan perusahaan serta komitmen pribadi terhadap kejujuran.',
     evaluatedCompetency: 'Etika Profesi & Keandalan Pribadi',
     keywords: ['kejujuran', 'rahasia', 'etika', 'integritas', 'tanggung jawab', 'kepercayaan', 'perusahaan', 'disiplin', 'komitmen'],
-    sampleIdealAnswer: 'Data keuangan adalah informasi vital yang menentukan kelangsungan dan reputasi perusahaan. Bagi saya, menjaga kerahasiaan dokumen keuangan bukan sekadar aturan, melainkan komitmen etika pribadi. Saya tidak akan pernah membocorkan informasi internal ke pihak luar dan selalu mencatat data secara riil sesuai fakta.',
+    sampleIdealAnswer: 'Data keuangan adalah informasi vital yang menentukan reputasi perusahaan. Bagi saya, menjaga kerahasiaan dokumen keuangan bukan sekadar aturan, melainkan komitmen etika pribadi. Saya tidak akan pernah membocorkan informasi internal ke pihak luar dan selalu mencatat data secara riil sesuai fakta.',
+  },
+  {
+    id: 'akl-4',
+    fieldId: 'akl',
+    question: 'Jelaskan perbedaan antara laporan Neraca (Balance Sheet), Laporan Laba Rugi, dan Laporan Arus Kas. Apa kegunaan masing-masing bagi manajemen?',
+    contextTips: 'Rekruter ingin memastikan kamu memahami tiga pilar laporan keuangan, bukan hanya bisa memasukkan angka ke software.',
+    evaluatedCompetency: 'Pemahaman Laporan Keuangan Dasar',
+    keywords: ['neraca', 'laba rugi', 'arus kas', 'aset', 'liabilitas', 'ekuitas', 'pendapatan', 'beban', 'operasional', 'investasi', 'pendanaan', 'manajemen'],
+    sampleIdealAnswer: 'Neraca menunjukkan posisi keuangan perusahaan pada titik waktu tertentu (aset = liabilitas + ekuitas). Laporan Laba Rugi memperlihatkan kinerja pendapatan dan beban selama satu periode, apakah perusahaan untung atau rugi. Laporan Arus Kas mencatat aliran kas masuk dan keluar dari aktivitas operasi, investasi, dan pendanaan — sehingga manajemen tahu apakah bisnis memiliki likuiditas yang cukup.',
+  },
+  {
+    id: 'akl-5',
+    fieldId: 'akl',
+    question: 'Ceritakan bagaimana caramu mengelola pekerjaan ketika dihadapkan pada tenggat waktu penutupan buku (closing) akhir bulan yang sangat padat!',
+    contextTips: 'Rekruter mengukur manajemen prioritas, kemampuan bekerja di bawah tekanan, dan keandalan dalam menyelesaikan tugas tepat waktu.',
+    evaluatedCompetency: 'Manajemen Waktu & Prioritas di Bawah Tekanan',
+    keywords: ['closing', 'deadline', 'prioritas', 'jadwal', 'efisien', 'lembur', 'disiplin', 'checklist', 'rekan', 'komunikasi', 'tepat waktu'],
+    sampleIdealAnswer: 'Menghadapi closing akhir bulan, saya mulai dengan membuat checklist tugas berdasarkan urgensi: rekonsiliasi kas diprioritaskan karena menjadi dasar semua posting. Saya juga berkoordinasi lebih awal dengan bagian lain untuk memastikan bukti transaksi masuk tepat waktu. Jika perlu lembur untuk memenuhi deadline, saya lakukan dengan tetap menjaga akurasi — tidak asal selesai.',
+  },
+  {
+    id: 'akl-6',
+    fieldId: 'akl',
+    question: 'Apa yang kamu ketahui tentang perhitungan dan pelaporan Pajak Pertambahan Nilai (PPN) atau Pajak Penghasilan (PPh) Pasal 21?',
+    contextTips: 'Rekruter ingin mengukur wawasan perpajakanmu, bukan meminta kamu menghitung angka. Sebutkan tarif dasar, objek pajak, dan cara pelaporannya.',
+    evaluatedCompetency: 'Pengetahuan Perpajakan Dasar',
+    keywords: ['ppn', 'pph', 'pajak', 'faktur pajak', 'spt', 'tarif', 'bphtb', 'npwp', 'efaktur', 'pelaporan', 'dpp', 'withholding'],
+    sampleIdealAnswer: 'PPN dikenakan sebesar 11% atas penyerahan Barang/Jasa Kena Pajak. Setiap transaksi kena pajak harus dibuatkan Faktur Pajak melalui aplikasi e-Faktur, dan dilaporkan bulanan dalam SPT Masa PPN. PPh Pasal 21 adalah pemotongan pajak atas penghasilan karyawan yang dihitung berdasarkan tarif progresif, dikurangkan dari gaji setiap bulan, dan dilaporkan ke KPP melalui SPT Tahunan.',
+  },
+  {
+    id: 'akl-7',
+    fieldId: 'akl',
+    question: 'Jika kamu menemukan indikasi kecurangan (fraud) dalam data keuangan yang kamu kelola, apa langkah yang akan kamu ambil?',
+    contextTips: 'Rekruter ingin menguji karakter dan integritas kamu dalam menghadapi situasi etis yang sulit dan berisiko tinggi.',
+    evaluatedCompetency: 'Integritas & Penanganan Fraud Keuangan',
+    keywords: ['fraud', 'kecurangan', 'lapor', 'atasan', 'bukti', 'dokumentasi', 'audit', 'etika', 'integritas', 'prosedur', 'jujur', 'tidak ikut'],
+    sampleIdealAnswer: 'Pertama saya akan mendokumentasikan temuan dengan bukti yang kuat tanpa mengubah data apapun. Kemudian saya melaporkan secara tertulis kepada atasan langsung atau — jika atasan terlibat — ke fungsi audit internal atau komite etik perusahaan. Saya tidak akan berkompromi atau menutup-nutupi karena keuangan yang bersih adalah fondasi kepercayaan perusahaan.',
   },
 
-  // --- UMUM (SEMUA JURUSAN) ---
+  // ─────────────────────────────────────────────
+  // UMUM / SOFT SKILLS  (7 soal)
+  // ─────────────────────────────────────────────
   {
     id: 'gen-1',
     fieldId: 'umum',
     question: 'Ceritakan tentang dirimu secara singkat, latar belakang pendidikanmu di SMK/SMA, dan kegiatan yang paling membanggakan bagimu!',
-    contextTips: 'Jawab dengan percaya diri dalam 1-2 menit. Ceritakan jurusan, prestasi sekolah/organisasi, dan fokus keahlianmu.',
+    contextTips: 'Jawab dengan percaya diri dalam 1–2 menit. Ceritakan jurusan, prestasi sekolah/organisasi, dan fokus keahlianmu.',
     evaluatedCompetency: 'Komunikasi Diri & Rasa Percaya Diri',
     keywords: ['nama', 'smk', 'sma', 'jurusan', 'organisasi', 'prestasi', 'kegiatan', 'lulusan', 'semangat', 'keahlian', 'pengalaman'],
     sampleIdealAnswer: 'Saya adalah siswa kelas XII yang berdedikasi tinggi dengan ketertarikan kuat pada bidang kejuruan saya. Selain aktif belajar di kelas dan laboratorium, saya aktif sebagai pengurus OSIS dan pernah mewakili sekolah dalam lomba kompetensi siswa. Saya terbiasa mengatur waktu antara tugas akademik, praktik, dan kegiatan sosial.',
@@ -174,10 +329,10 @@ export const INTERVIEW_QUESTIONS: InterviewQuestion[] = [
     id: 'gen-2',
     fieldId: 'umum',
     question: 'Apa kelebihan utama dan kelemahan terbesarmu, serta apa langkah nyata yang kamu lakukan untuk mengatasi kelemahan tersebut?',
-    contextTips: 'Sebutkan kelemahan yang nyata namun sertai solusi proaktif (misal: pelupa -> membuat to-do list terstruktur).',
+    contextTips: 'Sebutkan kelemahan yang nyata namun sertai solusi proaktif (misal: pelupa → membuat to-do list terstruktur).',
     evaluatedCompetency: 'Kesadaran Diri (Self-Awareness) & Pengembangan Diri',
     keywords: ['kelebihan', 'kekurangan', 'kelemahan', 'solusi', 'catatan', 'jadwal', 'perbaiki', 'disiplin', 'belajar', 'evaluasi'],
-    sampleIdealAnswer: 'Kelebihan utama saya adalah ketelitian, kemampuan cepat belajar hal baru, dan loyalitas terhadap tim. Kelemahan saya adalah terkadang saya terlalu perfeksionis sehingga membutuhkan waktu lebih lama. Untuk mengatasinya, sekarang saya selalu membuat jadwal prioritas dan menetapkan batas waktu tegas (timeboxing) untuk setiap tugas.',
+    sampleIdealAnswer: 'Kelebihan utama saya adalah ketelitian, kemampuan cepat belajar hal baru, dan loyalitas terhadap tim. Kelemahan saya adalah terkadang terlalu perfeksionis sehingga membutuhkan waktu lebih lama. Untuk mengatasinya, sekarang saya selalu membuat jadwal prioritas dan menetapkan batas waktu tegas (timeboxing) untuk setiap tugas.',
   },
   {
     id: 'gen-3',
@@ -187,5 +342,41 @@ export const INTERVIEW_QUESTIONS: InterviewQuestion[] = [
     evaluatedCompetency: 'Daya Jual Kandidat & Komitmen Kerja',
     keywords: ['kontribusi', 'disiplin', 'etos kerja', 'siap kerja', 'loyal', 'belajar', 'smk', 'keunggulan', 'solusi', 'perusahaan'],
     sampleIdealAnswer: 'Sebagai lulusan SMK, saya tidak hanya membawa teori tetapi juga pembiasaan budaya industri, kedisiplinan kerja, dan keterampilan praktis yang sudah teruji selama magang. Saya siap bekerja dengan cepat, patuh pada SOP, dan memiliki komitmen tinggi untuk terus belajar dan memberikan kontribusi nyata bagi produktivitas perusahaan.',
+  },
+  {
+    id: 'gen-4',
+    fieldId: 'umum',
+    question: 'Ceritakan pengalaman saat kamu harus bekerja sama dalam tim untuk menyelesaikan suatu proyek atau tugas yang cukup berat. Apa peranmu dan apa hasilnya?',
+    contextTips: 'Rekruter ingin mengukur kemampuan kolaborasi, peran dalam tim, dan kontribusi nyata yang kamu berikan.',
+    evaluatedCompetency: 'Kerja Tim & Kolaborasi (Teamwork)',
+    keywords: ['tim', 'kerjasama', 'proyek', 'peran', 'kontribusi', 'koordinasi', 'komunikasi', 'pembagian tugas', 'hasil', 'sukses', 'tantangan'],
+    sampleIdealAnswer: 'Dalam proyek pameran kejuruan sekolah, saya ditunjuk sebagai koordinator divisi dekorasi yang terdiri dari 6 orang. Saya membagi tugas sesuai kekuatan masing-masing anggota, mengadakan briefing harian singkat, dan menjadi penghubung dengan panitia utama. Hasilnya stand kami selesai tepat waktu dan mendapat predikat terbaik dari dewan juri.',
+  },
+  {
+    id: 'gen-5',
+    fieldId: 'umum',
+    question: 'Bagaimana cara kamu menghadapi kritik atau masukan negatif dari atasan atau rekan kerja terhadap hasil pekerjaanmu?',
+    contextTips: 'Rekruter mengukur kematangan emosi, kemampuan menerima umpan balik secara konstruktif, dan keinginan untuk berkembang.',
+    evaluatedCompetency: 'Kematangan Emosi & Penerimaan Umpan Balik',
+    keywords: ['kritik', 'masukan', 'feedback', 'atasan', 'evaluasi', 'tenang', 'perbaiki', 'belajar', 'tidak defensif', 'terbuka', 'dewasa'],
+    sampleIdealAnswer: 'Saya menerima kritik sebagai bahan bakar untuk berkembang, bukan sebagai serangan pribadi. Langkah saya: mendengarkan dengan tenang tanpa defensif, meminta klarifikasi jika kurang paham, mencatat poin perbaikan, lalu mempraktikkan perubahan tersebut pada pekerjaan berikutnya. Setelah diperbaiki, saya biasanya meminta konfirmasi apakah hasilnya sudah sesuai harapan.',
+  },
+  {
+    id: 'gen-6',
+    fieldId: 'umum',
+    question: 'Di mana kamu melihat dirimu dalam 2–3 tahun ke depan setelah bergabung dengan perusahaan ini?',
+    contextTips: 'Rekruter ingin memastikan kamu punya ambisi yang realistis, selaras dengan jalur karier di perusahaan, dan berkomitmen jangka panjang.',
+    evaluatedCompetency: 'Visi Jangka Pendek & Komitmen Berkarier',
+    keywords: ['karier', '2 tahun', '3 tahun', 'berkembang', 'kontribusi', 'posisi', 'keahlian', 'sertifikasi', 'target', 'profesional', 'loyal'],
+    sampleIdealAnswer: 'Dalam 1–2 tahun pertama, target saya adalah menguasai seluruh SOP dan alur kerja operasional perusahaan secara mendalam, serta membuktikan diri melalui kinerja yang terukur. Di tahun ke-3, saya berharap bisa mengemban tanggung jawab yang lebih besar atau memimpin proyek kecil, dengan dukungan pelatihan dan bimbingan dari manajemen.',
+  },
+  {
+    id: 'gen-7',
+    fieldId: 'umum',
+    question: 'Bagaimana reaksi dan pendekatanmu jika pada hari pertama kerja kamu dihadapkan pada tugas baru yang belum pernah kamu pelajari sebelumnya?',
+    contextTips: 'Rekruter ingin melihat sikap proaktif, keberanian bertanya, dan strategi belajar cepat dalam lingkungan kerja yang asing.',
+    evaluatedCompetency: 'Adaptabilitas & Inisiatif Belajar Cepat',
+    keywords: ['baru', 'adaptasi', 'bertanya', 'inisiatif', 'belajar', 'mandiri', 'atasan', 'rekan', 'observasi', 'proaktif', 'tidak menyerah', 'tenang'],
+    sampleIdealAnswer: 'Saya akan tetap tenang dan proaktif. Pertama, saya berusaha memahami tugas tersebut secara mandiri dengan membaca panduan atau SOP yang tersedia. Jika masih belum jelas, saya tidak ragu bertanya kepada rekan atau atasan yang lebih berpengalaman. Saya percaya bertanya adalah tanda profesionalisme, bukan kelemahan. Yang paling penting, saya mencatat setiap pelajaran baru agar tidak perlu mengulangi pertanyaan yang sama.',
   },
 ];
