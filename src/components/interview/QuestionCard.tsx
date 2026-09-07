@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { InterviewQuestion, Field, InterviewMode } from '../../types';
 import { 
   Lightbulb, Mic, MicOff, AlertCircle, ChevronRight, HelpCircle, 
-  UserCheck, Clock, Pause, Play, AlertTriangle 
+  UserCheck, Clock, Pause, Play, AlertTriangle, Volume2, VolumeX 
 } from 'lucide-react';
 
 interface QuestionCardProps {
@@ -37,6 +37,121 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isTimeUp, setIsTimeUp] = useState<boolean>(false);
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
+  const [isMuted, setIsMuted] = useState<boolean>(false);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
+  // Initialize or resume Web Audio Context safely
+  const getAudioContext = () => {
+    try {
+      if (!audioCtxRef.current) {
+        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+        if (AudioCtx) {
+          audioCtxRef.current = new AudioCtx();
+        }
+      }
+      if (audioCtxRef.current && audioCtxRef.current.state === 'suspended') {
+        audioCtxRef.current.resume();
+      }
+      return audioCtxRef.current;
+    } catch {
+      return null;
+    }
+  };
+
+  // Play realistic heartbeat & countdown tick sound
+  const playHeartbeatSound = (isUrgent: boolean = false) => {
+    if (isMuted) return;
+    try {
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+
+      // 1. Bass Heartbeat "lub" thump
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(isUrgent ? 120 : 95, now);
+      osc1.frequency.exponentialRampToValueAtTime(35, now + 0.09);
+      gain1.gain.setValueAtTime(isUrgent ? 0.28 : 0.2, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.1);
+
+      // 2. High crisp tick (audible on small laptop/phone speakers)
+      const oscTick1 = ctx.createOscillator();
+      const gainTick1 = ctx.createGain();
+      oscTick1.type = 'triangle';
+      oscTick1.frequency.setValueAtTime(isUrgent ? 950 : 700, now);
+      gainTick1.gain.setValueAtTime(isUrgent ? 0.14 : 0.08, now);
+      gainTick1.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      oscTick1.connect(gainTick1);
+      gainTick1.connect(ctx.destination);
+      oscTick1.start(now);
+      oscTick1.stop(now + 0.06);
+
+      // 3. Second heartbeat "dub" pulse after 120ms
+      const t2 = now + 0.12;
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(isUrgent ? 105 : 80, t2);
+      osc2.frequency.exponentialRampToValueAtTime(30, t2 + 0.09);
+      gain2.gain.setValueAtTime(isUrgent ? 0.22 : 0.15, t2);
+      gain2.gain.exponentialRampToValueAtTime(0.001, t2 + 0.09);
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(t2);
+      osc2.stop(t2 + 0.1);
+
+      const oscTick2 = ctx.createOscillator();
+      const gainTick2 = ctx.createGain();
+      oscTick2.type = 'triangle';
+      oscTick2.frequency.setValueAtTime(isUrgent ? 850 : 600, t2);
+      gainTick2.gain.setValueAtTime(isUrgent ? 0.1 : 0.06, t2);
+      gainTick2.gain.exponentialRampToValueAtTime(0.001, t2 + 0.05);
+      oscTick2.connect(gainTick2);
+      gainTick2.connect(ctx.destination);
+      oscTick2.start(t2);
+      oscTick2.stop(t2 + 0.06);
+    } catch {
+      // Audio autoplay policy fallback handled cleanly
+    }
+  };
+
+  // Play alarm sound when time is up
+  const playTimeUpAlert = () => {
+    if (isMuted) return;
+    try {
+      const ctx = getAudioContext();
+      if (!ctx) return;
+      const now = ctx.currentTime;
+      [0, 0.16, 0.32].forEach((delay, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(idx === 2 ? 330 : 440, now + delay);
+        gain.gain.setValueAtTime(0.2, now + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.14);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + delay);
+        osc.stop(now + delay + 0.15);
+      });
+    } catch {
+      // ignore
+    }
+  };
+
+  // Cleanup audio context on unmount
+  useEffect(() => {
+    return () => {
+      if (audioCtxRef.current && audioCtxRef.current.state !== 'closed') {
+        audioCtxRef.current.close().catch(() => {});
+      }
+    };
+  }, []);
 
   // Reset answer and timer on question change
   useEffect(() => {
@@ -78,6 +193,17 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       return () => clearInterval(interval);
     }
   }, [mode, isPaused, timeLeft]);
+
+  // Audio countdown sound effect for last 10 seconds & time up
+  useEffect(() => {
+    if (mode !== 'timed' || isPaused) return;
+
+    if (timeLeft <= 10 && timeLeft > 0) {
+      playHeartbeatSound(timeLeft <= 3);
+    } else if (timeLeft === 0 && isTimeUp) {
+      playTimeUpAlert();
+    }
+  }, [timeLeft, mode, isPaused, isTimeUp]);
 
   // Setup Web Speech API if supported
   useEffect(() => {
@@ -135,6 +261,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
   const charLength = answerText.trim().length;
   const isMinimumMet = charLength >= 20;
+  const isCriticalTime = mode === 'timed' && timeLeft <= 10 && timeLeft > 0 && !isPaused && !isTimeUp;
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -189,7 +316,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       {mode === 'timed' ? (
         <div className={`p-3.5 sm:p-4 rounded-2xl mb-5 border transition-all duration-300 shadow-xs flex items-center justify-between gap-4 ${
           timeLeft <= 10 
-            ? 'bg-rose-50/90 border-rose-300 text-rose-900 ring-2 ring-rose-300/40' 
+            ? 'animate-timer-heartbeat bg-rose-50/95 border-rose-400 text-rose-950 ring-2 ring-rose-400/60 shadow-lg shadow-rose-200/50' 
             : timeLeft <= 30
             ? 'bg-amber-50/90 border-amber-300 text-amber-900'
             : 'bg-white border-slate-200/90 text-slate-800'
@@ -197,7 +324,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm shrink-0 transition-colors shadow-2xs ${
               timeLeft <= 10 
-                ? 'bg-rose-600 text-white animate-pulse' 
+                ? 'bg-rose-600 text-white animate-icon-urgent shadow-md shadow-rose-500/40' 
                 : timeLeft <= 30
                 ? 'bg-amber-500 text-white'
                 : 'bg-blue-600 text-white'
@@ -205,15 +332,21 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               <Clock className="w-5 h-5" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold uppercase tracking-wider">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className={`text-xs font-bold uppercase tracking-wider ${timeLeft <= 10 ? 'text-rose-800' : ''}`}>
                   {isTimeUp ? 'Waktu Habis!' : 'Sisa Waktu Menjawab:'}
                 </span>
                 <span className={`font-mono text-lg sm:text-xl font-black tracking-tight ${
-                  timeLeft <= 10 ? 'text-rose-600' : timeLeft <= 30 ? 'text-amber-600' : 'text-blue-700'
+                  timeLeft <= 10 ? 'text-rose-600 scale-105 transition-transform inline-block' : timeLeft <= 30 ? 'text-amber-600' : 'text-blue-700'
                 }`}>
                   {formatTime(timeLeft)}
                 </span>
+                {timeLeft <= 10 && !isPaused && !isTimeUp && (
+                  <span className="inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 rounded-full bg-rose-600 text-white uppercase tracking-wider shadow-xs">
+                    <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+                    Detik Terakhir
+                  </span>
+                )}
                 {isPaused && (
                   <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-200/80 text-amber-900 uppercase">
                     Dijeda
@@ -222,7 +355,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               </div>
               <p className="text-[11px] text-slate-500 hidden sm:block">
                 {timeLeft <= 10 
-                  ? '⚠️ Waktu segera berakhir! Pastikan jawaban sudah lengkap.' 
+                  ? '⚠️ Waktu segera berakhir! Segera selesaikan dan kirimkan jawaban.' 
                   : timeLeft <= 30 
                   ? 'Perhatian: Waktu tersisa di bawah 30 detik.' 
                   : `Mode Seleksi Industri (${Math.floor(timerDurationSeconds / 60)} menit per pertanyaan)`}
@@ -231,6 +364,29 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            {/* Audio Toggle Button */}
+            <button
+              type="button"
+              onClick={() => {
+                const next = !isMuted;
+                setIsMuted(next);
+                if (!next) {
+                  getAudioContext();
+                }
+              }}
+              className={`p-2 sm:px-2.5 sm:py-1.5 rounded-lg border transition cursor-pointer text-xs font-semibold flex items-center gap-1.5 shadow-2xs active:scale-95 ${
+                isMuted
+                  ? 'bg-slate-100 border-slate-200 text-slate-400 hover:text-slate-600'
+                  : timeLeft <= 10
+                  ? 'bg-rose-100/90 border-rose-300 text-rose-700 hover:bg-rose-200'
+                  : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+              }`}
+              title={isMuted ? "Aktifkan Efek Suara Detak & Alarm" : "Bisukan Efek Suara"}
+            >
+              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className={`w-4 h-4 ${timeLeft <= 10 ? 'text-rose-600' : 'text-slate-600'}`} />}
+              <span className="hidden md:inline">{isMuted ? 'Bisu' : 'Suara'}</span>
+            </button>
+
             <button
               type="button"
               onClick={() => setIsPaused(!isPaused)}
@@ -254,8 +410,17 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
         </div>
       )}
 
+      {/* Screen edge warning pulsation */}
+      {isCriticalTime && (
+        <div className="pointer-events-none fixed inset-0 z-40 ring-inset ring-8 sm:ring-12 ring-rose-500/40 animate-vignette shadow-[inset_0_0_60px_rgba(239,68,68,0.3)]" />
+      )}
+
       {/* Main question card */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-sm mb-5">
+      <div className={`rounded-2xl transition-all duration-300 p-6 sm:p-8 shadow-sm mb-5 relative ${
+        isCriticalTime
+          ? 'bg-white border-2 border-rose-500 animate-border-urgent ring-4 ring-rose-400/30 shadow-rose-200/50'
+          : 'bg-white border border-slate-200/90'
+      }`}>
         {/* Recruiter Persona Header */}
         <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100 text-xs text-slate-500">
           <div className="flex items-center gap-2">
@@ -372,7 +537,11 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               value={answerText}
               onChange={(e) => setAnswerText(e.target.value)}
               placeholder="Contoh: Pada saat saya praktikum di sekolah, saya pernah menghadapi kendala... Tindakan teknis yang saya ambil adalah... Hasilnya pekerjaan selesai dengan baik."
-              className="w-full p-3.5 rounded-xl border border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none text-slate-900 text-sm leading-relaxed placeholder:text-slate-400 transition resize-y"
+              className={`w-full p-3.5 rounded-xl border outline-none text-slate-900 text-sm leading-relaxed placeholder:text-slate-400 transition resize-y ${
+                isCriticalTime
+                  ? 'border-rose-400 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 bg-rose-50/15'
+                  : 'border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100'
+              }`}
             />
           </div>
 

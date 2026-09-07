@@ -65,6 +65,77 @@ body {
   animation: audio-wave 1s ease-in-out 0.15s infinite;
 }
 
+/* Urgent Timer Heartbeat Animation */
+@keyframes timer-heartbeat {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  15% {
+    transform: scale(1.018);
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.25), 0 0 16px rgba(239, 68, 68, 0.2);
+  }
+  30% {
+    transform: scale(1);
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+  }
+  45% {
+    transform: scale(1.025);
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0.2), 0 0 24px rgba(239, 68, 68, 0.3);
+  }
+  70%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.animate-timer-heartbeat {
+  animation: timer-heartbeat 1s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+@keyframes pulse-icon-urgent {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+.animate-icon-urgent {
+  animation: pulse-icon-urgent 0.5s ease-in-out infinite;
+}
+
+/* Urgent Card Border Glow & Heartbeat */
+@keyframes border-pulse-urgent {
+  0%, 100% {
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.35), 0 0 15px rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.65), 0 0 35px rgba(239, 68, 68, 0.45);
+    border-color: rgba(220, 38, 38, 1);
+  }
+}
+
+.animate-border-urgent {
+  animation: border-pulse-urgent 1s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
+/* Subtle Screen Edge Vignette Warning Pulse */
+@keyframes vignette-pulse {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+.animate-vignette {
+  animation: vignette-pulse 1s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+}
+
 /* Custom subtle scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
