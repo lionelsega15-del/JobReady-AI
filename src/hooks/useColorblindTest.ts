@@ -1,18 +1,31 @@
 import { useState, useMemo } from 'react';
-import { COLORBLIND_QUESTIONS } from '../data/colorblind-questions';
-import { UserColorblindAnswer, ColorblindTestResult, ColorblindQuestion } from '../types';
+import { getQuestionsByMode } from '../data/colorblind-questions';
+import { UserColorblindAnswer, ColorblindTestResult, ColorblindQuestion, ColorblindMode } from '../types';
 
-export function useColorblindTest() {
+export function useColorblindTest(initialMode: ColorblindMode = 'digits') {
+  const [mode, setMode] = useState<ColorblindMode>(initialMode);
   const [currentPlateIndex, setCurrentPlateIndex] = useState<number>(0);
   const [answers, setAnswers] = useState<UserColorblindAnswer[]>([]);
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
 
-  const totalPlates = COLORBLIND_QUESTIONS.length;
-  const currentQuestion: ColorblindQuestion | undefined = COLORBLIND_QUESTIONS[currentPlateIndex];
+  const activeQuestions: ColorblindQuestion[] = useMemo(() => {
+    return getQuestionsByMode(mode);
+  }, [mode]);
+
+  const totalPlates = activeQuestions.length;
+  const currentQuestion: ColorblindQuestion | undefined = activeQuestions[currentPlateIndex];
 
   const progressPercentage = useMemo(() => {
+    if (totalPlates === 0) return 0;
     return Math.round(((currentPlateIndex) / totalPlates) * 100);
   }, [currentPlateIndex, totalPlates]);
+
+  const changeMode = (newMode: ColorblindMode) => {
+    setMode(newMode);
+    setCurrentPlateIndex(0);
+    setAnswers([]);
+    setIsCompleted(false);
+  };
 
   const submitAnswer = (selected: number | string) => {
     if (!currentQuestion) return;
@@ -31,7 +44,7 @@ export function useColorblindTest() {
     setAnswers(nextAnswers);
 
     if (currentPlateIndex + 1 < totalPlates) {
-      setCurrentPlateIndex(prev => prev + 1);
+      setCurrentPlateIndex((prev) => prev + 1);
     } else {
       setIsCompleted(true);
     }
@@ -44,24 +57,31 @@ export function useColorblindTest() {
   };
 
   const result: ColorblindTestResult = useMemo(() => {
-    const correctCount = answers.filter(a => a.isCorrect).length;
+    const correctCount = answers.filter((a) => a.isCorrect).length;
     const accuracy = totalPlates > 0 ? Math.round((correctCount / totalPlates) * 100) : 0;
 
     let statusCategory: 'normal' | 'partial-deficiency' | 'needs-clinical-eval' = 'normal';
     let title = 'Kemungkinan Penglihatan Warna Normal';
-    let explanation = 'Hasil tes menunjukkan Anda berhasil mengenali mayoritas plat uji Ishihara dengan akurasi tinggi. Karakteristik persepsi warna spektrum merah, hijau, oranye, dan kuning berfungsi normal.';
-    let recommendation = 'Kondisi ini memenuhi kriteria umum syarat administratif kejuruan teknik, kelistrikan, otomotif, maupun industri kreatif.';
+    let explanation = mode === 'tracing'
+      ? 'Hasil penelusuran alur berliku menunjukkan Anda mampu mengenali kontinuitas gradasi warna Ishihara dengan presisi tinggi tanpa terputus.'
+      : 'Hasil tes menunjukkan Anda berhasil mengenali mayoritas plat uji Ishihara dengan akurasi tinggi. Karakteristik persepsi warna spektrum merah, hijau, oranye, dan kuning berfungsi normal.';
+    let recommendation = 'Kondisi ini memenuhi kriteria umum syarat administratif kejuruan teknik, kelistrikan, otomotif, maupun industri manufaktur.';
 
-    if (correctCount <= 6) {
+    const failureThreshold = Math.max(1, Math.round(totalPlates * 0.65));
+    const partialThreshold = Math.max(1, Math.round(totalPlates * 0.85));
+
+    if (correctCount <= failureThreshold) {
       statusCategory = 'needs-clinical-eval';
       title = 'Terindikasi Defisiensi Penglihatan Warna';
-      explanation = 'Anda mengalami kesulitan mengenali beberapa plat transformasi dan vanishing. Hal ini mengindikasikan kemungkinan adanya defisiensi persepsi spektrum warna merah-hijau (protan/deutan).';
+      explanation = mode === 'tracing'
+        ? 'Anda mengalami kendala saat menelusuri alur berkelok pada plat tertentu. Hal ini mengindikasikan kemungkinan adanya kelemahan pembedaan rona merah-hijau.'
+        : 'Anda mengalami kesulitan mengenali beberapa plat transformasi dan vanishing. Hal ini mengindikasikan kemungkinan adanya defisiensi persepsi spektrum warna merah-hijau (protan/deutan).';
       recommendation = 'Disarankan untuk melakukan pemeriksaan komprehensif ke fasilitas kesehatan atau dokter spesialis mata (Sp.M) untuk diagnosis medis resmi.';
-    } else if (correctCount <= 8) {
+    } else if (correctCount <= partialThreshold) {
       statusCategory = 'partial-deficiency';
       title = 'Kemungkinan Defisiensi Ringan / Parsial';
-      explanation = 'Sebagian besar plat terbaca dengan baik, namun terdapat 2–3 plat yang tidak teridentifikasi tepat. Kondisi ini dapat dipengaruhi kontras layar, pencahayaan ruangan, atau defisiensi warna parsial ringan.';
-      recommendation = 'Pastikan kalibrasi monitor dan pencahayaan ruangan optimal. Jika disyaratkan oleh industri tujuan, konsultasikan hasil ini dengan tenaga medis optometri.';
+      explanation = 'Sebagian besar plat teridentifikasi dengan baik, namun terdapat alur/angka yang tidak terbaca tepat. Hal ini bisa dipengaruhi kontras layar atau defisiensi warna parsial ringan.';
+      recommendation = 'Pastikan kalibrasi monitor dan pencahayaan optimal. Jika disyaratkan oleh instansi/industri tujuan, konsultasikan hasil ini dengan dokter spesialis mata.';
     }
 
     return {
@@ -73,9 +93,11 @@ export function useColorblindTest() {
       explanation,
       recommendation,
     };
-  }, [answers, totalPlates]);
+  }, [answers, totalPlates, mode]);
 
   return {
+    mode,
+    changeMode,
     currentPlateIndex,
     currentQuestion,
     totalPlates,

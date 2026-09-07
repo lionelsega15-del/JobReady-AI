@@ -35,7 +35,8 @@ Banyak lulusan SMK/SMA memiliki keterampilan teknis yang baik, namun menghadapi 
 - **Ekspor Laporan:** Salin ringkasan evaluasi teks dengan satu klik.
 
 ### 2. Modul Latihan Tes Buta Warna
-- **10 Plat Ishihara Prosedural (SVG Murni):** Dibuat mandiri dengan kode SVG/CSS tanpa menggunakan gambar berlisensi/hak cipta pihak ketiga.
+- **15 Plat Ishihara Prosedural (SVG Murni):** Dibuat mandiri dengan kode SVG/CSS tanpa menggunakan gambar berlisensi/hak cipta pihak ketiga (10 plat angka + 5 plat alur meliuk).
+- **Mode Tracing Plat Jalur Berkelok (Winding Path Tracing):** Kanvas interaktif sentuh/mouse untuk menelusuri rute alur warna dari Titik A ke Titik B secara bebas dengan kuas halus dan fitur verifikasi alur rujukan resmi.
 - **Interaksi Angka Cepat:** Pilihan ganda responsif dengan dukungan tombol angka keyboard (1–4).
 - **Skrining & Rekomendasi Klinis:** Skor instan beserta rincian diagnostik tiap butir soal.
 - **Kepatuhan Integritas & Edukasi:** Menyertakan disclaimer medis resmi bahwa aplikasi ini merupakan sarana edukatif dan bukan pengganti diagnosis faskes resmi.

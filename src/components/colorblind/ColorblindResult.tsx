@@ -1,10 +1,12 @@
 import React from 'react';
 import { ColorblindTestResult, UserColorblindAnswer } from '../../types';
-import { COLORBLIND_QUESTIONS } from '../../data/colorblind-questions';
+import { COLORBLIND_DIGIT_QUESTIONS, COLORBLIND_TRACING_QUESTIONS } from '../../data/colorblind-questions';
 import { 
   CheckCircle2, XCircle, AlertTriangle, RotateCcw, 
   Briefcase, Home as HomeIcon, ShieldAlert, Award, FileText
 } from 'lucide-react';
+
+const ALL_QUESTIONS_LOOKUP = [...COLORBLIND_DIGIT_QUESTIONS, ...COLORBLIND_TRACING_QUESTIONS];
 
 interface ColorblindResultProps {
   result: ColorblindTestResult;
@@ -132,12 +134,12 @@ export const ColorblindResult: React.FC<ColorblindResultProps> = ({
       <div className="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
         <h3 className="text-base sm:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
           <FileText className="w-5 h-5 text-blue-600" />
-          <span>Rincian Hasil per Plat Soal (1–10)</span>
+          <span>Rincian Hasil per Plat Soal (1–{answers.length})</span>
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {answers.map((ans, idx) => {
-            const questionData = COLORBLIND_QUESTIONS.find(q => q.id === ans.questionId);
+          {answers.map((ans) => {
+            const questionData = ALL_QUESTIONS_LOOKUP.find(q => q.id === ans.questionId);
 
             return (
               <div

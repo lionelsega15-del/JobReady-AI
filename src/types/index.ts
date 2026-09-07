@@ -67,14 +67,29 @@ export interface InterviewSessionState {
   timerDurationSeconds?: number;
 }
 
+export type ColorblindMode = 'digits' | 'tracing' | 'all';
+
+export interface PathPoint {
+  x: number;
+  y: number;
+}
+
 export interface ColorblindQuestion {
   id: string;
   plateNumber: number;
+  category?: 'digit' | 'winding-path';
   correctAnswer: number | string;
   options: (number | string)[];
-  plateType: 'demonstration' | 'transformation' | 'vanishing' | 'hidden-digit';
+  plateType: 'demonstration' | 'transformation' | 'vanishing' | 'hidden-digit' | 'winding-path';
   diagnosisNote: string;
   paletteType: 'orange-green' | 'red-green' | 'yellow-blue' | 'blue-green';
+  // Tracing mode specific fields
+  instruction?: string;
+  startPoint?: { x: number; y: number; label: string };
+  endPoint?: { x: number; y: number; label: string };
+  pathPoints?: PathPoint[];
+  altPathPoints?: PathPoint[];
+  pathWidth?: number;
 }
 
 export interface UserColorblindAnswer {
@@ -83,6 +98,7 @@ export interface UserColorblindAnswer {
   selectedAnswer: number | string;
   correctAnswer: number | string;
   isCorrect: boolean;
+  userTracedPath?: PathPoint[];
 }
 
 export interface ColorblindTestResult {
@@ -94,3 +110,4 @@ export interface ColorblindTestResult {
   explanation: string;
   recommendation: string;
 }
+

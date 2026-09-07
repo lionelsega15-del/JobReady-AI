@@ -12,6 +12,7 @@ interface HomeProps {
 
 export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const [previewTab, setPreviewTab] = useState<'interview' | 'ishihara'>('interview');
 
   const toggleFaq = (index: number) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -19,15 +20,15 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
   return (
     <div className="space-y-16 sm:space-y-24 pb-16">
-      {/* Hero Section with Split Layout & Live Preview Card */}
+      {/* Hero Section with Split Layout & Interactive Preview Card */}
       <section className="relative pt-6 sm:pt-12 bg-grid-slate">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-blue-800 text-xs font-semibold shadow-2xs">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-blue-800 text-xs font-semibold shadow-2xs">
                 <Target className="w-3.5 h-3.5 text-blue-600" />
-                <span>Standar Kompetensi Kerja Kejuruan & Industri</span>
+                <span>Standar Rekrutmen Kerja Vokasi & Industri</span>
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-[1.15]">
@@ -35,7 +36,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                Latihan mandiri interaktif untuk siswa SMK/SMA dan instrumen pendamping Guru BK & BKK. Kuasai artikulasi jawaban metode STAR serta verifikasi persepsi visual warna secara mandiri.
+                Platform latihan mandiri interaktif untuk siswa SMK/SMA dan pendamping Guru BK & BKK. Latih artikulasi jawaban metode STAR serta verifikasi ketajaman persepsi warna dengan modul angka dan alur berkelok.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 sm:gap-4 pt-2">
@@ -57,27 +58,23 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 </button>
               </div>
 
-              {/* Highlights */}
-              <div className="pt-4 border-t border-slate-200/80 flex flex-wrap items-center justify-center lg:justify-start gap-y-2 gap-x-5 text-xs text-slate-600 font-medium">
+              {/* Highlights - Simplified & Elegant */}
+              <div className="pt-4 border-t border-slate-200/80 flex flex-wrap items-center justify-center lg:justify-start gap-y-2.5 gap-x-5 text-xs text-slate-600 font-medium">
                 <span className="flex items-center gap-1.5">
                   <Check className="w-4 h-4 text-blue-600 stroke-[2.5]" />
                   5 Kluster Jurusan SMK
                 </span>
                 <span className="flex items-center gap-1.5">
                   <Check className="w-4 h-4 text-blue-600 stroke-[2.5]" />
-                  Mode Timer Seleksi DUDI
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Check className="w-4 h-4 text-blue-600 stroke-[2.5]" />
                   Format STAR Terarah
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Check className="w-4 h-4 text-indigo-600 stroke-[2.5]" />
-                  Riwayat Evaluasi Tersimpan
+                  <Check className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
+                  Mode Tracing Alur Berkelok
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Check className="w-4 h-4 text-emerald-600 stroke-[2.5]" />
-                  100% Privasi di Browser
+                  <Check className="w-4 h-4 text-indigo-600 stroke-[2.5]" />
+                  Riwayat Tersimpan Lokal
                 </span>
               </div>
             </div>
@@ -85,51 +82,135 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             {/* Right Live Simulation Preview Widget */}
             <div className="lg:col-span-5">
               <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xl shadow-slate-200/50 p-5 sm:p-6 space-y-4">
+                {/* Preview Tabs */}
                 <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-800">
-                      Live Preview Penilaian
-                    </span>
+                  <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewTab('interview')}
+                      className={`px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                        previewTab === 'interview'
+                          ? 'bg-white text-blue-700 shadow-2xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      Wawancara STAR
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewTab('ishihara')}
+                      className={`px-3 py-1 rounded-lg text-xs font-semibold transition cursor-pointer flex items-center gap-1 ${
+                        previewTab === 'ishihara'
+                          ? 'bg-white text-emerald-700 shadow-2xs'
+                          : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                    >
+                      <span>Tracing Ishihara</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    </button>
                   </div>
-                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-700">
-                    Teknik Jaringan (TKJ)
+
+                  <span className="text-[11px] font-semibold px-2 py-0.5 rounded bg-slate-100 text-slate-600">
+                    Live Demo
                   </span>
                 </div>
 
-                <div className="space-y-2">
-                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                    Pertanyaan Pewawancara:
-                  </span>
-                  <p className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
-                    "Bagaimana tindakan Anda saat terjadi gangguan koneksi jaringan LAN mendadak di kantor?"
-                  </p>
-                </div>
+                {previewTab === 'interview' ? (
+                  <div className="space-y-3.5">
+                    <div className="space-y-1.5">
+                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
+                        Pertanyaan Rekruter (TKJ):
+                      </span>
+                      <p className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
+                        "Bagaimana tindakan Anda saat terjadi gangguan koneksi jaringan LAN mendadak di kantor?"
+                      </p>
+                    </div>
 
-                {/* Sample Answer with STAR badges */}
-                <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-200 text-xs space-y-2">
-                  <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500">
-                    <span>Contoh Jawaban Siswa</span>
-                    <span className="text-emerald-700 font-bold">Skor: 92/100</span>
-                  </div>
-                  <p className="text-slate-700 italic leading-relaxed text-[11px] sm:text-xs">
-                    "Saat praktikum, saya langsung mengecek status LED switch dan kabel RJ-45 (Situasi), melakukan ping loopback ke gateway (Aksi), dan mengisolasi port yang bermasalah sehingga jaringan pulih dalam 5 menit (Hasil)."
-                  </p>
-                  <div className="flex flex-wrap gap-1 pt-1">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">
-                      ✓ STAR Terstruktur
-                    </span>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                      ✓ Terminologi: Switch, Ping, Gateway
-                    </span>
-                  </div>
-                </div>
+                    {/* Sample Answer with STAR badges */}
+                    <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-200 text-xs space-y-2">
+                      <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500">
+                        <span>Contoh Jawaban Siswa</span>
+                        <span className="text-emerald-700 font-bold">Skor: 92/100</span>
+                      </div>
+                      <p className="text-slate-700 italic leading-relaxed text-[11px] sm:text-xs">
+                        "Saat praktikum, saya langsung mengecek status LED switch dan kabel RJ-45 (Situasi), melakukan ping loopback ke gateway (Aksi), dan mengisolasi port yang bermasalah sehingga jaringan pulih dalam 5 menit (Hasil)."
+                      </p>
+                      <div className="flex flex-wrap gap-1 pt-1">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800">
+                          ✓ STAR Terstruktur
+                        </span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                          ✓ Terminologi: Switch, Ping, Gateway
+                        </span>
+                      </div>
+                    </div>
 
-                {/* Feedback Note */}
-                <div className="bg-blue-50/70 border border-blue-200/80 rounded-xl p-3 text-[11px] text-blue-900 leading-relaxed">
-                  <span className="font-bold block mb-0.5">Catatan Evaluator:</span>
-                  Artikulasi lugas, sistematis, dan langsung memberikan solusi teknis yang jelas. Sangat siap kerja!
-                </div>
+                    {/* Feedback Note */}
+                    <div className="bg-blue-50/70 border border-blue-200/80 rounded-xl p-3 text-[11px] text-blue-900 leading-relaxed">
+                      <span className="font-bold block mb-0.5">Catatan Evaluator:</span>
+                      Artikulasi lugas, sistematis, dan langsung memberikan solusi teknis yang jelas. Sangat siap kerja!
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3 text-center">
+                    <div className="flex items-center justify-between text-xs text-slate-500">
+                      <span className="font-semibold text-slate-800">Plat #26: Alur Winding Berkelok</span>
+                      <span className="text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
+                        Kanvas Interaktif
+                      </span>
+                    </div>
+
+                    {/* Mini Visual Preview of Ishihara Tracing Plate */}
+                    <div className="relative w-44 h-44 mx-auto my-2 rounded-full p-1.5 bg-slate-100 border border-slate-200 shadow-inner flex items-center justify-center">
+                      <svg viewBox="0 0 100 100" className="w-full h-full rounded-full bg-slate-50">
+                        <circle cx="50" cy="50" r="48" fill="#f1f5f9" stroke="#cbd5e1" strokeWidth="1" />
+                        {/* Background dots */}
+                        {[
+                          [20, 30], [35, 20], [70, 25], [80, 45], [25, 75], 
+                          [40, 85], [75, 80], [85, 70], [30, 50], [70, 55],
+                          [18, 55], [50, 20], [50, 80], [82, 30], [22, 40]
+                        ].map(([cx, cy], i) => (
+                          <circle key={i} cx={cx} cy={cy} r="4.5" fill={i % 2 === 0 ? '#65a30d' : '#84cc16'} />
+                        ))}
+                        {/* Tracing Winding Path Dots (Orange-Red) */}
+                        {[
+                          [20, 50], [30, 38], [42, 35], [50, 45], [55, 60], [68, 65], [80, 50]
+                        ].map(([cx, cy], i) => (
+                          <circle key={i} cx={cx} cy={cy} r="5" fill={i % 2 === 0 ? '#ea580c' : '#dc2626'} />
+                        ))}
+                        {/* Winding guide line */}
+                        <path
+                          d="M 20 50 Q 35 30 50 45 T 80 50"
+                          fill="none"
+                          stroke="#0284c7"
+                          strokeWidth="2.5"
+                          strokeDasharray="3 3"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      {/* Marker A & B */}
+                      <span className="absolute left-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-emerald-600 text-white font-black text-[9px] flex items-center justify-center shadow">
+                        A
+                      </span>
+                      <span className="absolute right-2.5 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-rose-600 text-white font-black text-[9px] flex items-center justify-center shadow">
+                        B
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Siswa menarik garis dari <strong>Titik A</strong> ke <strong>Titik B</strong> untuk memverifikasi alur warna tanpa terputus.
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => onNavigate('colorblind')}
+                      className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 px-3.5 py-1.5 rounded-lg border border-emerald-200 transition cursor-pointer"
+                    >
+                      <span>Coba Mode Tracing Sekarang</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -210,7 +291,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 <span className="text-xs font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded">
                   Modul 2
                 </span>
-                <span className="text-xs text-slate-500 font-medium">10 Plat Ishihara Standar</span>
+                <span className="text-xs text-slate-500 font-medium">10 Plat Angka + 5 Plat Alur Berkelok</span>
               </div>
 
               <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-3">
@@ -224,15 +305,15 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
               <ul className="space-y-3 text-xs sm:text-sm text-slate-700 mb-8">
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>10 Plat pola warna Ishihara berbasis vektor SVG murni dan bebas lisensi</span>
+                  <span>15 Plat pola warna Ishihara berbasis vektor SVG murni dan bebas lisensi</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>Interaksi cepat menggunakan tombol keyboard (1–4) atau klik layar</span>
+                  <span><strong>Mode Baru:</strong> Tracing alur meliuk interaktif dengan kanvas sentuh & kuas responsif</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>Interpretasi hasil langsung dengan rincian diagnostik butir soal</span>
+                  <span>Fitur pembanding alur rujukan resmi untuk verifikasi jawaban secara objektif</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />

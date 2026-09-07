@@ -1,9 +1,10 @@
 import { ColorblindQuestion } from '../types';
 
-export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
+export const COLORBLIND_DIGIT_QUESTIONS: ColorblindQuestion[] = [
   {
     id: 'cb-1',
     plateNumber: 1,
+    category: 'digit',
     correctAnswer: 12,
     options: [12, 17, 72, 'Tidak Terlihat'],
     plateType: 'demonstration',
@@ -13,6 +14,7 @@ export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
   {
     id: 'cb-2',
     plateNumber: 2,
+    category: 'digit',
     correctAnswer: 8,
     options: [3, 8, 9, 'Tidak Terlihat'],
     plateType: 'transformation',
@@ -22,6 +24,7 @@ export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
   {
     id: 'cb-3',
     plateNumber: 3,
+    category: 'digit',
     correctAnswer: 29,
     options: [70, 29, 26, 'Tidak Terlihat'],
     plateType: 'transformation',
@@ -31,6 +34,7 @@ export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
   {
     id: 'cb-4',
     plateNumber: 4,
+    category: 'digit',
     correctAnswer: 5,
     options: [2, 5, 6, 'Tidak Terlihat'],
     plateType: 'transformation',
@@ -40,6 +44,7 @@ export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
   {
     id: 'cb-5',
     plateNumber: 5,
+    category: 'digit',
     correctAnswer: 74,
     options: [21, 74, 71, 'Tidak Terlihat'],
     plateType: 'transformation',
@@ -49,6 +54,7 @@ export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
   {
     id: 'cb-6',
     plateNumber: 6,
+    category: 'digit',
     correctAnswer: 6,
     options: [5, 6, 8, 'Tidak Terlihat'],
     paletteType: 'blue-green',
@@ -58,6 +64,7 @@ export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
   {
     id: 'cb-7',
     plateNumber: 7,
+    category: 'digit',
     correctAnswer: 45,
     options: [45, 15, 48, 'Tidak Terlihat'],
     paletteType: 'orange-green',
@@ -67,6 +74,7 @@ export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
   {
     id: 'cb-8',
     plateNumber: 8,
+    category: 'digit',
     correctAnswer: 16,
     options: [18, 16, 76, 'Tidak Terlihat'],
     paletteType: 'red-green',
@@ -76,6 +84,7 @@ export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
   {
     id: 'cb-9',
     plateNumber: 9,
+    category: 'digit',
     correctAnswer: 7,
     options: [1, 7, 9, 'Tidak Terlihat'],
     paletteType: 'yellow-blue',
@@ -85,6 +94,7 @@ export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
   {
     id: 'cb-10',
     plateNumber: 10,
+    category: 'digit',
     correctAnswer: 2,
     options: [2, 7, 3, 'Tidak Terlihat'],
     paletteType: 'red-green',
@@ -92,3 +102,158 @@ export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
     diagnosisNote: 'Penglihatan normal melihat angka 2 dengan kontras titik merah di atas pola hijau.',
   },
 ];
+
+export const COLORBLIND_TRACING_QUESTIONS: ColorblindQuestion[] = [
+  {
+    id: 'cb-trace-1',
+    plateNumber: 26,
+    category: 'winding-path',
+    correctAnswer: 'Jalur A ke B Terhubung Jelas',
+    options: [
+      'Jalur A ke B Terhubung Jelas',
+      'Jalur Terputus di Tengah',
+      'Jalur Berbelok ke Bawah',
+      'Tidak Terlihat Jalur',
+    ],
+    plateType: 'demonstration',
+    paletteType: 'orange-green',
+    instruction: 'Tarik garis alur menggunakan mouse/sentuhan dari Titik A ke Titik B mengikuti rangkaian titik oranye-merah meliuk di antara titik-titik hijau.',
+    startPoint: { x: 55, y: 150, label: 'A' },
+    endPoint: { x: 245, y: 150, label: 'B' },
+    pathWidth: 24,
+    pathPoints: [
+      { x: 55, y: 150 },
+      { x: 85, y: 110 },
+      { x: 120, y: 90 },
+      { x: 150, y: 115 },
+      { x: 165, y: 175 },
+      { x: 195, y: 205 },
+      { x: 225, y: 185 },
+      { x: 245, y: 150 },
+    ],
+    diagnosisNote: 'Plat alur demonstrasi (Ishihara Plate 26). Rute alur berbentuk S ganda yang dapat ditelusuri dengan mudah oleh mata normal maupun defisiensi warna.',
+  },
+  {
+    id: 'cb-trace-2',
+    plateNumber: 27,
+    category: 'winding-path',
+    correctAnswer: 'Alur Merah Berkelok Lengkap',
+    options: [
+      'Alur Merah Berkelok Lengkap',
+      'Alur Terputus / Tidak Bersambung',
+      'Melihat Alur Berbeda',
+      'Tidak Terlihat Alur Sama Sekali',
+    ],
+    plateType: 'transformation',
+    paletteType: 'red-green',
+    instruction: 'Telusuri jalur melengkung dari Titik A (kiri atas) melewati tengah hingga Titik B (kanan bawah). Perhatikan apakah garis terasa utuh atau terputus.',
+    startPoint: { x: 75, y: 85, label: 'A' },
+    endPoint: { x: 225, y: 225, label: 'B' },
+    pathWidth: 22,
+    pathPoints: [
+      { x: 75, y: 85 },
+      { x: 110, y: 135 },
+      { x: 140, y: 110 },
+      { x: 170, y: 145 },
+      { x: 160, y: 195 },
+      { x: 195, y: 215 },
+      { x: 225, y: 225 },
+    ],
+    diagnosisNote: 'Plat alur seleksi merah-hijau (Ishihara Plate 27). Individu dengan penglihatan normal dapat menghubungkan kedua tanda silang/titik tanpa terhenti.',
+  },
+  {
+    id: 'cb-trace-3',
+    plateNumber: 28,
+    category: 'winding-path',
+    correctAnswer: 'Jalur Lengkung Bawah Terbaca Utuh',
+    options: [
+      'Jalur Lengkung Bawah Terbaca Utuh',
+      'Garis Samar di Area Tengah',
+      'Jalur Terputus Total',
+      'Tidak Terlihat Garis Berkelok',
+    ],
+    plateType: 'vanishing',
+    paletteType: 'blue-green',
+    instruction: 'Tarik garis dari Titik A di bagian kiri menuju Titik B di kanan melalui lengkungan bawah plat.',
+    startPoint: { x: 65, y: 180, label: 'A' },
+    endPoint: { x: 235, y: 180, label: 'B' },
+    pathWidth: 22,
+    pathPoints: [
+      { x: 65, y: 180 },
+      { x: 100, y: 220 },
+      { x: 150, y: 235 },
+      { x: 200, y: 220 },
+      { x: 235, y: 180 },
+    ],
+    diagnosisNote: 'Plat alur vanishing lengkung (Ishihara Plate 28). Menguji kepekaan visual terhadap gradasi rona biru-kehijauan di atas kontras dedaunan hijau.',
+  },
+  {
+    id: 'cb-trace-4',
+    plateNumber: 29,
+    category: 'winding-path',
+    correctAnswer: 'Dua Jalur Kontras Terpisah Jelas',
+    options: [
+      'Dua Jalur Kontras Terpisah Jelas',
+      'Hanya Terlihat Jalur Tunggal',
+      'Kedua Jalur Saling Membingungkan',
+      'Tidak Terlihat Jalur Apapun',
+    ],
+    plateType: 'transformation',
+    paletteType: 'orange-green',
+    instruction: 'Amati dan telusuri jalur utama yang menghubungkan Titik A ke Titik B secara kontinu tanpa melompat.',
+    startPoint: { x: 60, y: 110, label: 'A' },
+    endPoint: { x: 230, y: 120, label: 'B' },
+    pathWidth: 22,
+    pathPoints: [
+      { x: 60, y: 110 },
+      { x: 95, y: 160 },
+      { x: 130, y: 130 },
+      { x: 170, y: 175 },
+      { x: 205, y: 140 },
+      { x: 230, y: 120 },
+    ],
+    diagnosisNote: 'Plat alur ganda bersilangan (Ishihara Plate 29). Pada defisiensi warna, penguji kerap mengabaikan satu jalur atau melompat ke alur latar yang salah.',
+  },
+  {
+    id: 'cb-trace-5',
+    plateNumber: 30,
+    category: 'winding-path',
+    correctAnswer: 'Jalur Berkelok Zig-Zag Sempurna',
+    options: [
+      'Jalur Berkelok Zig-Zag Sempurna',
+      'Jalur Terputus di Puncak Tengah',
+      'Hanya Terlihat Titik Acak',
+      'Tidak Ada Pola Terlihat',
+    ],
+    plateType: 'transformation',
+    paletteType: 'yellow-blue',
+    instruction: 'Hubungkan Titik A dari kiri bawah melingkari titik tengah menuju Titik B di kanan atas.',
+    startPoint: { x: 70, y: 220, label: 'A' },
+    endPoint: { x: 230, y: 80, label: 'B' },
+    pathWidth: 22,
+    pathPoints: [
+      { x: 70, y: 220 },
+      { x: 110, y: 180 },
+      { x: 135, y: 215 },
+      { x: 165, y: 125 },
+      { x: 195, y: 145 },
+      { x: 230, y: 80 },
+    ],
+    diagnosisNote: 'Plat alur diagonal zig-zag (Ishihara Plate 30). Memverifikasi kontinuitas persepsi warna pada sumbu kontras tritan/kuning-oranye.',
+  },
+];
+
+// Default compatibility export
+export const COLORBLIND_QUESTIONS: ColorblindQuestion[] = [
+  ...COLORBLIND_DIGIT_QUESTIONS,
+];
+
+export function getQuestionsByMode(mode: 'digits' | 'tracing' | 'all'): ColorblindQuestion[] {
+  if (mode === 'tracing') {
+    return COLORBLIND_TRACING_QUESTIONS;
+  }
+  if (mode === 'all') {
+    return [...COLORBLIND_DIGIT_QUESTIONS, ...COLORBLIND_TRACING_QUESTIONS];
+  }
+  return COLORBLIND_DIGIT_QUESTIONS;
+}

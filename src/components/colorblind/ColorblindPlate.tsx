@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react';
-import { ColorblindQuestion } from '../../types';
+import { ColorblindQuestion, PathPoint } from '../../types';
+import { PathTracingCanvas } from './PathTracingCanvas';
 
 interface ColorblindPlateProps {
   question: ColorblindQuestion;
+  onPathDrawn?: (hasDrawn: boolean) => void;
 }
 
 // 7x5 dot matrix definitions for digits 0-9
@@ -127,7 +129,28 @@ interface Dot {
   color: string;
 }
 
-export const ColorblindPlate: React.FC<ColorblindPlateProps> = ({ question }) => {
+// Distance from point to line segment [p1, p2]
+function distToSegment(px: number, py: number, x1: number, y1: number, x2: number, y2: number): number {
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const l2 = dx * dx + dy * dy;
+  if (l2 === 0) return Math.hypot(px - x1, py - y1);
+  let t = ((px - x1) * dx + (py - y1) * dy) / l2;
+  t = Math.max(0, Math.min(1, t));
+  return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+}
+
+function isPointOnWindingPath(px: number, py: number, points: PathPoint[], radius: number): boolean {
+  for (let i = 0; i < points.length - 1; i++) {
+    const d = distToSegment(px, py, points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+    if (d <= radius) return true;
+  }
+  return false;
+}
+
+export const ColorblindPlate: React.FC<ColorblindPlateProps> = ({ question, onPathDrawn }) => {
+  const isTracing = question.category === 'winding-path';
+
   const dots: Dot[] = useMemo(() => {
     const list: Dot[] = [];
     const size = 300;
@@ -143,8 +166,6 @@ export const ColorblindPlate: React.FC<ColorblindPlateProps> = ({ question }) =>
 
     // Helper: is a point inside the digit shape?
     const isPointInsideDigits = (px: number, py: number): boolean => {
-      // Calculate bounding box for digits
-      // Total height ~ 130px, digit width ~ 48px
       const digitHeight = 126;
       const digitWidth = 52;
       const digitGap = 12;
@@ -160,7 +181,6 @@ export const ColorblindPlate: React.FC<ColorblindPlateProps> = ({ question }) =>
         const dX = startX + d * (digitWidth + digitGap);
         const dY = startY;
 
-        // Check if px, py falls inside this digit's bounds
         if (px >= dX && px <= dX + digitWidth && py >= dY && py <= dY + digitHeight) {
           const colIndex = Math.floor(((px - dX) / digitWidth) * 5);
           const rowIndex = Math.floor(((py - dY) / digitHeight) * 7);
@@ -185,6 +205,7 @@ export const ColorblindPlate: React.FC<ColorblindPlateProps> = ({ question }) =>
     // Generate hexagonal/jittered grid of dots within circle
     const step = 10.5;
     let dotId = 0;
+    const pathRadius = (question.pathWidth || 22) / 2;
 
     for (let y = center - plateRadius; y <= center + plateRadius; y += step) {
       const rowOffset = (Math.floor(y / step) % 2 === 0) ? (step / 2) : 0;
@@ -196,11 +217,18 @@ export const ColorblindPlate: React.FC<ColorblindPlateProps> = ({ question }) =>
 
         const distFromCenter = Math.hypot(cx - center, cy - center);
         if (distFromCenter < plateRadius - 3) {
-          const inTarget = isPointInsideDigits(cx, cy);
-          const r = 3.6 + pseudoRandom() * 4.2;
+          let inTarget = false;
 
+          if (isTracing && question.pathPoints && question.pathPoints.length > 1) {
+            inTarget = isPointOnWindingPath(cx, cy, question.pathPoints, pathRadius);
+          } else {
+            inTarget = isPointInsideDigits(cx, cy);
+          }
+
+          const r = 3.6 + pseudoRandom() * 4.2;
           let colorPool = inTarget ? palette.target : palette.background;
-          // In subtle vanishing plates, introduce a tiny 5% background noise into the digit to make it blend authentically
+
+          // In subtle vanishing plates, introduce subtle background noise
           if (inTarget && pseudoRandom() < 0.08) {
             colorPool = palette.background;
           }
@@ -219,36 +247,53 @@ export const ColorblindPlate: React.FC<ColorblindPlateProps> = ({ question }) =>
     }
 
     return list;
-  }, [question]);
+  }, [question, isTracing]);
 
   return (
-    <div className="flex flex-col items-center justify-center p-4">
-      <div className="relative p-2.5 rounded-full bg-slate-900/5 shadow-inner border border-slate-200">
-        <svg
-          viewBox="0 0 300 300"
-          className="w-64 h-64 sm:w-80 sm:h-80 rounded-full select-none"
-          style={{ background: '#f1f5f9' }}
-        >
-          {/* Subtle outer circular rim */}
-          <circle cx="150" cy="150" r="147" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="2" />
-          
-          {/* Procedural Ishihara dots */}
-          {dots.map((dot) => (
-            <circle
-              key={dot.id}
-              cx={dot.cx}
-              cy={dot.cy}
-              r={dot.r}
-              fill={dot.color}
-              className="transition-colors duration-300"
-            />
-          ))}
-        </svg>
+    <div className="flex flex-col items-center justify-center p-2 sm:p-4">
+      {/* Visual Plate Frame */}
+      <div className="relative p-2.5 rounded-full bg-slate-900/5 shadow-inner border border-slate-200/80">
+        <div className="relative w-64 h-64 sm:w-80 sm:h-80 rounded-full overflow-hidden">
+          {/* Base Ishihara SVG Plate */}
+          <svg
+            viewBox="0 0 300 300"
+            className="w-full h-full rounded-full select-none"
+            style={{ background: '#f8fafc' }}
+          >
+            {/* Outer circular rim */}
+            <circle cx="150" cy="150" r="147" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="2" />
+
+            {/* Procedural Ishihara dots */}
+            {dots.map((dot) => (
+              <circle
+                key={dot.id}
+                cx={dot.cx}
+                cy={dot.cy}
+                r={dot.r}
+                fill={dot.color}
+                className="transition-colors duration-300"
+              />
+            ))}
+          </svg>
+
+          {/* Interactive Tracing Canvas (if winding path) */}
+          {isTracing && (
+            <div className="absolute inset-0 z-20">
+              <PathTracingCanvas
+                startPoint={question.startPoint}
+                endPoint={question.endPoint}
+                canonicalPath={question.pathPoints}
+                instruction={question.instruction}
+                onPathChange={onPathDrawn}
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="mt-3 text-center">
         <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-          Plat #{question.plateNumber} — Gaya Ishihara Prosedural SVG
+          Plat #{question.plateNumber} — {isTracing ? 'Penelusuran Alur Berkelok (Winding Path)' : 'Skrining Angka Ishihara'}
         </span>
       </div>
     </div>
