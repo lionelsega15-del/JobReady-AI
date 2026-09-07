@@ -116,8 +116,9 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
                 <span className="text-[11px] font-bold text-blue-900 uppercase tracking-wider block mb-2">
                   Durasi Per Pertanyaan:
                 </span>
-                <div className="grid grid-cols-3 gap-1.5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
                   {[
+                    { sec: 15, label: '15 Detik', desc: 'Tes Cepat' },
                     { sec: 60, label: '1 Menit', desc: 'Cepat' },
                     { sec: 120, label: '2 Menit', desc: 'Standar DUDI' },
                     { sec: 180, label: '3 Menit', desc: 'Mendalam' },

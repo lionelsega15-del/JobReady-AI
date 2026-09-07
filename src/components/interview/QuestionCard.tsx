@@ -261,7 +261,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
 
   const charLength = answerText.trim().length;
   const isMinimumMet = charLength >= 20;
-  const isCriticalTime = mode === 'timed' && timeLeft <= 10 && timeLeft > 0 && !isPaused && !isTimeUp;
+  const isCriticalTime = mode === 'timed' && (timeLeft <= 10 || isTimeUp) && !isPaused;
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -364,6 +364,21 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
+            {/* Quick 10s preview trigger button */}
+            {timeLeft > 10 && !isTimeUp && (
+              <button
+                type="button"
+                onClick={() => {
+                  setTimeLeft(10);
+                  getAudioContext();
+                }}
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold cursor-pointer transition active:scale-95 shadow-2xs"
+                title="Lompat langsung ke 10 detik terakhir untuk menguji efek detak & suara"
+              >
+                <span>⚡ Coba Efek 10s</span>
+              </button>
+            )}
+
             {/* Audio Toggle Button */}
             <button
               type="button"
