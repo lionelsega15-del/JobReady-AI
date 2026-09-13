@@ -128,27 +128,35 @@ export function getScoreBadge(score: number) {
 }
 
 /**
- * Menghasilkan teks tanggapan lisan alami dari pewawancara AI
- * untuk dibacakan langsung melalui Text-to-Speech setelah kandidat menjawab
+ * Menghasilkan respon lisan pewawancara alami seperti HR sungguhan
+ * TANPA menyebutkan skor/angka, lalu langsung menyambung ke pertanyaan berikutnya
  */
-export function generateSpokenFeedback(
+export function generateNaturalHRResponse(
   question: InterviewQuestion,
-  feedback: AnswerFeedback
+  feedback: AnswerFeedback,
+  isLastQuestion: boolean,
+  nextQuestionIndex?: number
 ): string {
-  const { score, status, strengths, suggestions } = feedback;
-  
-  if (status === 'excellent') {
-    const keyStrength = strengths.length > 0 ? strengths[0] : 'Jawaban Anda sangat terstruktur dan meyakinkan.';
-    return `Bagus sekali! ${keyStrength} Skor Anda untuk pertanyaan ini adalah ${score}. Pertahankan ketenangan dan artikulasi profesional seperti ini.`;
+  const { status, matchedKeywords } = feedback;
+  let acknowledgment = '';
+
+  if (matchedKeywords && matchedKeywords.length > 0) {
+    const kwSample = matchedKeywords.slice(0, 2).join(' dan ');
+    acknowledgment = `Baik, terima kasih atas penjelasannya. Menarik sekali mendengar cara Anda menerapkan ${kwSample} pada situasi tersebut.`;
+  } else if (status === 'excellent') {
+    acknowledgment = 'Baik, penjelasan yang sangat runtut dan gamblang. Pendekatan dan inisiatif kerja nyata seperti ini memang sangat dibutuhkan di lingkungan industri.';
+  } else if (status === 'moderate') {
+    acknowledgment = 'Baik, saya mencatat poin penting dan alur tindakan yang Anda sampaikan tadi.';
+  } else {
+    acknowledgment = 'Baik, terima kasih atas tanggapan yang Anda sampaikan.';
   }
-  
-  if (status === 'moderate') {
-    const keySuggestion = suggestions.length > 0 ? suggestions[0] : 'Perkuat dengan metode STAR agar lebih memukau.';
-    return `Jawaban Anda sudah cukup mengena dengan skor ${score}. Catatan evaluasi saya: ${keySuggestion}. Terus asah artikulasi Anda.`;
+
+  if (isLastQuestion) {
+    return `${acknowledgment} Seluruh rangkaian pertanyaan wawancara telah selesai. Terima kasih banyak atas partisipasi Anda, saya akan langsung siapkan ringkasan evaluasi lengkapnya.`;
+  } else {
+    const nextNum = (nextQuestionIndex ?? 0) + 1;
+    return `${acknowledgment} Nah, sekarang kita lanjutkan ke pertanyaan nomor ${nextNum} ya.`;
   }
-  
-  // needs-improvement
-  const tip = suggestions.length > 0 ? suggestions[0] : 'Ceritakan pengalaman nyata secara lebih lengkap.';
-  return `Terima kasih atas jawabannya. Skor Anda adalah ${score}. Masukan dari saya: ${tip}. Jangan ragu untuk berbicara lebih terperinci.`;
 }
+
 
