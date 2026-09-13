@@ -15,7 +15,7 @@ export const Footer: React.FC = () => {
               <span className="font-bold text-white text-lg tracking-tight">JobReady</span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Platform latihan mandiri wawancara kerja dan asesmen visual persepsi warna untuk siswa SMK/SMA menuju dunia usaha dan industri (DUDI).
+              Platform latihan mandiri wawancara kerja tatap muka kamera dan dialog audio AI untuk siswa SMK/SMA menuju dunia usaha dan industri (DUDI).
             </p>
             <div className="pt-1 flex items-center gap-2 text-[11px] text-emerald-400">
               <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
@@ -27,15 +27,15 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="text-xs font-semibold uppercase text-slate-200 tracking-wider mb-3.5 flex items-center gap-1.5">
               <BookOpen className="w-3.5 h-3.5 text-blue-400" />
-              Modul Latihan
+              Kluster Kejuruan
             </h4>
             <ul className="text-xs text-slate-400 space-y-2">
               <li>Teknik Kendaraan Ringan (Otomotif)</li>
               <li>Teknik Komputer & Jaringan (TKJ)</li>
               <li>Tata Boga / Seni Kuliner</li>
               <li>Akuntansi & Keuangan Lembaga</li>
-              <li>Wawancara HR / Kepribadian Umum</li>
-              <li>Skrining Ishihara 10 Plat SVG</li>
+              <li>Wawancara HR & Kepribadian Umum</li>
+              <li>Simulasi Video Call & Perekam Nyata</li>
             </ul>
           </div>
 
@@ -43,14 +43,14 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="text-xs font-semibold uppercase text-slate-200 tracking-wider mb-3.5 flex items-center gap-1.5">
               <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-              Pendekatan & Standar
+              Fitur Interaktif
             </h4>
             <ul className="text-xs text-slate-400 space-y-2">
+              <li>Preview Kamera Tatap Muka Langsung</li>
+              <li>Pewawancara AI Bersuara (Audio TTS)</li>
+              <li>Respon Evaluasi Lisan Otomatis</li>
               <li>Metode STAR (Situation, Task, Action, Result)</li>
-              <li>Standar Kompetensi Kerja Kejuruan</li>
-              <li>Analisis Terminologi & Kata Kunci Teknis</li>
-              <li>Dukungan Praktik Suara (Speech-to-Text)</li>
-              <li>Pedoman Konseling BKK & Guru BK</li>
+              <li>Rapor Evaluasi & Cetak PDF</li>
             </ul>
           </div>
 
@@ -61,10 +61,10 @@ export const Footer: React.FC = () => {
             </h4>
             <div className="bg-slate-900/90 rounded-xl p-3.5 border border-slate-800 text-[11px] text-slate-400 leading-relaxed space-y-2">
               <p>
-                Seluruh pengolahan jawaban dan suara dilakukan langsung di browser Anda. Tidak ada data pribadi atau rekaman yang disimpan di server eksternal.
+                Seluruh pengolahan kamera video, suara mikrofon, dan transkripsi dijalankan 100% di browser lokal Anda. Tidak ada video atau rekaman audio yang dikirim ke server luar.
               </p>
               <p className="text-slate-500 text-[10px] pt-1 border-t border-slate-800">
-                *Tes buta warna adalah simulasi latihan awal, bukan surat keterangan medis resmi faskes.
+                *Simulasi dirancang untuk pendampingan siswa dan Guru BK dalam persiapan rekrutmen kerja.
               </p>
             </div>
           </div>

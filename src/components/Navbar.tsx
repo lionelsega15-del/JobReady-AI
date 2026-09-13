@@ -38,15 +38,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
           <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold shadow-sm group-hover:bg-blue-600 transition-colors">
             <GraduationCap className="w-5 h-5 text-blue-400 group-hover:text-white transition-colors" />
           </div>
-          <div>
+            <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-slate-900 text-lg tracking-tight">JobReady</span>
-              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
-                Kejuruan & Vokasi
+              <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                AI Tatap Muka
               </span>
             </div>
             <p className="text-[11px] text-slate-500 hidden sm:block">
-              Simulasi Wawancara Kerja & Tes Fisik Ishihara
+              Simulasi Wawancara Kerja Interaktif & Audio AI Vokasi
             </p>
           </div>
         </button>
@@ -67,14 +67,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
 
           <button
             onClick={() => onNavigate('interview')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition cursor-pointer ${
               currentPage === 'interview'
-                ? 'bg-blue-50 text-blue-700 font-semibold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                ? 'bg-blue-600 text-white font-semibold shadow-xs'
+                : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
             }`}
           >
-            <Briefcase className="w-4 h-4 text-blue-600" />
+            <Briefcase className="w-4 h-4 text-blue-400" />
             <span>Simulasi Wawancara</span>
+            <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-blue-500/30 text-blue-100">
+              Live
+            </span>
           </button>
 
           <button
@@ -86,24 +89,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             }`}
           >
             <History className="w-4 h-4 text-indigo-600" />
-            <span>Riwayat</span>
+            <span>Riwayat Latihan</span>
             {historyCount > 0 && (
               <span className="ml-0.5 px-1.5 py-0.2 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-700">
                 {historyCount}
               </span>
             )}
-          </button>
-
-          <button
-            onClick={() => onNavigate('colorblind')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition cursor-pointer ${
-              currentPage === 'colorblind'
-                ? 'bg-emerald-50 text-emerald-700 font-semibold'
-                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-            }`}
-          >
-            <Eye className="w-4 h-4 text-emerald-600" />
-            <span>Tes Buta Warna</span>
           </button>
         </nav>
       </div>

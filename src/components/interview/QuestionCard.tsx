@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { InterviewQuestion, Field, InterviewMode } from '../../types';
+import { speechService } from '../../lib/speech-service';
 import { 
   Lightbulb, Mic, MicOff, AlertCircle, ChevronRight, HelpCircle, 
-  UserCheck, Clock, Pause, Play, AlertTriangle, Volume2, VolumeX 
+  UserCheck, Clock, Pause, Play, AlertTriangle, Volume2, VolumeX, RotateCcw
 } from 'lucide-react';
 
 interface QuestionCardProps {
@@ -38,7 +39,22 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
   const [isTimeUp, setIsTimeUp] = useState<boolean>(false);
   const [elapsedSeconds, setElapsedSeconds] = useState<number>(0);
   const [isMuted, setIsMuted] = useState<boolean>(false);
+  const [isSpeakingQuestion, setIsSpeakingQuestion] = useState<boolean>(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
+
+  const handleSpeakQuestion = () => {
+    if (isSpeakingQuestion) {
+      speechService.stop();
+      setIsSpeakingQuestion(false);
+    } else {
+      setIsSpeakingQuestion(true);
+      speechService.speak(question.question, {
+        onStart: () => setIsSpeakingQuestion(true),
+        onEnd: () => setIsSpeakingQuestion(false),
+        onError: () => setIsSpeakingQuestion(false),
+      });
+    }
+  };
 
   // Initialize or resume Web Audio Context safely
   const getAudioContext = () => {
@@ -458,10 +474,26 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">
             {currentIndex + 1}
           </div>
-          <div>
+          <div className="flex-1">
             <h3 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug">
               {question.question}
             </h3>
+
+            <div className="mt-2.5 flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleSpeakQuestion}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer border ${
+                  isSpeakingQuestion
+                    ? 'bg-blue-600 text-white border-blue-600 animate-pulse'
+                    : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+                }`}
+                title="Dengarkan pembacaan pertanyaan dengan suara Bahasa Indonesia"
+              >
+                <Volume2 className="w-3.5 h-3.5" />
+                <span>{isSpeakingQuestion ? 'AI Sedang Membaca...' : 'Dengarkan Pertanyaan (Suara AI)'}</span>
+              </button>
+            </div>
           </div>
         </div>
 

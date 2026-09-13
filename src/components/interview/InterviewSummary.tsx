@@ -16,7 +16,7 @@ interface InterviewSummaryProps {
   totalSessionDuration?: number;
   onRestart: () => void;
   onSelectOtherField: () => void;
-  onGoToColorblind: () => void;
+  onGoToColorblind?: () => void;
   onGoToHistory?: () => void;
 }
 
@@ -158,25 +158,17 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
 
             <button
               onClick={onRestart}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-slate-300 bg-white text-slate-700 text-xs font-semibold hover:bg-slate-50 transition cursor-pointer shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition cursor-pointer shadow-2xs"
             >
               <RotateCcw className="w-4 h-4" />
-              <span>Ulangi Sesi</span>
+              <span>Simulasi Ulang Bidang Ini</span>
             </button>
 
             <button
               onClick={onSelectOtherField}
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800 transition cursor-pointer shadow-2xs"
             >
-              <span>Pilih Bidang Lain</span>
-            </button>
-
-            <button
-              onClick={onGoToColorblind}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition shadow-2xs cursor-pointer"
-            >
-              <Eye className="w-4 h-4" />
-              <span>Lanjut Tes Buta Warna</span>
+              <span>Pilih Kejuruan Lain</span>
             </button>
           </div>
         </div>

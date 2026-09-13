@@ -126,3 +126,29 @@ export function getScoreBadge(score: number) {
     desc: 'Jawaban masih terlalu ringkas atau belum menyentuh inti kompetensi. Disarankan konsultasi dengan Guru BK.',
   };
 }
+
+/**
+ * Menghasilkan teks tanggapan lisan alami dari pewawancara AI
+ * untuk dibacakan langsung melalui Text-to-Speech setelah kandidat menjawab
+ */
+export function generateSpokenFeedback(
+  question: InterviewQuestion,
+  feedback: AnswerFeedback
+): string {
+  const { score, status, strengths, suggestions } = feedback;
+  
+  if (status === 'excellent') {
+    const keyStrength = strengths.length > 0 ? strengths[0] : 'Jawaban Anda sangat terstruktur dan meyakinkan.';
+    return `Bagus sekali! ${keyStrength} Skor Anda untuk pertanyaan ini adalah ${score}. Pertahankan ketenangan dan artikulasi profesional seperti ini.`;
+  }
+  
+  if (status === 'moderate') {
+    const keySuggestion = suggestions.length > 0 ? suggestions[0] : 'Perkuat dengan metode STAR agar lebih memukau.';
+    return `Jawaban Anda sudah cukup mengena dengan skor ${score}. Catatan evaluasi saya: ${keySuggestion}. Terus asah artikulasi Anda.`;
+  }
+  
+  // needs-improvement
+  const tip = suggestions.length > 0 ? suggestions[0] : 'Ceritakan pengalaman nyata secara lebih lengkap.';
+  return `Terima kasih atas jawabannya. Skor Anda adalah ${score}. Masukan dari saya: ${tip}. Jangan ragu untuk berbicara lebih terperinci.`;
+}
+
