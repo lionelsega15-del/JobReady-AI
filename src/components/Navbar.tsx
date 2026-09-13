@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PageView } from '../types';
-import { Briefcase, Eye, Home as HomeIcon, GraduationCap, History } from 'lucide-react';
+import { Briefcase, Home as HomeIcon, GraduationCap, History, MessageSquareText } from 'lucide-react';
 import { getInterviewHistory } from '../lib/storage';
 
 interface NavbarProps {
@@ -95,6 +95,21 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
                 {historyCount}
               </span>
             )}
+          </button>
+
+          <button
+            onClick={() => onNavigate('debate')}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition cursor-pointer ${
+              currentPage === 'debate'
+                ? 'bg-purple-100 text-purple-700 font-semibold'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            <MessageSquareText className="w-4 h-4 text-purple-500" />
+            <span className="hidden sm:inline">AI Debat</span>
+            <span className="text-[10px] uppercase font-bold px-1.5 py-0.5 rounded bg-purple-100 text-purple-600 border border-purple-200">
+              Baru
+            </span>
           </button>
         </nav>
       </div>

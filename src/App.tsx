@@ -5,6 +5,7 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { InterviewPage } from './pages/Interview';
 import { HistoryPage } from './pages/History';
+import { DebatePage } from './pages/Debate';
 
 export function App() {
   const [currentPage, setCurrentPage] = useState<PageView>('home');
@@ -23,6 +24,7 @@ export function App() {
         {currentPage === 'interview' && <InterviewPage onNavigate={setCurrentPage} />}
         {currentPage === 'history' && <HistoryPage onNavigate={setCurrentPage} />}
         {currentPage === 'colorblind' && <InterviewPage onNavigate={setCurrentPage} />}
+        {currentPage === 'debate' && <DebatePage onNavigate={setCurrentPage} />}
       </main>
 
       <Footer />
