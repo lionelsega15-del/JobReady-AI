@@ -1,4 +1,4 @@
-export type PageView = 'home' | 'interview' | 'colorblind' | 'history' | 'debate';
+export type PageView = 'home' | 'interview' | 'colorblind' | 'history';
 
 export type InterviewMode = 'relaxed' | 'timed';
 

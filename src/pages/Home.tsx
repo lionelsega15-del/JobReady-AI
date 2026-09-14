@@ -2,7 +2,7 @@ import React from 'react';
 import { PageView } from '../types';
 import { 
   Video, ArrowRight, CheckCircle2, History,
-  Wrench, Network, UtensilsCrossed, Calculator, Users, Sparkles, Volume2, Mic, MessageSquareText
+  Wrench, Network, UtensilsCrossed, Calculator, Users, Sparkles, Volume2, Mic
 } from 'lucide-react';
 
 interface HomeProps {
@@ -146,35 +146,6 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Fitur Baru: AI Debat Partner Banner */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6">
-        <div className="bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 rounded-2xl p-5 sm:p-6 text-white border border-purple-500/30 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-5">
-          <div className="flex items-start sm:items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-purple-500/20 border border-purple-400/30 flex items-center justify-center shrink-0">
-              <MessageSquareText className="w-6 h-6 text-purple-300" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-purple-300 bg-purple-500/20 px-2 py-0.5 rounded-full border border-purple-400/30">
-                  Fitur Baru
-                </span>
-                <h3 className="font-bold text-base sm:text-lg text-white">AI Debat Partner Real-Time</h3>
-              </div>
-              <p className="text-xs text-purple-200/80 mt-1 max-w-xl">
-                Asah critical thinking, retorika, dan ketajaman argumentasi secara lisan melalui percakapan dua arah langsung dengan AI!
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => onNavigate('debate')}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs sm:text-sm transition shrink-0 cursor-pointer shadow-md hover:scale-[1.02] active:scale-95"
-          >
-            <span>Mulai Debat AI</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
         </div>
       </section>
 
