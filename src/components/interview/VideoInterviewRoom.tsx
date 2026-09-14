@@ -64,14 +64,34 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
   const [timeLeft, setTimeLeft] = useState<number>(timerDurationSeconds);
   const [showTips, setShowTips] = useState<boolean>(false);
 
-  // Keep refs for callbacks
+  // Keep refs for callbacks and avoid stale closures
   const flowStateRef = useRef(flowState);
   flowStateRef.current = flowState;
 
   const candidateTranscriptRef = useRef(candidateTranscript);
   candidateTranscriptRef.current = candidateTranscript;
 
+  const manualTextRef = useRef(manualText);
+  manualTextRef.current = manualText;
+
+  const currentIndexRef = useRef(currentIndex);
+  currentIndexRef.current = currentIndex;
+
+  const questionRef = useRef(question);
+  questionRef.current = question;
+
+  const totalQuestionsRef = useRef(totalQuestions);
+  totalQuestionsRef.current = totalQuestions;
+
   const isLastQuestion = currentIndex + 1 >= totalQuestions;
+  const isLastQuestionRef = useRef(isLastQuestion);
+  isLastQuestionRef.current = isLastQuestion;
+
+  const recordingSecondsRef = useRef(recordingSeconds);
+  recordingSecondsRef.current = recordingSeconds;
+
+  const handleCandidateFinishSpeakingRef = useRef<(text?: string) => void>(() => {});
+
 
   // 1. Initialize Webcam & Microphone
   useEffect(() => {
@@ -212,7 +232,7 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
         silenceTimerRef.current = setTimeout(() => {
           const currentTotal = (candidateTranscriptRef.current + ' ' + finalT + ' ' + interimT).trim();
           if (flowStateRef.current === 'candidate_turn' && currentTotal.length >= 15) {
-            handleCandidateFinishSpeaking(currentTotal);
+            handleCandidateFinishSpeakingRef.current?.(currentTotal);
           }
         }, 3500);
       };
@@ -292,6 +312,14 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
     setTimeLeft(timerDurationSeconds);
     setShowTextDrawer(false);
 
+    // Synchronize refs
+    candidateTranscriptRef.current = '';
+    manualTextRef.current = '';
+    recordingSecondsRef.current = 0;
+    if (silenceTimerRef.current) {
+      clearTimeout(silenceTimerRef.current);
+    }
+
     const timer = setTimeout(() => {
       playQuestionSpeech(question.question);
     }, 600);
@@ -306,12 +334,16 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
   // 4. Timers (recording seconds & countdown)
   useEffect(() => {
     const interval = setInterval(() => {
-      setRecordingSeconds(prev => prev + 1);
+      setRecordingSeconds(prev => {
+        const nextSec = prev + 1;
+        recordingSecondsRef.current = nextSec;
+        return nextSec;
+      });
       if (mode === 'timed') {
         setTimeLeft(prev => {
-          if (prev <= 1 && flowState === 'candidate_turn') {
+          if (prev <= 1 && flowStateRef.current === 'candidate_turn') {
             // Auto submit when time is up
-            handleCandidateFinishSpeaking();
+            handleCandidateFinishSpeakingRef.current?.();
             return 0;
           }
           return Math.max(0, prev - 1);
@@ -320,7 +352,7 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [flowState, mode]);
+  }, [mode]);
 
   // Format seconds mm:ss
   const formatTime = (secs: number) => {
@@ -333,18 +365,28 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
   const handleCandidateFinishSpeaking = (overrideText?: string) => {
     stopCandidateListening();
 
-    const finalText = (overrideText || candidateTranscript || manualText).trim();
+    const currentIdx = currentIndexRef.current !== undefined ? currentIndexRef.current : currentIndex;
+    const currentQ = questionRef.current || question;
+    const totalQ = totalQuestionsRef.current || totalQuestions;
+    const isLastQ = currentIdx + 1 >= totalQ;
+
+    const textFromRef = candidateTranscriptRef.current || manualTextRef.current;
+    const finalText = (overrideText || textFromRef || candidateTranscript || manualText).trim();
     const answerToEvaluate = finalText.length > 0 ? finalText : 'Kandidat telah memberikan tanggapan lisan.';
 
     // Evaluate silently in background (saves score, strengths, and suggestions for final report)
-    const feedback = evaluateInterviewAnswer(question, answerToEvaluate);
+    const feedback = evaluateInterviewAnswer(currentQ, answerToEvaluate);
 
-    // Generate natural HR recruiter conversational acknowledgment (WITHOUT mentioning scores!)
+    // Nomor urut pertanyaan berikutnya (1-based: jika di pertanyaan 1 (idx 0), maka nomor berikutnya adalah 2; jika di pertanyaan 2 (idx 1), nomor berikutnya 3; jika di pertanyaan 3 (idx 2), nomor berikutnya 4, dst.)
+    const nextQuestionNumber = currentIdx + 2;
+
+    // Generate natural HR recruiter conversational acknowledgment
     const naturalResponse = generateNaturalHRResponse(
-      question,
+      currentQ,
       feedback,
-      isLastQuestion,
-      currentIndex + 1
+      isLastQ,
+      nextQuestionNumber,
+      totalQ
     );
 
     setAiSpokenCaption(naturalResponse);
@@ -371,10 +413,13 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
     }
   };
 
+  // Keep ref up to date on every render
+  handleCandidateFinishSpeakingRef.current = handleCandidateFinishSpeaking;
+
   // Submit and trigger next question in useInterviewSession
   const proceedToNextQuestion = (answerText: string) => {
     speechService.stop();
-    const timeSpent = Math.max(1, recordingSeconds);
+    const timeSpent = Math.max(1, recordingSecondsRef.current || recordingSeconds);
     onSubmitAnswer(answerText, timeSpent);
   };
 
@@ -384,10 +429,12 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
     if (flowState === 'speaking_question') {
       startCandidateListening();
     } else if (flowState === 'speaking_feedback') {
-      const finalText = (candidateTranscript || manualText || 'Tanggapan lisan kandidat.').trim();
+      const textFromRef = candidateTranscriptRef.current || manualTextRef.current;
+      const finalText = (textFromRef || candidateTranscript || manualText || 'Tanggapan lisan kandidat.').trim();
       proceedToNextQuestion(finalText);
     }
   };
+
 
   // Re-read question aloud
   const handleRepeatQuestion = () => {

@@ -128,35 +128,71 @@ export function getScoreBadge(score: number) {
 }
 
 /**
- * Menghasilkan respon lisan pewawancara alami seperti HR sungguhan
- * TANPA menyebutkan skor/angka, lalu langsung menyambung ke pertanyaan berikutnya
+ * Menghasilkan respon lisan pewawancara alami seperti HR profesional sungguhan
+ * TANPA menyebutkan skor/angka teknis, memberikan apresiasi kontekstual,
+ * lalu menyambung secara akurat ke nomor pertanyaan berikutnya.
  */
 export function generateNaturalHRResponse(
   question: InterviewQuestion,
   feedback: AnswerFeedback,
   isLastQuestion: boolean,
-  nextQuestionIndex?: number
+  nextQuestionNumber?: number, // Nomor pertanyaan berikutnya (1-based: 2, 3, 4...)
+  totalQuestions?: number
 ): string {
   const { status, matchedKeywords } = feedback;
   let acknowledgment = '';
+
+  const acknowledgmentsExcellent = [
+    'Penjelasan yang sangat runtut dan aplikatif. Pendekatan kerja nyata seperti ini memang sangat dibutuhkan di dunia industri.',
+    'Sangat baik, inisiatif dan pemahaman teknis yang Anda paparkan sangat relevan dengan kebutuhan lapangan kerja.',
+    'Luar biasa, alur tindakan dan solusi praktis yang Anda lakukan tergambar dengan sangat jelas dan terstruktur.',
+  ];
+
+  const acknowledgmentsModerate = [
+    'Baik, saya mencatat poin penting dan alur tindakan yang Anda sampaikan tadi.',
+    'Baik, terima kasih atas penjelasan yang cukup jelas mengenai pengalaman dan langkah Anda.',
+    'Bagus, saya memahami konteks situasi dan keputusan kerja yang Anda ambil.',
+  ];
+
+  const acknowledgmentsBasic = [
+    'Baik, terima kasih atas tanggapan yang telah Anda sampaikan.',
+    'Baik, poin jawaban Anda sudah saya catat dengan baik.',
+  ];
 
   if (matchedKeywords && matchedKeywords.length > 0) {
     const kwSample = matchedKeywords.slice(0, 2).join(' dan ');
     acknowledgment = `Baik, terima kasih atas penjelasannya. Menarik sekali mendengar cara Anda menerapkan ${kwSample} pada situasi tersebut.`;
   } else if (status === 'excellent') {
-    acknowledgment = 'Baik, penjelasan yang sangat runtut dan gamblang. Pendekatan dan inisiatif kerja nyata seperti ini memang sangat dibutuhkan di lingkungan industri.';
+    acknowledgment = acknowledgmentsExcellent[Math.floor(Math.random() * acknowledgmentsExcellent.length)];
   } else if (status === 'moderate') {
-    acknowledgment = 'Baik, saya mencatat poin penting dan alur tindakan yang Anda sampaikan tadi.';
+    acknowledgment = acknowledgmentsModerate[Math.floor(Math.random() * acknowledgmentsModerate.length)];
   } else {
-    acknowledgment = 'Baik, terima kasih atas tanggapan yang Anda sampaikan.';
+    acknowledgment = acknowledgmentsBasic[Math.floor(Math.random() * acknowledgmentsBasic.length)];
   }
 
+  // Jika ini adalah pertanyaan terakhir dalam sesi wawancara
   if (isLastQuestion) {
     return `${acknowledgment} Seluruh rangkaian pertanyaan wawancara telah selesai. Terima kasih banyak atas partisipasi Anda, saya akan langsung siapkan ringkasan evaluasi lengkapnya.`;
-  } else {
-    const nextNum = (nextQuestionIndex ?? 0) + 1;
-    return `${acknowledgment} Nah, sekarang kita lanjutkan ke pertanyaan nomor ${nextNum} ya.`;
   }
+
+  // Tentukan nomor pertanyaan berikutnya secara akurat
+  const targetNum = nextQuestionNumber && nextQuestionNumber > 1 ? nextQuestionNumber : 2;
+
+  // Jika pertanyaan berikutnya adalah pertanyaan paling terakhir
+  if (totalQuestions && targetNum === totalQuestions) {
+    return `${acknowledgment} Nah, sekarang kita masuk ke pertanyaan terakhir (nomor ${targetNum}) ya.`;
+  }
+
+  // Variasi transisi alami antar pertanyaan
+  const transitions = [
+    `Nah, sekarang kita lanjutkan ke pertanyaan nomor ${targetNum} ya.`,
+    `Selanjutnya, mari kita beralih ke pertanyaan nomor ${targetNum}.`,
+    `Baik, kita teruskan ke pertanyaan nomor ${targetNum} ya.`,
+  ];
+  const transition = transitions[(targetNum - 2) % transitions.length] || transitions[0];
+
+  return `${acknowledgment} ${transition}`;
 }
+
 
 
