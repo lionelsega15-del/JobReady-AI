@@ -34,10 +34,10 @@ export const InterviewPage: React.FC<InterviewPageProps> = ({ onNavigate }) => {
   const [viewLayout, setViewLayout] = useState<'video' | 'compact'>('video');
 
   return (
-    <div className="py-6 sm:py-8 px-4 sm:px-6 max-w-6xl mx-auto flex-1 flex flex-col">
+    <div className="py-3 sm:py-4 px-3 sm:px-6 max-w-6xl mx-auto flex-1 flex flex-col">
       {/* Top control bar if in active session */}
       {selectedFieldId && !isCompleted && (
-        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <button
             onClick={resetSession}
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition cursor-pointer"
@@ -56,10 +56,10 @@ export const InterviewPage: React.FC<InterviewPageProps> = ({ onNavigate }) => {
                   ? 'bg-white text-blue-700 shadow-xs'
                   : 'text-slate-500 hover:text-slate-800'
               }`}
-              title="Mode Simulasi Tatap Muka Kamera & Audio AI"
+              title="Mode Simulasi Wawancara Video Call Realistis"
             >
               <Video className="w-3.5 h-3.5 text-blue-600" />
-              <span>Tatap Muka & Audio AI</span>
+              <span>Simulasi Video Call</span>
             </button>
 
             <button

@@ -42,11 +42,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             <div className="flex items-center gap-2">
               <span className="font-extrabold text-slate-900 text-lg tracking-tight">JobReady</span>
               <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                AI Tatap Muka
+                Simulasi Tatap Muka
               </span>
             </div>
             <p className="text-[11px] text-slate-500 hidden sm:block">
-              Simulasi Wawancara Kerja Interaktif & Audio AI Vokasi
+              Simulasi Wawancara Kerja Interaktif Vokasi
             </p>
           </div>
         </button>

@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { InterviewQuestion, Field, InterviewMode, AnswerFeedback } from '../../types';
+import { InterviewQuestion, Field, InterviewMode } from '../../types';
 import { speechService } from '../../lib/speech-service';
 import { evaluateInterviewAnswer, generateNaturalHRResponse } from '../../lib/feedback-engine';
 import { 
   Camera, CameraOff, Mic, MicOff, Volume2, VolumeX, 
-  RotateCcw, Sparkles, Lightbulb, PhoneOff, 
-  Keyboard, Send, X, ArrowRight, UserCheck, CheckCircle2
+  RotateCcw, Lightbulb, PhoneOff, 
+  Keyboard, Send, X, ArrowRight, UserCheck, CheckCircle2,
+  MessageSquareQuote, Video as VideoIcon, Check
 } from 'lucide-react';
+import interviewerSarahImg from '../../assets/interviewer_sarah.jpg';
 
 interface VideoInterviewRoomProps {
   question: InterviewQuestion;
@@ -123,7 +125,7 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
         }
       } catch (err: any) {
         console.warn('Webcam/Mic access error:', err);
-        setCameraError('Kamera atau mikrofon belum diizinkan. Anda tetap dapat melanjutkan simulasi.');
+        setCameraError('Kamera atau mikrofon belum diizinkan. Anda tetap dapat melanjutkan simulasi wawancara.');
         setCameraActive(false);
       }
     };
@@ -204,7 +206,7 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
         }
         setInterimTranscript(interimT);
 
-        // Auto Turn-Taking via silence detection: if user has spoken something and pauses for 3 seconds
+        // Auto Turn-Taking via silence detection: if user has spoken something and pauses for 3.5 seconds
         if (silenceTimerRef.current) {
           clearTimeout(silenceTimerRef.current);
         }
@@ -213,7 +215,7 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
           if (flowStateRef.current === 'candidate_turn' && currentTotal.length >= 15) {
             handleCandidateFinishSpeaking(currentTotal);
           }
-        }, 3000);
+        }, 3500);
       };
 
       recognition.onerror = () => {
@@ -262,7 +264,7 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
     stopCandidateListening();
 
     if (isAiMuted) {
-      // If muted, switch to candidate turn after 2 seconds
+      // If muted, switch to candidate turn after brief 2 seconds
       setTimeout(() => {
         startCandidateListening();
       }, 2000);
@@ -273,7 +275,7 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
       rate: 0.95,
       onStart: () => setFlowState('speaking_question'),
       onEnd: () => {
-        // AI finished asking the question -> Candidate's turn immediately starts!
+        // Recruiter finished asking question -> Candidate's turn immediately starts!
         startCandidateListening();
       },
       onError: () => {
@@ -349,13 +351,13 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
     setAiSpokenCaption(naturalResponse);
     setFlowState('speaking_feedback');
 
-    // Ibu Sarah speaks the acknowledgment naturally
+    // Sarah speaks the acknowledgment naturally
     if (!isAiMuted) {
       speechService.speak(naturalResponse, {
         rate: 0.95,
         onStart: () => setFlowState('speaking_feedback'),
         onEnd: () => {
-          // Immediately after Ibu Sarah finishes speaking the response, advance to next question!
+          // Immediately after Sarah finishes speaking response, advance to next question!
           proceedToNextQuestion(answerToEvaluate);
         },
         onError: () => {
@@ -377,7 +379,7 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
     onSubmitAnswer(answerText, timeSpent);
   };
 
-  // Skip AI speech if user wants to answer immediately
+  // Skip speaking if user wants to answer immediately
   const handleSkipAiSpeech = () => {
     speechService.stop();
     if (flowState === 'speaking_question') {
@@ -395,36 +397,39 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
 
   const displayedCandidateText = (candidateTranscript + ' ' + interimTranscript).trim();
 
+  // Active speaker conditions
+  const isInterviewerSpeaking = flowState === 'speaking_question' || flowState === 'speaking_feedback';
+  const isCandidateSpeaking = flowState === 'candidate_turn' && audioLevel > 15;
+
   return (
-    <div className="max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between space-y-4">
-      {/* 1. Header Bar: Meeting Info & Stepper */}
-      <div className="bg-slate-900 text-white rounded-2xl p-4 sm:p-4.5 shadow-lg border border-slate-800 flex flex-wrap items-center justify-between gap-3">
-        {/* Recruiter Identity & Field */}
+    <div className="max-w-6xl mx-auto w-full flex-1 flex flex-col justify-between space-y-3">
+      {/* 1. Header Bar: Meeting Info & Progress */}
+      <div className="bg-slate-900/95 backdrop-blur-md text-white rounded-2xl px-4 py-2.5 sm:px-5 sm:py-3 shadow-md border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+        {/* Recruiter & Meeting Room Info */}
         <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-bold text-white shadow-md">
-              <UserCheck className="w-5 h-5 text-white" />
-            </div>
-            <span className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-slate-900" title="Online" />
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400">
+            <VideoIcon className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-sm sm:text-base text-white tracking-tight">Ruang Wawancara Tatap Muka AI</span>
-              <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30">
-                {field.shortName}
+              <span className="font-bold text-sm sm:text-base text-slate-100 tracking-tight">
+                Ruang Wawancara Video
+              </span>
+              <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                {field.name}
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5">
-              Pewawancara: <span className="text-slate-200 font-medium">Ibu Sarah Pratama (Talent Acquisition)</span>
+              Pewawancara: <span className="text-slate-200 font-medium">Sarah Pratama, S.Psi.</span> (Talent Acquisition)
             </p>
           </div>
         </div>
 
-        {/* Stepper Progress & Meeting Clock */}
-        <div className="flex items-center gap-3">
+        {/* Meeting Status, Clock & Sound */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
           {/* Question Stepper Dots */}
           <div className="hidden sm:flex items-center gap-1.5 bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700/60 text-xs">
-            <span className="text-slate-400 mr-1">Soal:</span>
+            <span className="text-slate-400 mr-1">Pertanyaan:</span>
             {Array.from({ length: totalQuestions }).map((_, idx) => (
               <span
                 key={idx}
@@ -443,13 +448,13 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
 
           {/* REC Timer */}
           <div className="bg-slate-800/90 px-3 py-1.5 rounded-xl border border-slate-700/80 flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-            <span className="font-mono font-bold text-xs sm:text-sm text-slate-100">
+            <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+            <span className="font-mono font-bold text-xs sm:text-sm text-slate-200">
               {mode === 'timed' ? formatTime(timeLeft) : formatTime(recordingSeconds)}
             </span>
           </div>
 
-          {/* AI Sound Toggle */}
+          {/* Sound Toggle */}
           <button
             onClick={() => {
               const next = !isAiMuted;
@@ -459,186 +464,137 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
             className={`p-2 rounded-xl border transition cursor-pointer ${
               isAiMuted 
                 ? 'bg-slate-800 text-slate-400 border-slate-700 hover:text-white' 
-                : 'bg-blue-600/20 text-blue-400 border-blue-500/40 hover:bg-blue-600/30'
+                : 'bg-slate-800 text-blue-400 border-slate-700 hover:bg-slate-700'
             }`}
-            title={isAiMuted ? 'Aktifkan Suara Audio AI' : 'Bisukan Suara Audio AI'}
+            title={isAiMuted ? 'Nyalakan Suara Pewawancara' : 'Bisukan Suara Pewawancara'}
           >
             {isAiMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
           </button>
         </div>
       </div>
 
-      {/* 2. Main Stage: Split Video Tiles (Google Meet / Zoom Style) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch flex-1 min-h-[440px] sm:min-h-[480px]">
+      {/* 2. Main Stage: Virtual Video Conference Tiles (Google Meet / Zoom Style) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 items-stretch flex-1 min-h-[300px] sm:min-h-[340px]">
         
-        {/* TILE 1: AI INTERVIEWER (Ibu Sarah Pratama) */}
-        <div className="bg-gradient-to-b from-slate-900 via-slate-800 to-slate-950 rounded-2xl border border-slate-700/80 p-5 flex flex-col justify-between relative overflow-hidden shadow-xl min-h-[360px] sm:min-h-[420px]">
-          {/* Subtle Ambient Radial Glow */}
-          <div className="absolute inset-0 bg-radial from-blue-900/15 via-transparent to-black/50 pointer-events-none" />
+        {/* TILE 1: PEWAWANCARA (Sarah Pratama - Realistic Webcam Feed) */}
+        <div 
+          className={`bg-slate-950 rounded-2xl border transition-all duration-300 relative overflow-hidden shadow-xl flex flex-col justify-between min-h-[280px] sm:min-h-[350px] ${
+            isInterviewerSpeaking 
+              ? 'border-blue-500/80 ring-2 ring-blue-500/30' 
+              : 'border-slate-800'
+          }`}
+        >
+          {/* Authentic Webcam Photo Feed */}
+          <div className="absolute inset-0 w-full h-full">
+            <img
+              src={interviewerSarahImg}
+              alt="Sarah Pratama - Pewawancara"
+              className="w-full h-full object-cover object-center"
+            />
+            {/* Realistic video overlay gradients to keep badges readable */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-black/40 pointer-events-none" />
+          </div>
 
-          {/* Header inside AI Feed */}
-          <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-700/60 text-xs">
-              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-              <span className="font-semibold text-slate-200">Ibu Sarah (AI Recruiter)</span>
+          {/* Top Status Overlays on Interviewer Feed */}
+          <div className="relative z-10 p-3.5 sm:p-4 flex items-center justify-between">
+            <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-xs">
+              <span className={`w-2 h-2 rounded-full ${isInterviewerSpeaking ? 'bg-blue-400 animate-pulse' : 'bg-emerald-400'}`} />
+              <span className="font-semibold text-white">Sarah Pratama</span>
+              <span className="text-slate-400 text-[11px] hidden sm:inline">• Pewawancara</span>
             </div>
 
             {/* Dynamic Status Pill */}
-            <div className="flex items-center gap-2">
+            <div>
               {flowState === 'speaking_question' && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 animate-pulse">
-                  <Volume2 className="w-3.5 h-3.5" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-600/80 backdrop-blur-md text-white border border-blue-400/30 shadow-xs">
+                  <Volume2 className="w-3.5 h-3.5 animate-pulse" />
                   <span>Membacakan Pertanyaan...</span>
                 </span>
               )}
               {flowState === 'candidate_turn' && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  <span>Menyimak Jawaban Anda</span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-black/60 backdrop-blur-md text-slate-300 border border-white/10">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span>Menyimak Tanggapan Anda</span>
                 </span>
               )}
               {flowState === 'speaking_feedback' && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 animate-pulse">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Merespons Lisan...</span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-600/80 backdrop-blur-md text-white border border-indigo-400/30 shadow-xs">
+                  <MessageSquareQuote className="w-3.5 h-3.5 animate-pulse" />
+                  <span>Menanggapi Jawaban...</span>
                 </span>
               )}
             </div>
           </div>
 
-          {/* AI Avatar Centerpiece with Speaking Ripple */}
-          <div className="my-auto py-4 flex flex-col items-center justify-center relative z-10 text-center">
-            <div className="relative">
-              {/* Ripple wave when AI is speaking */}
-              {(flowState === 'speaking_question' || flowState === 'speaking_feedback') && (
-                <>
-                  <div className="absolute -inset-4 rounded-full bg-blue-500/20 animate-ping" />
-                  <div className="absolute -inset-8 rounded-full bg-blue-500/10 animate-pulse" />
-                </>
-              )}
-
-              {/* Avatar Photo */}
-              <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full p-1 bg-gradient-to-tr from-blue-600 via-indigo-500 to-purple-600 shadow-2xl relative">
-                <div className="w-full h-full rounded-full bg-slate-900 overflow-hidden flex items-center justify-center border-2 border-white/20">
-                  <img
-                    src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&auto=format&fit=crop&q=80"
-                    alt="Ibu Sarah AI"
-                    className="w-full h-full object-cover object-top"
-                    onError={(e) => {
-                      (e.target as HTMLElement).style.display = 'none';
-                    }}
-                  />
-                  <div className="text-white text-3xl font-black">SP</div>
-                </div>
-              </div>
-
-              {/* Speaking Equalizer Badge */}
-              {(flowState === 'speaking_question' || flowState === 'speaking_feedback') && (
-                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md px-3 py-1 rounded-full border border-blue-500/40 flex items-center gap-1 shadow-md">
-                  <span className="w-1 h-3 bg-blue-400 rounded-full animate-bounce" />
-                  <span className="w-1 h-5 bg-blue-400 rounded-full animate-bounce [animation-delay:0.15s]" />
-                  <span className="w-1 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:0.3s]" />
-                  <span className="w-1 h-4 bg-blue-400 rounded-full animate-bounce [animation-delay:0.45s]" />
-                </div>
-              )}
-            </div>
-
-            <div className="mt-4">
-              <h4 className="text-white font-bold text-base">Ibu Sarah Pratama</h4>
-              <p className="text-xs text-slate-400">Head of Talent Acquisition & Vocational Assessor</p>
-            </div>
-          </div>
-
-          {/* Bottom Live Caption of what Ibu Sarah says */}
-          <div className="relative z-10 bg-slate-950/90 backdrop-blur-md rounded-xl p-4 border border-slate-700/80 space-y-1.5 shadow-md">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold text-blue-400 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                {flowState === 'speaking_feedback' ? (
-                  <>
-                    <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-                    <span>Tanggapan Lisan Pewawancara:</span>
-                  </>
-                ) : (
-                  <>
-                    <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
-                    <span>Pertanyaan #{currentIndex + 1}:</span>
-                  </>
-                )}
-              </span>
-
-              <div className="flex items-center gap-2">
-                {flowState === 'speaking_question' && (
-                  <button
-                    onClick={handleSkipAiSpeech}
-                    className="text-[11px] text-blue-300 hover:text-white underline cursor-pointer"
-                    title="Lewati pembacaan suara dan langsung mulai menjawab"
-                  >
-                    Lewati Suara & Mulai Bicara
-                  </button>
-                )}
-                <button
-                  onClick={handleRepeatQuestion}
-                  className="inline-flex items-center gap-1 text-[11px] text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded-md border border-slate-600 transition cursor-pointer"
-                  title="Dengarkan Ulang Pertanyaan"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  <span>Ulang Suara</span>
-                </button>
-              </div>
-            </div>
-
-            <p className="text-white text-sm sm:text-base font-medium leading-relaxed">
-              {flowState === 'speaking_feedback' ? aiSpokenCaption : question.question}
-            </p>
-
-            {/* Recruiter Context Tips Accordion */}
-            <div className="pt-1 flex items-center justify-between text-xs">
-              <button
-                type="button"
-                onClick={() => setShowTips(!showTips)}
-                className="text-amber-400 hover:text-amber-300 flex items-center gap-1 font-medium transition cursor-pointer"
-              >
-                <Lightbulb className="w-3.5 h-3.5" />
-                <span>{showTips ? 'Tutup Petunjuk' : 'Tips Rekruter'}</span>
-              </button>
-              <span className="text-[11px] text-slate-500">Kompetensi: {question.evaluatedCompetency}</span>
-            </div>
-
-            {showTips && (
-              <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs mt-1.5 leading-relaxed">
-                <strong>Tips Wawancara:</strong> {question.contextTips}
+          {/* Bottom Overlay: Interviewer Nameplate & Speaking Caption */}
+          <div className="relative z-10 p-3.5 sm:p-4 space-y-2">
+            {/* Live speech caption when Sarah is speaking feedback */}
+            {flowState === 'speaking_feedback' && aiSpokenCaption && (
+              <div className="bg-black/75 backdrop-blur-md border border-white/15 rounded-xl p-3 text-xs sm:text-sm text-slate-100 shadow-lg animate-in fade-in duration-200">
+                <span className="text-blue-400 font-semibold block text-[11px] uppercase tracking-wider mb-0.5">
+                  Tanggapan Pewawancara:
+                </span>
+                <p className="leading-relaxed italic">"{aiSpokenCaption}"</p>
               </div>
             )}
+
+            <div className="flex items-center justify-between">
+              {/* Google Meet / Zoom style name badge */}
+              <div className="bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 flex items-center gap-2 text-xs">
+                {isInterviewerSpeaking ? (
+                  <div className="flex items-center gap-0.5 text-blue-400">
+                    <span className="w-1 h-3 bg-blue-400 rounded-full animate-bounce" />
+                    <span className="w-1 h-4 bg-blue-400 rounded-full animate-bounce [animation-delay:0.15s]" />
+                    <span className="w-1 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:0.3s]" />
+                  </div>
+                ) : (
+                  <Mic className="w-3.5 h-3.5 text-slate-400" />
+                )}
+                <div>
+                  <span className="font-semibold text-white">Sarah Pratama, S.Psi.</span>
+                  <span className="text-[11px] text-slate-400 block sm:inline sm:ml-1.5">Talent Acquisition & Asesor</span>
+                </div>
+              </div>
+
+              <div className="text-[11px] text-slate-400 bg-black/50 backdrop-blur-md px-2 py-1 rounded border border-white/10 hidden sm:block">
+                HD • 1080p
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* TILE 2: CANDIDATE LIVE FEED (Webcam & Live Karaoke Subtitles) */}
-        <div className="bg-slate-900 rounded-2xl border border-slate-700/80 flex flex-col justify-between relative overflow-hidden shadow-xl min-h-[360px] sm:min-h-[420px]">
-          
+        {/* TILE 2: KANDIDAT (Webcam Feed & Live Subtitles) */}
+        <div 
+          className={`bg-slate-950 rounded-2xl border transition-all duration-300 relative overflow-hidden shadow-xl flex flex-col justify-between min-h-[280px] sm:min-h-[350px] ${
+            isCandidateSpeaking 
+              ? 'border-emerald-500/80 ring-2 ring-emerald-500/30' 
+              : 'border-slate-800'
+          }`}
+        >
           {/* Top Overlays on Candidate Video */}
-          <div className="absolute top-4 left-4 right-4 z-20 flex items-center justify-between pointer-events-none">
-            {/* Blinking LIVE REC Badge */}
-            <div className="flex items-center gap-2 bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-xs text-white">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-600 animate-pulse" />
-              <span className="font-bold tracking-wider text-rose-400">REC</span>
-              <span className="font-mono text-slate-300 font-semibold">{formatTime(recordingSeconds)}</span>
+          <div className="absolute top-3.5 left-3.5 right-3.5 sm:top-4 sm:left-4 sm:right-4 z-20 flex items-center justify-between pointer-events-none">
+            {/* Live REC indicator */}
+            <div className="flex items-center gap-2 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-xs text-white">
+              <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+              <span className="font-semibold text-rose-300 text-[11px] tracking-wider">REC</span>
+              <span className="font-mono text-slate-300 text-[11px]">{formatTime(recordingSeconds)}</span>
             </div>
 
             {/* Turn status indicator */}
-            <div className="bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-xs text-white">
+            <div className="bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-xs text-white">
               {flowState === 'candidate_turn' ? (
-                <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                <span className="text-emerald-400 font-medium flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                   Giliran Anda Berbicara
                 </span>
               ) : (
-                <span className="text-slate-400">Menunggu AI...</span>
+                <span className="text-slate-400">Menyimak Pewawancara...</span>
               )}
             </div>
           </div>
 
-          {/* Actual Video Element or Fallback */}
-          <div className="relative w-full h-full flex items-center justify-center flex-1 min-h-[300px] bg-slate-950">
+          {/* Actual Video Element or Clean Fallback */}
+          <div className="relative w-full h-full flex items-center justify-center flex-1 bg-slate-900">
             {cameraActive && !cameraError ? (
               <video
                 ref={videoRef}
@@ -649,63 +605,39 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
               />
             ) : (
               <div className="flex flex-col items-center justify-center p-6 text-center text-slate-400 space-y-3">
-                <div className="w-24 h-24 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center text-slate-300 text-2xl font-bold">
-                  Siswa
+                <div className="w-20 h-20 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 text-xl font-bold">
+                  Kandidat
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-slate-200">Kamera Dinonaktifkan</p>
                   <p className="text-xs text-slate-400 mt-1 max-w-xs">
-                    {cameraError || 'Anda dapat mengaktifkan kamera dengan tombol kamera di bar kontrol.'}
+                    {cameraError || 'Kamera Anda nonaktif. Anda dapat mengaktifkannya melalui bar kontrol di bawah.'}
                   </p>
                 </div>
               </div>
             )}
 
-            {/* Live Audio Visualizer Pill (Bottom Left of Camera) */}
-            <div className="absolute bottom-20 left-4 z-20 flex items-center gap-2 bg-black/75 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
-              <Mic className={`w-3.5 h-3.5 ${audioLevel > 15 ? 'text-emerald-400 animate-pulse' : 'text-slate-400'}`} />
-              <div className="flex items-center gap-1 h-3">
-                {[1, 2, 3, 4, 5].map((bar) => {
-                  const threshold = bar * 18;
-                  const isActive = audioLevel >= threshold;
-                  return (
-                    <div
-                      key={bar}
-                      className={`w-1 rounded-full transition-all duration-75 ${
-                        isActive ? 'bg-emerald-400 h-full' : 'bg-slate-700 h-1.5'
-                      }`}
-                    />
-                  );
-                })}
-              </div>
-              <span className="text-[10px] font-bold text-slate-300 uppercase">
-                {audioLevel > 15 ? 'Suara Masuk' : 'Mic Aktif'}
-              </span>
-            </div>
+            {/* Overlay Gradient for readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-black/30 pointer-events-none" />
 
-            {/* Candidate Name Tag */}
-            <div className="absolute bottom-20 right-4 z-20 bg-black/75 backdrop-blur-md px-3 py-1 rounded-lg border border-white/10 text-xs font-semibold text-white">
-              Kandidat Peserta Vokasi
-            </div>
-
-            {/* 3. Live Subtitles / Caption Overlay for Candidate's Speech */}
-            <div className="absolute bottom-3 left-3 right-3 z-25 bg-slate-950/85 backdrop-blur-md rounded-xl p-3 border border-white/15 text-left transition-all">
+            {/* Google Meet / Zoom style Closed Captions (Live Subtitles) */}
+            <div className="absolute bottom-14 left-3 right-3 sm:bottom-14 sm:left-4 sm:right-4 z-20 bg-black/80 backdrop-blur-md rounded-xl px-3.5 py-2.5 border border-white/15 text-left transition-all">
               <div className="flex items-center justify-between text-[11px] text-slate-400 mb-1">
-                <span className="flex items-center gap-1 text-emerald-400 font-semibold">
+                <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
                   <Mic className="w-3 h-3" />
-                  <span>Transkripsi Lisan Anda (Live Caption):</span>
+                  <span>Transkripsi Lisan Langsung:</span>
                 </span>
                 {displayedCandidateText.length > 0 && (
-                  <span className="text-slate-400">{displayedCandidateText.split(' ').length} kata</span>
+                  <span className="text-slate-400 font-mono text-[10px]">{displayedCandidateText.split(' ').length} kata</span>
                 )}
               </div>
 
-              <p className="text-white text-xs sm:text-sm leading-relaxed min-h-[38px] max-h-[56px] overflow-y-auto">
+              <p className="text-white text-xs sm:text-sm leading-relaxed min-h-[28px] max-h-[50px] overflow-y-auto">
                 {displayedCandidateText ? (
                   <>
                     <span>{candidateTranscript}</span>
                     {interimTranscript && (
-                      <span className="text-blue-300 italic"> {interimTranscript}</span>
+                      <span className="text-emerald-300 font-normal"> {interimTranscript}</span>
                     )}
                   </>
                 ) : flowState === 'candidate_turn' ? (
@@ -714,23 +646,106 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
                   </span>
                 ) : (
                   <span className="text-slate-500 italic">
-                    Menunggu giliran menjawab...
+                    Menyimak pewawancara...
                   </span>
                 )}
               </p>
+            </div>
+
+            {/* Bottom-left Nameplate for Candidate */}
+            <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20 flex items-center gap-2 bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/10 text-xs text-white">
+              <div className="flex items-center gap-1">
+                <Mic className={`w-3.5 h-3.5 ${audioLevel > 15 ? 'text-emerald-400' : 'text-slate-400'}`} />
+                <div className="flex items-center gap-0.5 h-2.5">
+                  {[1, 2, 3].map((bar) => (
+                    <div
+                      key={bar}
+                      className={`w-0.5 rounded-full transition-all duration-75 ${
+                        audioLevel >= bar * 25 ? 'bg-emerald-400 h-full' : 'bg-slate-600 h-1'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+              <span className="font-semibold text-slate-200">Anda (Kandidat Seleksi)</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 4. Floating Meeting Control Bar (Google Meet Style) */}
-      <div className="bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-2xl p-3 sm:p-4 shadow-xl flex flex-wrap items-center justify-between gap-3">
-        {/* Left Side: Camera & Mic Controls */}
+      {/* 3. Question & Assessment Guide Banner (Clean & Prominent) */}
+      <div className="bg-slate-900 text-white rounded-2xl p-4 sm:p-4.5 border border-slate-800 shadow-md space-y-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-blue-400 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-blue-400" />
+              <span>Pertanyaan {currentIndex + 1} dari {totalQuestions}</span>
+            </span>
+            <span className="text-slate-500">•</span>
+            <span className="text-slate-400 text-[11px]">
+              Kompetensi: <strong className="text-slate-200 font-medium">{question.evaluatedCompetency}</strong>
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {flowState === 'speaking_question' && (
+              <button
+                onClick={handleSkipAiSpeech}
+                className="text-[11px] text-blue-400 hover:text-blue-300 font-medium transition cursor-pointer"
+                title="Lewati pembacaan suara dan langsung mulai menjawab"
+              >
+                Mulai Menjawab Sekarang
+              </button>
+            )}
+            <button
+              onClick={handleRepeatQuestion}
+              className="inline-flex items-center gap-1 text-[11px] text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded-lg border border-slate-700 transition cursor-pointer"
+              title="Dengarkan Ulang Pertanyaan"
+            >
+              <RotateCcw className="w-3 h-3" />
+              <span>Dengarkan Ulang</span>
+            </button>
+          </div>
+        </div>
+
+        {/* The Question Text */}
+        <p className="text-white text-sm sm:text-base font-semibold leading-relaxed">
+          {question.question}
+        </p>
+
+        {/* Tips / Panduan Rekruter Accordion */}
+        <div className="pt-1 flex items-center justify-between text-xs border-t border-slate-800/80">
+          <button
+            type="button"
+            onClick={() => setShowTips(!showTips)}
+            className="text-amber-400 hover:text-amber-300 flex items-center gap-1.5 font-medium transition cursor-pointer"
+          >
+            <Lightbulb className="w-3.5 h-3.5" />
+            <span>{showTips ? 'Sembunyikan Panduan Menjawab' : 'Lihat Tips & Panduan Menjawab'}</span>
+          </button>
+          
+          <span className="text-[11px] text-slate-400">
+            Fokus pada pengalaman konkret, tindakan nyata, dan hasil kerja.
+          </span>
+        </div>
+
+        {showTips && (
+          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-200 text-xs leading-relaxed mt-1 animate-in fade-in duration-150">
+            <strong>Panduan Menjawab:</strong> {question.contextTips}
+          </div>
+        )}
+      </div>
+
+      {/* 4. Video Meeting Control Dock (Google Meet / Zoom Style) */}
+      <div className="bg-slate-900/95 backdrop-blur-md border border-slate-800 rounded-2xl px-4 py-3 sm:py-3.5 shadow-xl flex flex-wrap items-center justify-between gap-3">
+        {/* Left: Hardware Controls (Camera, Mic, Manual Text) */}
         <div className="flex items-center gap-2">
           <button
             onClick={toggleCamera}
-            className={`p-3 rounded-xl transition cursor-pointer flex items-center gap-1.5 text-xs font-semibold ${
-              cameraActive ? 'bg-slate-800 text-white hover:bg-slate-700' : 'bg-rose-600 text-white shadow-md'
+            className={`p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl transition cursor-pointer flex items-center gap-2 text-xs font-semibold ${
+              cameraActive 
+                ? 'bg-slate-800 text-slate-200 hover:bg-slate-700 border border-slate-700' 
+                : 'bg-rose-600 text-white shadow-sm'
             }`}
             title={cameraActive ? 'Matikan Kamera' : 'Nyalakan Kamera'}
           >
@@ -740,8 +755,10 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
 
           <button
             onClick={toggleMic}
-            className={`p-3 rounded-xl transition cursor-pointer flex items-center gap-1.5 text-xs font-semibold ${
-              micActive ? 'bg-slate-800 text-white hover:bg-slate-700' : 'bg-rose-600 text-white shadow-md'
+            className={`p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl transition cursor-pointer flex items-center gap-2 text-xs font-semibold ${
+              micActive 
+                ? 'bg-slate-800 text-slate-200 hover:bg-slate-700 border border-slate-700' 
+                : 'bg-rose-600 text-white shadow-sm'
             }`}
             title={micActive ? 'Matikan Mikrofon' : 'Nyalakan Mikrofon'}
           >
@@ -752,45 +769,47 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
           {/* Emergency Text Drawer Trigger */}
           <button
             onClick={() => setShowTextDrawer(!showTextDrawer)}
-            className={`p-3 rounded-xl transition cursor-pointer text-xs font-semibold flex items-center gap-1.5 ${
-              showTextDrawer ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700'
+            className={`p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl transition cursor-pointer text-xs font-semibold flex items-center gap-2 ${
+              showTextDrawer 
+                ? 'bg-blue-600 text-white' 
+                : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 border border-slate-700'
             }`}
-            title="Ketik manual jika mic bermasalah"
+            title="Ketik jawaban jika mic atau suasana sedang berisik"
           >
             <Keyboard className="w-4 h-4" />
-            <span className="hidden md:inline">Ketik Manual</span>
+            <span className="hidden md:inline">Ketik Jawaban</span>
           </button>
         </div>
 
-        {/* Center: Main Dynamic Action Button */}
+        {/* Center: Main Primary Action Button */}
         <div className="flex items-center gap-2 flex-1 sm:flex-initial justify-center">
           {flowState === 'candidate_turn' ? (
             <button
               onClick={() => handleCandidateFinishSpeaking()}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-emerald-600/30 transition cursor-pointer active:scale-95 animate-pulse"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm shadow-md transition cursor-pointer active:scale-95"
             >
-              <Mic className="w-4 h-4" />
-              <span>Selesai Menjawab (AI Langsung Merespons)</span>
+              <Check className="w-4 h-4" />
+              <span>Selesai Menjawab</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           ) : flowState === 'speaking_question' ? (
-            <div className="flex items-center gap-2 text-xs text-blue-300 bg-blue-500/10 px-4 py-2.5 rounded-xl border border-blue-500/20">
+            <div className="flex items-center gap-2 text-xs text-slate-300 bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700">
               <Volume2 className="w-4 h-4 text-blue-400 animate-pulse" />
-              <span>Ibu Sarah membacakan pertanyaan...</span>
+              <span>Pewawancara sedang membacakan pertanyaan...</span>
             </div>
           ) : (
-            <div className="flex items-center gap-2 text-xs text-purple-300 bg-purple-500/10 px-4 py-2.5 rounded-xl border border-purple-500/20">
-              <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
-              <span>Ibu Sarah menanggapi & menyambung otomatis...</span>
+            <div className="flex items-center gap-2 text-xs text-slate-300 bg-slate-800/80 px-4 py-2 rounded-xl border border-slate-700">
+              <MessageSquareQuote className="w-4 h-4 text-indigo-400 animate-pulse" />
+              <span>Pewawancara sedang memberikan tanggapan...</span>
             </div>
           )}
         </div>
 
-        {/* Right Side: End Call Button */}
+        {/* Right: End Session Button */}
         <div className="flex items-center gap-2">
           <button
             onClick={onCancel}
-            className="p-3 rounded-xl bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white transition border border-rose-500/30 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
+            className="p-2.5 sm:px-3.5 sm:py-2.5 rounded-xl bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white transition border border-rose-500/30 text-xs font-semibold flex items-center gap-1.5 cursor-pointer"
             title="Keluar dari sesi wawancara"
           >
             <PhoneOff className="w-4 h-4" />
@@ -799,25 +818,25 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
         </div>
       </div>
 
-      {/* 5. Emergency Text Drawer (Slide-up modal when user clicks 'Ketik Manual') */}
+      {/* 5. Emergency Text Drawer (Modal when candidate clicks 'Ketik Jawaban') */}
       {showTextDrawer && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-5 space-y-4 shadow-2xl text-white">
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
                 <Keyboard className="w-5 h-5 text-blue-400" />
-                <h3 className="font-bold text-sm">Mode Jawaban Teks Darurat</h3>
+                <h3 className="font-bold text-sm">Mode Jawaban Teks</h3>
               </div>
               <button
                 onClick={() => setShowTextDrawer(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white transition"
+                className="p-1 rounded-lg text-slate-400 hover:text-white transition cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <p className="text-xs text-slate-400">
-              Gunakan opsi ini hanya jika mikrofon Anda tidak berfungsi atau berada di tempat bising.
+              Gunakan opsi ini jika mikrofon Anda mengalami kendala teknis atau Anda berada di ruangan yang bising.
             </p>
 
             <textarea
@@ -827,7 +846,7 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
                 setManualText(e.target.value);
                 setCandidateTranscript(e.target.value);
               }}
-              placeholder="Ketikkan jawaban Anda di sini..."
+              placeholder="Tuliskan jawaban lengkap Anda di sini..."
               className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-700 text-sm text-slate-100 placeholder:text-slate-500 outline-none focus:border-blue-500 transition resize-none"
             />
 
@@ -835,9 +854,9 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
               <button
                 type="button"
                 onClick={() => setShowTextDrawer(false)}
-                className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white transition"
+                className="px-4 py-2 rounded-xl text-xs text-slate-400 hover:text-white transition cursor-pointer"
               >
-                Tutup
+                Batal
               </button>
 
               <button
@@ -850,7 +869,7 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-xs text-white transition disabled:opacity-50 cursor-pointer"
               >
                 <Send className="w-3.5 h-3.5" />
-                <span>Kirim & Dengarkan Tanggapan AI</span>
+                <span>Kirim Jawaban</span>
               </button>
             </div>
           </div>

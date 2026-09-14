@@ -4,6 +4,7 @@ import {
   Video, ArrowRight, CheckCircle2, History,
   Wrench, Network, UtensilsCrossed, Calculator, Users, Sparkles, Volume2, Mic, MessageSquareText
 } from 'lucide-react';
+import interviewerSarahImg from '../assets/interviewer_sarah.jpg';
 
 interface HomeProps {
   onNavigate: (page: PageView) => void;
@@ -86,18 +87,26 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
               {/* 2-Pane Video Preview */}
               <div className="grid grid-cols-2 gap-3">
-                {/* AI Recruiter Pane */}
-                <div className="bg-slate-800/80 rounded-xl p-3 border border-slate-700 flex flex-col items-center justify-center min-h-[130px] text-center space-y-2">
-                  <div className="relative">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center font-bold text-white shadow">
-                      SP
-                    </div>
-                    <span className="absolute -bottom-1 -right-1 w-3 h-3 rounded-full bg-emerald-500 border-2 border-slate-900" />
+                {/* HR Recruiter Pane */}
+                <div className="bg-slate-950 rounded-xl overflow-hidden border border-slate-700 relative flex flex-col justify-between min-h-[130px]">
+                  <img 
+                    src={interviewerSarahImg} 
+                    alt="Sarah Pratama" 
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-black/30 pointer-events-none" />
+                  
+                  <div className="relative z-10 p-2 flex justify-between items-center">
+                    <span className="text-[9px] font-semibold bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded text-white border border-white/10">
+                      Pewawancara HR
+                    </span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                   </div>
-                  <div>
-                    <span className="text-xs font-bold text-slate-200 block">Ibu Sarah (AI HR)</span>
-                    <span className="text-[10px] text-blue-400 flex items-center justify-center gap-1 mt-0.5">
-                      <Volume2 className="w-2.5 h-2.5" /> Berbicara...
+
+                  <div className="relative z-10 p-2 text-left">
+                    <span className="text-xs font-bold text-white block">Sarah Pratama, S.Psi.</span>
+                    <span className="text-[10px] text-blue-300 flex items-center gap-1 mt-0.5">
+                      <Volume2 className="w-2.5 h-2.5 animate-pulse" /> Sedang Berbicara...
                     </span>
                   </div>
                 </div>
