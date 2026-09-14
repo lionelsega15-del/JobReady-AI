@@ -4,7 +4,6 @@ import {
   Video, ArrowRight, CheckCircle2, History,
   Wrench, Network, UtensilsCrossed, Calculator, Users, Sparkles, Volume2, Mic, MessageSquareText
 } from 'lucide-react';
-import interviewerSarahImg from '../assets/interviewer_sarah.jpg';
 
 interface HomeProps {
   onNavigate: (page: PageView) => void;
@@ -87,26 +86,30 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
               {/* 2-Pane Video Preview */}
               <div className="grid grid-cols-2 gap-3">
-                {/* HR Recruiter Pane */}
-                <div className="bg-slate-950 rounded-xl overflow-hidden border border-slate-700 relative flex flex-col justify-between min-h-[130px]">
-                  <img 
-                    src={interviewerSarahImg} 
-                    alt="Sarah Pratama" 
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-black/30 pointer-events-none" />
-                  
-                  <div className="relative z-10 p-2 flex justify-between items-center">
-                    <span className="text-[9px] font-semibold bg-black/60 backdrop-blur-xs px-2 py-0.5 rounded text-white border border-white/10">
-                      Pewawancara HR
+                {/* HR Recruiter Audio Pane */}
+                <div className="bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 rounded-xl overflow-hidden border border-slate-700 relative flex flex-col justify-between p-2.5 min-h-[130px] text-center">
+                  <div className="flex justify-between items-center text-[9px]">
+                    <span className="font-semibold bg-black/60 px-2 py-0.5 rounded text-white border border-white/10">
+                      Pewawancara
                     </span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-ping" />
                   </div>
 
-                  <div className="relative z-10 p-2 text-left">
+                  {/* 4-Pill Audio Waveform Preview */}
+                  <div className="my-auto py-1 flex flex-col items-center justify-center space-y-1.5">
+                    <span className="text-[11px] font-bold text-slate-200">Membacakan Soal</span>
+                    <div className="flex items-center justify-center gap-1.5 h-10">
+                      <span className="w-2 rounded-full bg-gradient-to-t from-blue-600 to-sky-400 animate-g-bar-1" />
+                      <span className="w-2.5 rounded-full bg-gradient-to-t from-indigo-600 to-sky-300 animate-g-bar-2" />
+                      <span className="w-2.5 rounded-full bg-gradient-to-t from-purple-600 to-blue-300 animate-g-bar-3" />
+                      <span className="w-2 rounded-full bg-gradient-to-t from-blue-500 to-teal-300 animate-g-bar-4" />
+                    </div>
+                  </div>
+
+                  <div className="text-left">
                     <span className="text-xs font-bold text-white block">Sarah Pratama, S.Psi.</span>
                     <span className="text-[10px] text-blue-300 flex items-center gap-1 mt-0.5">
-                      <Volume2 className="w-2.5 h-2.5 animate-pulse" /> Sedang Berbicara...
+                      <Volume2 className="w-2.5 h-2.5 animate-pulse" /> Audio Aktif
                     </span>
                   </div>
                 </div>

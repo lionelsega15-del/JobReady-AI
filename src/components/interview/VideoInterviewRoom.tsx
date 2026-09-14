@@ -8,7 +8,6 @@ import {
   Keyboard, Send, X, ArrowRight, UserCheck, CheckCircle2,
   MessageSquareQuote, Video as VideoIcon, Check
 } from 'lucide-react';
-import interviewerSarahImg from '../../assets/interviewer_sarah.jpg';
 
 interface VideoInterviewRoomProps {
   question: InterviewQuestion;
@@ -476,23 +475,19 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
       {/* 2. Main Stage: Virtual Video Conference Tiles (Google Meet / Zoom Style) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 items-stretch flex-1 min-h-[300px] sm:min-h-[340px]">
         
-        {/* TILE 1: PEWAWANCARA (Sarah Pratama - Realistic Webcam Feed) */}
+        {/* TILE 1: PEWAWANCARA (Sarah Pratama - Google-Style Audio Visualizer) */}
         <div 
-          className={`bg-slate-950 rounded-2xl border transition-all duration-300 relative overflow-hidden shadow-xl flex flex-col justify-between min-h-[280px] sm:min-h-[350px] ${
+          className={`bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 rounded-2xl border transition-all duration-300 relative overflow-hidden shadow-xl flex flex-col justify-between min-h-[280px] sm:min-h-[350px] ${
             isInterviewerSpeaking 
               ? 'border-blue-500/80 ring-2 ring-blue-500/30' 
               : 'border-slate-800'
           }`}
         >
-          {/* Authentic Webcam Photo Feed */}
-          <div className="absolute inset-0 w-full h-full">
-            <img
-              src={interviewerSarahImg}
-              alt="Sarah Pratama - Pewawancara"
-              className="w-full h-full object-cover object-center"
-            />
-            {/* Realistic video overlay gradients to keep badges readable */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-black/40 pointer-events-none" />
+          {/* Subtle Ambient Radial Glow */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className={`w-64 h-64 rounded-full blur-3xl transition-opacity duration-700 ${
+              isInterviewerSpeaking ? 'bg-blue-600/20 opacity-100' : 'bg-indigo-600/10 opacity-50'
+            }`} />
           </div>
 
           {/* Top Status Overlays on Interviewer Feed */}
@@ -523,6 +518,67 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
                   <span>Menanggapi Jawaban...</span>
                 </span>
               )}
+            </div>
+          </div>
+
+          {/* Center Stage: Google Assistant Style Audio Graphic */}
+          <div className="relative z-10 flex flex-col items-center justify-center my-auto py-4 text-center space-y-3">
+            {/* Status Title */}
+            <div className="space-y-0.5">
+              <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                {flowState === 'speaking_question' 
+                  ? 'Membacakan Soal' 
+                  : flowState === 'speaking_feedback' 
+                  ? 'Memberikan Tanggapan' 
+                  : 'Mendengarkan'}
+              </h3>
+              <div className="flex items-center justify-center gap-1 text-slate-400 text-xs font-medium">
+                {isInterviewerSpeaking ? (
+                  <span className="text-blue-400 flex items-center gap-1">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-blue-400 animate-ping" />
+                    <span>Suara pewawancara sedang aktif...</span>
+                  </span>
+                ) : (
+                  <span className="text-slate-400 flex items-center gap-1">
+                    <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                    <span>Menyimak jawaban Anda...</span>
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* 4 Google-Style Fluid Audio Waveform Pill Bars */}
+            <div className="flex items-center justify-center gap-3 sm:gap-4 h-24 my-2">
+              {/* Pill 1 */}
+              <div
+                className={`w-3.5 sm:w-4 rounded-full bg-gradient-to-t from-blue-600 via-sky-400 to-cyan-300 shadow-lg shadow-blue-500/25 transition-all duration-300 ${
+                  isInterviewerSpeaking ? 'animate-g-bar-1' : 'h-3.5 opacity-40'
+                }`}
+              />
+              {/* Pill 2 */}
+              <div
+                className={`w-4 sm:w-4.5 rounded-full bg-gradient-to-t from-indigo-600 via-blue-500 to-sky-300 shadow-lg shadow-indigo-500/30 transition-all duration-300 ${
+                  isInterviewerSpeaking ? 'animate-g-bar-2' : 'h-5 opacity-60'
+                }`}
+              />
+              {/* Pill 3 */}
+              <div
+                className={`w-4 sm:w-4.5 rounded-full bg-gradient-to-t from-purple-600 via-indigo-400 to-blue-300 shadow-lg shadow-purple-500/30 transition-all duration-300 ${
+                  isInterviewerSpeaking ? 'animate-g-bar-3' : 'h-4 opacity-50'
+                }`}
+              />
+              {/* Pill 4 */}
+              <div
+                className={`w-3.5 sm:w-4 rounded-full bg-gradient-to-t from-blue-500 via-sky-400 to-teal-300 shadow-lg shadow-sky-500/25 transition-all duration-300 ${
+                  isInterviewerSpeaking ? 'animate-g-bar-4' : 'h-3 opacity-35'
+                }`}
+              />
+            </div>
+
+            {/* Sub-badge matching Google Assistant */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/80 text-xs text-slate-300 shadow-xs">
+              <CheckCircle2 className={`w-3.5 h-3.5 ${isInterviewerSpeaking ? 'text-blue-400' : 'text-emerald-400'}`} />
+              <span>{isInterviewerSpeaking ? 'Audio Lisan Otomatis Aktif' : 'Pewawancara Sedang Menyimak'}</span>
             </div>
           </div>
 
@@ -557,7 +613,7 @@ export const VideoInterviewRoom: React.FC<VideoInterviewRoomProps> = ({
               </div>
 
               <div className="text-[11px] text-slate-400 bg-black/50 backdrop-blur-md px-2 py-1 rounded border border-white/10 hidden sm:block">
-                HD • 1080p
+                Audio Interaktif
               </div>
             </div>
           </div>
