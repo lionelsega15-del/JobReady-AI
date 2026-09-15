@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PageView } from '../types';
-import { Briefcase, Home as HomeIcon, GraduationCap, History } from 'lucide-react';
+import { Briefcase, Home as HomeIcon, GraduationCap, History, Sparkles } from 'lucide-react';
 import { getInterviewHistory } from '../lib/storage';
 
 interface NavbarProps {
@@ -77,6 +77,22 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate }) => {
             <span>Simulasi Wawancara</span>
             <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-blue-500/30 text-blue-100">
               Live
+            </span>
+          </button>
+
+          <button
+            onClick={() => onNavigate('mirror')}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition cursor-pointer ${
+              currentPage === 'mirror'
+                ? 'bg-amber-100/80 text-amber-900 font-semibold shadow-2xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+            title="Latihan tatap kamera 60 detik tanpa dinilai"
+          >
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            <span className="hidden sm:inline">Mode Cermin</span>
+            <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-amber-200/80 text-amber-900">
+              60s
             </span>
           </button>
 

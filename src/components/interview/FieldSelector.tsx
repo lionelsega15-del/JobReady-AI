@@ -10,6 +10,7 @@ import {
 interface FieldSelectorProps {
   onSelectField: (fieldId: string, mode: InterviewMode, timerDuration: number) => void;
   onNavigateHistory?: () => void;
+  onNavigateMirror?: () => void;
 }
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
@@ -22,7 +23,8 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
 
 export const FieldSelector: React.FC<FieldSelectorProps> = ({ 
   onSelectField,
-  onNavigateHistory 
+  onNavigateHistory,
+  onNavigateMirror,
 }) => {
   const [selectedMode, setSelectedMode] = useState<InterviewMode>('timed');
   const [selectedDuration, setSelectedDuration] = useState<number>(120); // default 2 minutes (120s)
@@ -43,16 +45,30 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
           <span className="hidden md:inline text-slate-400">• Evaluasi struktur STAR & kompetensi teknis</span>
         </div>
 
-        {onNavigateHistory && savedSessionsCount > 0 && (
-          <button
-            type="button"
-            onClick={onNavigateHistory}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-xs font-semibold transition cursor-pointer"
-          >
-            <History className="w-3.5 h-3.5" />
-            <span>Lihat Riwayat Latihan ({savedSessionsCount} Sesi)</span>
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {onNavigateMirror && (
+            <button
+              type="button"
+              onClick={onNavigateMirror}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 text-xs font-semibold transition cursor-pointer"
+              title="Latihan tatap kamera 60 detik tanpa dinilai"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+              <span>Mode Cermin (60s)</span>
+            </button>
+          )}
+
+          {onNavigateHistory && savedSessionsCount > 0 && (
+            <button
+              type="button"
+              onClick={onNavigateHistory}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-xs font-semibold transition cursor-pointer"
+            >
+              <History className="w-3.5 h-3.5" />
+              <span>Riwayat ({savedSessionsCount})</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Main Header */}

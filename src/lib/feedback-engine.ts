@@ -1,4 +1,4 @@
-import { InterviewQuestion, AnswerFeedback } from '../types';
+import { InterviewQuestion, AnswerFeedback, UserInterviewAnswer, ConfidenceMetrics, FillerWordOccurrence } from '../types';
 
 export function evaluateInterviewAnswer(
   question: InterviewQuestion,
@@ -194,5 +194,161 @@ export function generateNaturalHRResponse(
   return `${acknowledgment} ${transition}`;
 }
 
+/**
+ * Menganalisis metrik rasa percaya diri dan kelancaran bicara dari seluruh sesi wawancara.
+ * Mengukur: Kata gumam (filler words), Pacing (Words Per Minute / WPM), dan Skor Percaya Diri.
+ */
+export function analyzeConfidenceAndFluency(
+  answers: UserInterviewAnswer[],
+  totalSessionDurationSeconds: number = 0
+): ConfidenceMetrics {
+  if (!answers || answers.length === 0) {
+    return {
+      wpm: 0,
+      wpmStatus: 'ideal',
+      wpmDescription: 'Belum ada data rekaman bicara yang cukup.',
+      fillerCount: 0,
+      fillerDetails: [],
+      fillerStatus: 'very-confident',
+      fillerDescription: 'Belum ada gumaman terdeteksi.',
+      confidenceScore: 75,
+      confidenceLabel: 'Cukup Percaya Diri',
+      psychologicalTip: 'Terus berlatih dengan tenang dan teratur.',
+    };
+  }
 
+  // 1. Hitung total kata dari seluruh jawaban
+  let totalWords = 0;
+  let totalSpeakingSeconds = 0;
+  const combinedText = answers.map(a => {
+    const text = a.userAnswer || '';
+    const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+    totalWords += words.length;
+    totalSpeakingSeconds += (a.timeSpentSeconds && a.timeSpentSeconds > 0) ? a.timeSpentSeconds : 0;
+    return text;
+  }).join(' ');
 
+  // Jika durasi per soal tidak tercatat, gunakan total durasi sesi atau estimasi wajar
+  if (totalSpeakingSeconds <= 0) {
+    totalSpeakingSeconds = totalSessionDurationSeconds > 0 
+      ? Math.max(20, totalSessionDurationSeconds * 0.7) // estimasi 70% waktu dipakai bicara
+      : answers.length * 35; // estimasi 35 detik per soal
+  }
+
+  // 2. Hitung Pacing (WPM)
+  const durationMinutes = Math.max(0.2, totalSpeakingSeconds / 60);
+  const rawWpm = Math.round(totalWords / durationMinutes);
+  // Batasi rentang WPM yang masuk akal
+  const wpm = Math.max(30, Math.min(220, rawWpm));
+
+  let wpmStatus: 'slow' | 'ideal' | 'fast' = 'ideal';
+  let wpmDescription = '';
+
+  if (wpm < 85) {
+    wpmStatus = 'slow';
+    wpmDescription = `Tempo bicara Anda cenderung lambat dan sangat berhati-hati (${wpm} kata/menit). Di dunia kerja, jeda yang terlalu panjang bisa disalahartikan pewawancara sebagai keraguan.`;
+  } else if (wpm > 145) {
+    wpmStatus = 'fast';
+    wpmDescription = `Tempo bicara Anda cukup cepat dan terburu-buru (${wpm} kata/menit). Ketika cemas, kita cenderung mempercepat ucapan. Berikan jeda napas 1 detik di setiap akhir kalimat.`;
+  } else {
+    wpmStatus = 'ideal';
+    wpmDescription = `Tempo bicara Anda sangat stabil dan ideal (${wpm} kata/menit). Ritme ini mencerminkan ketenangan, kejelasan artikulasi, dan rasa percaya diri yang matang.`;
+  }
+
+  // 3. Deteksi Kata Gumam (Filler Words) Bahasa Indonesia
+  // Target: eemm, eem, umm, um, ee, anu, apa ya, kayak, ngg, hmm, yaa
+  const fillerWordTargets: { pattern: RegExp; display: string }[] = [
+    { pattern: /\b(e+m+|u+m+)\b/gi, display: 'eemm / umm' },
+    { pattern: /\b(a+n+u+)\b/gi, display: 'anu' },
+    { pattern: /\b(apa ya|gimana ya)\b/gi, display: 'apa ya' },
+    { pattern: /\b(kayak|kayaknya)\b/gi, display: 'kayak' },
+    { pattern: /\b(ng+g+|h+m+)\b/gi, display: 'hmm / ngg' },
+    { pattern: /\b(e+)\b/gi, display: 'ee...' },
+  ];
+
+  const fillerDetails: FillerWordOccurrence[] = [];
+  let totalFillers = 0;
+
+  fillerWordTargets.forEach(({ pattern, display }) => {
+    const matches = combinedText.match(pattern);
+    if (matches && matches.length > 0) {
+      fillerDetails.push({
+        word: display,
+        count: matches.length,
+      });
+      totalFillers += matches.length;
+    }
+  });
+
+  let fillerStatus: 'very-confident' | 'moderate' | 'hesitant' = 'very-confident';
+  let fillerDescription = '';
+
+  if (totalFillers <= 2) {
+    fillerStatus = 'very-confident';
+    fillerDescription = `Luar biasa! Sangat minim gumaman (${totalFillers} kali terdeteksi). Ucapan Anda terdengar lugas, meyakinkan, dan profesional.`;
+  } else if (totalFillers <= 6) {
+    fillerStatus = 'moderate';
+    fillerDescription = `Cukup baik, terdeteksi ${totalFillers} kali kata gumam saat berpikir. Cobalah mengganti gumaman seperti 'eemm' dengan jeda hening singkat (silent pause) 1 detik.`;
+  } else {
+    fillerStatus = 'hesitant';
+    fillerDescription = `Cukup sering terdeteksi kata gumam (${totalFillers} kali). Hal ini menandakan rasa gugup saat merangkai kalimat. Tarik napas sejenak sebelum menjawab daripada mengucapkan 'anu' atau 'eemm'.`;
+  }
+
+  // 4. Hitung Skor Indeks Percaya Diri (0 - 100)
+  let confidenceScore = 100;
+
+  // Penalti filler words: maks 25 poin
+  confidenceScore -= Math.min(25, totalFillers * 3.5);
+
+  // Penalti WPM tidak ideal: maks 15 poin
+  if (wpm < 85) {
+    confidenceScore -= Math.min(15, Math.round((85 - wpm) * 0.3));
+  } else if (wpm > 145) {
+    confidenceScore -= Math.min(15, Math.round((wpm - 145) * 0.25));
+  }
+
+  // Pengaruh panjang rata-rata jawaban: jika terlalu pendek (<20 kata), kurangi 10 poin
+  const avgWordsPerAnswer = totalWords / answers.length;
+  if (avgWordsPerAnswer < 20) {
+    confidenceScore -= 12;
+  }
+
+  confidenceScore = Math.max(45, Math.min(98, Math.round(confidenceScore)));
+
+  // Label Percaya Diri
+  let confidenceLabel = '';
+  if (confidenceScore >= 85) {
+    confidenceLabel = 'Sangat Percaya Diri & Mantap';
+  } else if (confidenceScore >= 70) {
+    confidenceLabel = 'Percaya Diri & Komunikatif';
+  } else if (confidenceScore >= 55) {
+    confidenceLabel = 'Cukup Baik, Perlu Pembiasaan';
+  } else {
+    confidenceLabel = 'Perlu Pemanasan & Relaksasi';
+  }
+
+  // 5. Tips Psikologis Spesifik
+  let psychologicalTip = '';
+  if (totalFillers > 4 && wpm > 145) {
+    psychologicalTip = 'Gugup membuat detak jantung naik dan bicara jadi terburu-buru. Sebelum menjawab pertanyaan berikutnya, coba teknik Box Breathing (tarik napas 4 detik) dan izinkan diri Anda hening sejenak sebelum bersuara.';
+  } else if (wpm < 85) {
+    psychologicalTip = 'Jangan takut salah bicara. Rekruter industri lebih menghargai jawaban yang lugas dan mengalir daripada jawaban sempurna yang dipikirkan terlalu lama. Percayai keahlian praktik yang sudah Anda miliki!';
+  } else if (totalFillers > 4) {
+    psychologicalTip = 'Teknik "Silent Pause" adalah senjata rahasia pembicara andal: daripada mengisi keheningan dengan "eemm" atau "anu", diam sejenak sambil menatap pewawancara. Diam sejenak justru membuat Anda terlihat bijak dan berpikir matang.';
+  } else {
+    psychologicalTip = 'Pertahankan ketenangan dan postur tubuh yang tegak! Kombinasi tempo bicara stabil dan minim kata gumam ini membuktikan Anda siap diterjunkan langsung ke dunia industri.';
+  }
+
+  return {
+    wpm,
+    wpmStatus,
+    wpmDescription,
+    fillerCount: totalFillers,
+    fillerDetails,
+    fillerStatus,
+    fillerDescription,
+    confidenceScore,
+    confidenceLabel,
+    psychologicalTip,
+  };
+}

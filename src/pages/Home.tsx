@@ -49,6 +49,15 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             </button>
 
             <button
+              onClick={() => onNavigate('mirror')}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-amber-50 hover:bg-amber-100/80 text-amber-900 font-bold text-sm sm:text-base border border-amber-200/80 shadow-2xs transition active:scale-95 cursor-pointer"
+              title="Latihan tatap kamera 60 detik tanpa dinilai"
+            >
+              <Sparkles className="w-5 h-5 text-amber-500" />
+              <span>Mode Cermin (60s)</span>
+            </button>
+
+            <button
               onClick={() => onNavigate('history')}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm sm:text-base border border-slate-200 shadow-2xs transition active:scale-95 cursor-pointer"
             >
@@ -66,7 +75,10 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
               🔊 Dialog Audio AI Bahasa Indonesia
             </span>
             <span className="bg-white border border-slate-200/80 px-3 py-1 rounded-full shadow-2xs">
-              ✨ Format STAR & Feedback Instan
+              🪞 Mode Cermin 60s & Pemanasan 4-4-4-4
+            </span>
+            <span className="bg-white border border-slate-200/80 px-3 py-1 rounded-full shadow-2xs">
+              📊 Analisis WPM & Detektor Gumaman
             </span>
           </div>
 

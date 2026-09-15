@@ -1,4 +1,22 @@
-export type PageView = 'home' | 'interview' | 'colorblind' | 'history';
+export type PageView = 'home' | 'interview' | 'colorblind' | 'history' | 'mirror';
+
+export interface FillerWordOccurrence {
+  word: string;
+  count: number;
+}
+
+export interface ConfidenceMetrics {
+  wpm: number; // words per minute
+  wpmStatus: 'slow' | 'ideal' | 'fast';
+  wpmDescription: string;
+  fillerCount: number;
+  fillerDetails: FillerWordOccurrence[];
+  fillerStatus: 'very-confident' | 'moderate' | 'hesitant';
+  fillerDescription: string;
+  confidenceScore: number; // 0 - 100
+  confidenceLabel: string;
+  psychologicalTip: string;
+}
 
 export type InterviewMode = 'relaxed' | 'timed';
 

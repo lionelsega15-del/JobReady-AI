@@ -4,7 +4,9 @@ import { FieldSelector } from '../components/interview/FieldSelector';
 import { QuestionCard } from '../components/interview/QuestionCard';
 import { VideoInterviewRoom } from '../components/interview/VideoInterviewRoom';
 import { InterviewSummary } from '../components/interview/InterviewSummary';
-import { PageView } from '../types';
+import { PreInterviewWarmupModal } from '../components/interview/PreInterviewWarmupModal';
+import { VOCATIONAL_FIELDS } from '../data/interview-questions';
+import { PageView, InterviewMode, Field } from '../types';
 import { ArrowLeft, Video, Layout } from 'lucide-react';
 
 interface InterviewPageProps {
@@ -32,6 +34,49 @@ export const InterviewPage: React.FC<InterviewPageProps> = ({ onNavigate }) => {
 
   // 'video' is the modern interactive face-to-face AI voice room, 'compact' is classic form card
   const [viewLayout, setViewLayout] = useState<'video' | 'compact'>('video');
+
+  // Pre-interview Warm-up state
+  const [showWarmupModal, setShowWarmupModal] = useState<boolean>(false);
+  const [pendingSessionConfig, setPendingSessionConfig] = useState<{
+    field: Field;
+    mode: InterviewMode;
+    duration: number;
+  } | null>(null);
+
+  const handleInitiateField = (fieldId: string, selectedMode: InterviewMode, duration: number) => {
+    const foundField = VOCATIONAL_FIELDS.find(f => f.id === fieldId) || VOCATIONAL_FIELDS[0];
+    setPendingSessionConfig({
+      field: foundField,
+      mode: selectedMode,
+      duration,
+    });
+    setShowWarmupModal(true);
+  };
+
+  const handleStartFromWarmup = () => {
+    if (pendingSessionConfig) {
+      startSession(
+        pendingSessionConfig.field.id,
+        pendingSessionConfig.mode,
+        pendingSessionConfig.duration
+      );
+    }
+    setShowWarmupModal(false);
+    setPendingSessionConfig(null);
+  };
+
+  const handleCloseWarmup = () => {
+    // If skipped, start directly
+    if (pendingSessionConfig) {
+      startSession(
+        pendingSessionConfig.field.id,
+        pendingSessionConfig.mode,
+        pendingSessionConfig.duration
+      );
+    }
+    setShowWarmupModal(false);
+    setPendingSessionConfig(null);
+  };
 
   return (
     <div className="py-3 sm:py-4 px-3 sm:px-6 max-w-6xl mx-auto flex-1 flex flex-col">
@@ -81,12 +126,22 @@ export const InterviewPage: React.FC<InterviewPageProps> = ({ onNavigate }) => {
 
       {/* Screen 1: Field Selection & Mode Config */}
       {!selectedFieldId && (
-        <FieldSelector 
-          onSelectField={(fieldId, selectedMode, duration) => {
-            startSession(fieldId, selectedMode, duration);
-          }}
-          onNavigateHistory={() => onNavigate('history')}
-        />
+        <>
+          <FieldSelector 
+            onSelectField={handleInitiateField}
+            onNavigateHistory={() => onNavigate('history')}
+            onNavigateMirror={() => onNavigate('mirror')}
+          />
+
+          {pendingSessionConfig && (
+            <PreInterviewWarmupModal
+              field={pendingSessionConfig.field}
+              isOpen={showWarmupModal}
+              onStartInterview={handleStartFromWarmup}
+              onClose={handleCloseWarmup}
+            />
+          )}
+        </>
       )}
 
       {/* Screen 2: Active Question - Video Face-to-Face or Compact Card */}
