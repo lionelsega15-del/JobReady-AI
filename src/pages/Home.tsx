@@ -1,9 +1,8 @@
 import React from 'react';
 import { PageView } from '../types';
 import { 
-  Video, ArrowRight, CheckCircle2, History, Eye,
-  Wrench, Network, UtensilsCrossed, Calculator, Users, 
-  Sparkles, ShieldCheck, Clock, Award, Check, Play, Brain, HeartHandshake
+  Briefcase, Video, Mic, ArrowRight, Eye, 
+  Camera, CheckCircle2, ShieldCheck, Clock, Award, Check, Play, Brain, HeartHandshake
 } from 'lucide-react';
 
 interface HomeProps {
@@ -50,10 +49,10 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
             <button
               onClick={() => onNavigate('mirror')}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-amber-50/60 text-slate-800 hover:text-amber-950 font-bold text-sm sm:text-base border border-slate-200 hover:border-amber-300 shadow-2xs transition active:scale-98 cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 font-bold text-sm sm:text-base border border-slate-200 shadow-2xs transition active:scale-98 cursor-pointer"
               title="Latihan tatap kamera 60 detik tanpa dinilai"
             >
-              <Sparkles className="w-4 h-4 text-amber-500" />
+              <Camera className="w-4 h-4 text-slate-600" />
               <span>Mode Cermin (Latihan 60s)</span>
             </button>
 
@@ -157,7 +156,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
 
             {/* Bottom Insight Strip */}
             <div className="bg-blue-50/70 border border-blue-100 rounded-xl p-3 flex items-center gap-2.5 text-xs text-blue-950">
-              <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
               <span>
                 <strong>Hasil Akhir Komprehensif:</strong> Evaluasi format STAR, skor penguasaan kata kunci, kecepatan bicara (WPM), dan deteksi kata gumam.
               </span>
@@ -204,8 +203,8 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
           {/* Card 2 */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-2xs space-y-3 flex flex-col justify-between hover:border-slate-300 transition">
             <div className="space-y-3">
-              <div className="w-11 h-11 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center font-bold">
-                <Sparkles className="w-5 h-5 text-amber-600" />
+              <div className="w-11 h-11 rounded-xl bg-slate-100 text-slate-800 flex items-center justify-center font-bold">
+                <Camera className="w-5 h-5 text-slate-700" />
               </div>
               <h3 className="font-bold text-slate-900 text-base">
                 Mode Cermin & Pemanasan Relaksasi
@@ -214,7 +213,7 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
                 Latihan menatap lensa kamera dengan panduan titik fokus, pernapasan ritmis 4-4-4-4 untuk menurunkan detak jantung, serta putar ulang rekaman sendiri agar bebas canggung.
               </p>
             </div>
-            <div className="pt-3 border-t border-slate-100 flex items-center text-xs font-semibold text-amber-700">
+            <div className="pt-3 border-t border-slate-100 flex items-center text-xs font-semibold text-slate-700">
               <span>Bebas Latihan Tanpa Dinilai</span>
             </div>
           </div>

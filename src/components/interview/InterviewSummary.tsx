@@ -191,16 +191,16 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
           {/* Header */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center shadow-sm">
-                <Sparkles className="w-5 h-5 text-amber-300" />
+              <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center">
+                <Activity className="w-5 h-5" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
-                    Analisis Kepercayaan Diri & Kelancaran Bicara
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight">
+                    Evaluasi Tempo & Kelancaran Bicara
                   </h3>
-                  <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                    Non-Verbal AI
+                  <span className="text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                    Artikulasi & Pacing
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 mt-0.5">
@@ -209,7 +209,7 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
               </div>
             </div>
 
-            <span className={`px-3 py-1 rounded-full text-xs font-bold border ${
+            <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${
               confidenceMetrics.confidenceScore >= 80 
                 ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
                 : confidenceMetrics.confidenceScore >= 65
@@ -223,22 +223,22 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
           {/* 3 Metric Pillars */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Box 1: Confidence Index */}
-            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between">
+            <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between text-xs text-slate-500 font-semibold mb-1">
-                  <span>Indeks Percaya Diri</span>
-                  <Activity className="w-4 h-4 text-indigo-500" />
+                  <span>Skor Keteraturan Bicara</span>
+                  <Activity className="w-4 h-4 text-blue-600" />
                 </div>
                 <div className="flex items-baseline gap-1.5 my-2">
-                  <span className="text-3xl font-black text-slate-900 tracking-tight">
+                  <span className="text-3xl font-bold text-slate-900 tracking-tight">
                     {confidenceMetrics.confidenceScore}
                   </span>
-                  <span className="text-xs font-semibold text-slate-400">/100</span>
+                  <span className="text-xs font-medium text-slate-400">/100</span>
                 </div>
               </div>
               <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden mt-1">
                 <div 
-                  className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-500"
+                  className="h-full bg-blue-600 rounded-full transition-all duration-500"
                   style={{ width: `${confidenceMetrics.confidenceScore}%` }}
                 />
               </div>
@@ -248,21 +248,21 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
             </div>
 
             {/* Box 2: Speech Pacing (WPM) */}
-            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between">
+            <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between text-xs text-slate-500 font-semibold mb-1">
                   <span>Kecepatan Bicara (Pacing)</span>
-                  <Clock className="w-4 h-4 text-blue-500" />
+                  <Clock className="w-4 h-4 text-slate-600" />
                 </div>
                 <div className="flex items-baseline gap-1.5 my-2">
-                  <span className="text-3xl font-black text-blue-700 tracking-tight">
+                  <span className="text-3xl font-bold text-blue-700 tracking-tight">
                     {confidenceMetrics.wpm}
                   </span>
                   <span className="text-xs font-semibold text-slate-500">WPM</span>
                 </div>
               </div>
               <div className="flex items-center gap-1.5">
-                <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
+                <span className={`px-2 py-0.5 rounded-md text-[10px] font-semibold ${
                   confidenceMetrics.wpmStatus === 'ideal' 
                     ? 'bg-emerald-100 text-emerald-800' 
                     : confidenceMetrics.wpmStatus === 'fast'
@@ -278,31 +278,31 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
             </div>
 
             {/* Box 3: Filler Words */}
-            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 flex flex-col justify-between">
+            <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between text-xs text-slate-500 font-semibold mb-1">
                   <span>Deteksi Kata Gumam</span>
-                  <MessageSquareQuote className="w-4 h-4 text-amber-500" />
+                  <MessageSquareQuote className="w-4 h-4 text-slate-600" />
                 </div>
                 <div className="flex items-baseline gap-1.5 my-2">
-                  <span className={`text-3xl font-black tracking-tight ${
+                  <span className={`text-3xl font-bold tracking-tight ${
                     confidenceMetrics.fillerCount <= 2 ? 'text-emerald-700' : 'text-amber-600'
                   }`}>
                     {confidenceMetrics.fillerCount}
                   </span>
-                  <span className="text-xs font-semibold text-slate-500">kali terdeteksi</span>
+                  <span className="text-xs font-medium text-slate-500">kali terdeteksi</span>
                 </div>
               </div>
               {confidenceMetrics.fillerDetails.length > 0 ? (
                 <div className="flex flex-wrap gap-1 mt-1">
                   {confidenceMetrics.fillerDetails.map((f, i) => (
-                    <span key={i} className="text-[10px] font-semibold px-1.5 py-0.5 bg-amber-50 text-amber-900 border border-amber-200 rounded">
+                    <span key={i} className="text-[10px] font-medium px-1.5 py-0.5 bg-amber-50 text-amber-900 border border-amber-200 rounded">
                       "{f.word}": {f.count}x
                     </span>
                   ))}
                 </div>
               ) : (
-                <span className="text-[11px] text-emerald-700 font-semibold mt-1">
+                <span className="text-[11px] text-emerald-700 font-medium mt-1">
                   ✓ Bersih tanpa gumaman canggung
                 </span>
               )}
@@ -312,16 +312,16 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
             </div>
           </div>
 
-          {/* Psychological Recommendation Banner */}
-          <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-50/90 via-indigo-50/70 to-cyan-50/90 border border-blue-200/80 flex items-start gap-3">
-            <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs mt-0.5">
+          {/* Recommendation Banner */}
+          <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-3">
+            <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
               <Brain className="w-4 h-4" />
             </div>
-            <div className="space-y-1">
-              <h4 className="text-xs font-bold text-blue-950 uppercase tracking-wider">
-                Catatan Psikologis & Kesiapan Mental Wawancara:
+            <div className="space-y-0.5">
+              <h4 className="text-xs font-bold text-slate-900">
+                Saran Kelancaran & Ketenangan Berbicara:
               </h4>
-              <p className="text-xs text-slate-700 leading-relaxed font-medium">
+              <p className="text-xs text-slate-600 leading-relaxed">
                 {confidenceMetrics.psychologicalTip}
               </p>
             </div>

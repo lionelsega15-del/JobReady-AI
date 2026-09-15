@@ -4,7 +4,7 @@ import { InterviewMode } from '../../types';
 import { getInterviewHistory } from '../../lib/storage';
 import { 
   Wrench, Network, UtensilsCrossed, Calculator, Users, 
-  ArrowRight, BookMarked, Clock, Sparkles, History, Check, Zap 
+  ArrowRight, BookMarked, Clock, Camera, History, Check, Zap 
 } from 'lucide-react';
 
 interface FieldSelectorProps {
@@ -50,10 +50,10 @@ export const FieldSelector: React.FC<FieldSelectorProps> = ({
             <button
               type="button"
               onClick={onNavigateMirror}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 text-xs font-semibold transition cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 text-xs font-semibold transition cursor-pointer"
               title="Latihan tatap kamera 60 detik tanpa dinilai"
             >
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
+              <Camera className="w-3.5 h-3.5 text-slate-600" />
               <span>Mode Cermin (60s)</span>
             </button>
           )}

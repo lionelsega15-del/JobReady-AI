@@ -391,7 +391,7 @@ export const MirrorPracticePage: React.FC<MirrorPracticePageProps> = ({ onNaviga
           {/* Guide Card */}
           <div className="bg-white rounded-3xl border border-slate-200 p-5 shadow-xs space-y-3">
             <div className="flex items-center gap-2 text-blue-700">
-              <Sparkles className="w-5 h-5 text-amber-500" />
+              <VideoIcon className="w-5 h-5 text-blue-600" />
               <h3 className="font-extrabold text-sm tracking-tight text-slate-900">
                 Latihan Elevator Pitch 60 Detik
               </h3>

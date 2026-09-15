@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Field } from '../../types';
 import { 
-  Heart, Wind, Smile, Sparkles, ArrowRight, X, Play, RotateCcw,
-  CheckCircle2, Volume2, ShieldCheck, Flame
+  Wind, Volume2, Eye, CheckCircle2, ArrowRight, X, 
+  Play, Pause, RotateCcw, Clock
 } from 'lucide-react';
 
 interface PreInterviewWarmupModalProps {
@@ -12,7 +12,7 @@ interface PreInterviewWarmupModalProps {
   onClose: () => void;
 }
 
-type WarmupTab = 'breathing' | 'vocal' | 'affirmation';
+type WarmupTab = 'breathing' | 'vocal' | 'mindset';
 
 export const PreInterviewWarmupModal: React.FC<PreInterviewWarmupModalProps> = ({
   field,
@@ -44,7 +44,6 @@ export const PreInterviewWarmupModal: React.FC<PreInterviewWarmupModalProps> = (
           if (currPhase === 'inhale') return 'hold-in';
           if (currPhase === 'hold-in') return 'exhale';
           if (currPhase === 'exhale') return 'hold-out';
-          // After hold-out, loop to inhale and increment cycle
           setCycleCount((c) => c + 1);
           return 'inhale';
         });
@@ -58,229 +57,260 @@ export const PreInterviewWarmupModal: React.FC<PreInterviewWarmupModalProps> = (
 
   if (!isOpen) return null;
 
-  const getPhaseData = () => {
+  const getPhaseInfo = () => {
     switch (breathingPhase) {
       case 'inhale':
         return {
-          title: 'Tarik Napas Perlahan',
-          instruction: 'Tarik napas dalam-dalam melalui hidung secara perlahan...',
-          color: 'text-cyan-600 bg-cyan-50 border-cyan-200',
-          circleScale: 'scale-125',
-          haloBg: 'bg-cyan-400/20',
+          stepIndex: 0,
+          label: 'Tarik Napas',
+          instruction: 'Tarik napas perlahan melalui hidung secara teratur',
+          scale: 'scale-110',
+          ringColor: 'border-blue-500 bg-blue-50/70 text-blue-900',
         };
       case 'hold-in':
         return {
-          title: 'Tahan Napas',
-          instruction: 'Tahan udara di dada dengan rileks, rasakan ketenangan...',
-          color: 'text-blue-600 bg-blue-50 border-blue-200',
-          circleScale: 'scale-125',
-          haloBg: 'bg-blue-400/30',
+          stepIndex: 1,
+          label: 'Tahan Napas',
+          instruction: 'Tahan udara di dada dengan rileks tanpa menegangkan bahu',
+          scale: 'scale-110',
+          ringColor: 'border-slate-500 bg-slate-100 text-slate-900',
         };
       case 'exhale':
         return {
-          title: 'Hembuskan Perlahan',
-          instruction: 'Keluarkan napas perlahan melalui mulut secara halus...',
-          color: 'text-emerald-600 bg-emerald-50 border-emerald-200',
-          circleScale: 'scale-90',
-          haloBg: 'bg-emerald-400/20',
+          stepIndex: 2,
+          label: 'Hembuskan',
+          instruction: 'Keluarkan napas perlahan dan halus melalui mulut',
+          scale: 'scale-95',
+          ringColor: 'border-emerald-500 bg-emerald-50/70 text-emerald-900',
         };
       case 'hold-out':
         return {
-          title: 'Rileks & Kosongkan',
-          instruction: 'Istirahat sejenak sebelum tarikan napas berikutnya...',
-          color: 'text-indigo-600 bg-indigo-50 border-indigo-200',
-          circleScale: 'scale-90',
-          haloBg: 'bg-indigo-400/20',
+          stepIndex: 3,
+          label: 'Jeda Santai',
+          instruction: 'Istirahatkan dada sejenak sebelum tarikan napas berikutnya',
+          scale: 'scale-95',
+          ringColor: 'border-slate-400 bg-slate-50 text-slate-800',
         };
     }
   };
 
-  const phaseData = getPhaseData();
+  const currentPhase = getPhaseInfo();
+
+  const resetBreathing = () => {
+    setBreathingPhase('inhale');
+    setPhaseSecondsLeft(4);
+    setCycleCount(1);
+    setIsBreathingRunning(true);
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/70 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="bg-white rounded-3xl border border-slate-200/90 shadow-2xl max-w-xl w-full overflow-hidden flex flex-col max-h-[92vh]">
-        {/* Modal Header */}
-        <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-cyan-700 p-5 text-white relative">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-2xl bg-white/15 backdrop-blur-xs flex items-center justify-center text-white shadow-inner">
-                <Sparkles className="w-5 h-5 text-amber-300 animate-pulse" />
-              </div>
-              <div>
-                <span className="text-[11px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full bg-white/20 text-cyan-200">
-                  Zona Pemanasan Anti-Gugup
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-lg w-full overflow-hidden flex flex-col max-h-[90vh]">
+        {/* Clean, Professional Header */}
+        <div className="p-5 border-b border-slate-100 bg-white">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+                  <Clock className="w-3 h-3" />
+                  Persiapan Singkat (1 Menit)
                 </span>
-                <h3 className="text-lg font-extrabold tracking-tight mt-0.5">
-                  1 Menit Relaksasi Sebelum Wawancara
-                </h3>
+                <span className="text-xs text-slate-400">•</span>
+                <span className="text-xs font-medium text-slate-500">
+                  {field.shortName}
+                </span>
               </div>
+              <h3 className="text-lg font-bold text-slate-900 mt-1 tracking-tight">
+                Latihan Kesiapan Pra-Wawancara
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+                Luangkan 1 menit untuk mengatur ketenangan napas, melenturkan artikulasi, dan memusatkan fokus.
+              </p>
             </div>
 
             <button
               onClick={onClose}
-              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white/80 hover:text-white transition cursor-pointer"
-              title="Tutup / Lewati Pemanasan"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition cursor-pointer shrink-0"
+              title="Tutup / Lewati"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
-          <p className="text-xs text-blue-100/90 mt-2">
-            Persiapan singkat untuk bidang <strong className="text-white">{field.name}</strong> agar detak jantung tenang dan otak tidak <em className="italic">blank</em>.
-          </p>
-
-          {/* Navigation Tabs */}
-          <div className="flex items-center gap-1.5 mt-4 p-1 rounded-xl bg-black/20 backdrop-blur-xs">
+          {/* Segmented Tabs Navigation */}
+          <div className="grid grid-cols-3 gap-1 mt-4 p-1 rounded-xl bg-slate-100/90 text-xs font-medium text-slate-600">
             <button
               onClick={() => setActiveTab('breathing')}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg text-xs font-semibold transition cursor-pointer ${
+              className={`py-2 px-2 rounded-lg text-center transition cursor-pointer ${
                 activeTab === 'breathing'
-                  ? 'bg-white text-blue-800 shadow-xs'
-                  : 'text-white/80 hover:text-white'
+                  ? 'bg-white text-slate-900 font-bold shadow-xs'
+                  : 'hover:text-slate-900'
               }`}
             >
-              <Wind className="w-3.5 h-3.5" />
-              <span>1. Pernapasan 4-4-4-4</span>
+              1. Pernapasan
             </button>
 
             <button
               onClick={() => setActiveTab('vocal')}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg text-xs font-semibold transition cursor-pointer ${
+              className={`py-2 px-2 rounded-lg text-center transition cursor-pointer ${
                 activeTab === 'vocal'
-                  ? 'bg-white text-blue-800 shadow-xs'
-                  : 'text-white/80 hover:text-white'
+                  ? 'bg-white text-slate-900 font-bold shadow-xs'
+                  : 'hover:text-slate-900'
               }`}
             >
-              <Smile className="w-3.5 h-3.5" />
-              <span>2. Senam Vokal</span>
+              2. Artikulasi Suara
             </button>
 
             <button
-              onClick={() => setActiveTab('affirmation')}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg text-xs font-semibold transition cursor-pointer ${
-                activeTab === 'affirmation'
-                  ? 'bg-white text-blue-800 shadow-xs'
-                  : 'text-white/80 hover:text-white'
+              onClick={() => setActiveTab('mindset')}
+              className={`py-2 px-2 rounded-lg text-center transition cursor-pointer ${
+                activeTab === 'mindset'
+                  ? 'bg-white text-slate-900 font-bold shadow-xs'
+                  : 'hover:text-slate-900'
               }`}
             >
-              <Heart className="w-3.5 h-3.5" />
-              <span>3. Afirmasi Diri</span>
+              3. Kesiapan Mental
             </button>
           </div>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto flex-1 flex flex-col justify-center">
-          {/* TAB 1: BOX BREATHING 4-4-4-4 */}
+        <div className="p-6 overflow-y-auto flex-1 flex flex-col justify-center min-h-[300px]">
+          {/* TAB 1: PERNAPASAN (BOX BREATHING) */}
           {activeTab === 'breathing' && (
             <div className="flex flex-col items-center text-center space-y-5 my-auto">
               <div className="space-y-1">
-                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-colors ${phaseData.color}`}>
-                  <Wind className="w-3.5 h-3.5" />
-                  Siklus ke-{cycleCount} • {phaseData.title}
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  Ritme Pernapasan 4 Detik (Putaran {cycleCount})
                 </span>
-                <p className="text-xs text-slate-500 max-w-sm">
-                  Metode Box Breathing terbukti secara ilmiah menstabilkan detak jantung dan meredakan demam panggung.
+                <p className="text-xs text-slate-600 max-w-sm">
+                  Mengatur ritme napas membantu meredakan rasa tegang dan menstabilkan suara sebelum berbicara.
                 </p>
               </div>
 
-              {/* Animated Visual Circle */}
-              <div className="relative w-48 h-48 sm:w-52 sm:h-52 flex items-center justify-center">
-                {/* Outer Halo */}
-                <div 
-                  className={`absolute inset-0 rounded-full transition-all duration-1000 ease-in-out ${phaseData.haloBg} ${phaseData.circleScale} blur-lg`} 
-                />
+              {/* Minimalist, Clean Breathing Circle Indicator */}
+              <div className="relative w-40 h-40 flex items-center justify-center">
+                {/* Subtle track circle */}
+                <div className="absolute inset-0 rounded-full border border-slate-200" />
 
-                {/* Outer Rotating/Pulsing Ring */}
+                {/* Animated soft circle */}
                 <div 
-                  className={`absolute inset-4 rounded-full border-2 border-dashed border-blue-400/50 transition-all duration-1000 ease-in-out ${phaseData.circleScale}`} 
-                />
-
-                {/* Inner Core Circle */}
-                <div 
-                  className={`w-32 h-32 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 text-white flex flex-col items-center justify-center shadow-xl transition-transform duration-1000 ease-in-out ${phaseData.circleScale} z-10`}
+                  className={`w-32 h-32 rounded-full border-2 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out shadow-xs ${currentPhase.ringColor} ${currentPhase.scale}`}
                 >
-                  <span className="text-3xl sm:text-4xl font-black tracking-tight">{phaseSecondsLeft}</span>
-                  <span className="text-[10px] font-semibold text-cyan-100 uppercase tracking-wider mt-0.5">
-                    Detik
+                  <span className="text-3xl font-bold tracking-tight">{phaseSecondsLeft}s</span>
+                  <span className="text-[11px] font-semibold tracking-wide uppercase mt-0.5 opacity-90">
+                    {currentPhase.label}
                   </span>
                 </div>
               </div>
 
-              {/* Instruction message */}
-              <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 max-w-md w-full text-center">
-                <p className="text-sm font-semibold text-slate-800">
-                  {phaseData.instruction}
+              {/* Instructions and 4-Step Tracker */}
+              <div className="w-full max-w-sm bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-center space-y-2.5">
+                <p className="text-xs font-semibold text-slate-800">
+                  {currentPhase.instruction}
                 </p>
-                <div className="flex items-center justify-center gap-2 mt-2 text-[11px] text-slate-500">
-                  <span className={breathingPhase === 'inhale' ? 'font-bold text-blue-700' : ''}>Tarik 4s</span>
-                  <span>→</span>
-                  <span className={breathingPhase === 'hold-in' ? 'font-bold text-blue-700' : ''}>Tahan 4s</span>
-                  <span>→</span>
-                  <span className={breathingPhase === 'exhale' ? 'font-bold text-blue-700' : ''}>Hembus 4s</span>
-                  <span>→</span>
-                  <span className={breathingPhase === 'hold-out' ? 'font-bold text-blue-700' : ''}>Tenang 4s</span>
+
+                {/* Step indicator bar */}
+                <div className="grid grid-cols-4 gap-1 text-[10px] font-medium pt-1 border-t border-slate-200/60">
+                  <div className={`py-1 rounded ${currentPhase.stepIndex === 0 ? 'bg-blue-600 text-white font-bold' : 'text-slate-500'}`}>
+                    1. Tarik
+                  </div>
+                  <div className={`py-1 rounded ${currentPhase.stepIndex === 1 ? 'bg-slate-700 text-white font-bold' : 'text-slate-500'}`}>
+                    2. Tahan
+                  </div>
+                  <div className={`py-1 rounded ${currentPhase.stepIndex === 2 ? 'bg-emerald-600 text-white font-bold' : 'text-slate-500'}`}>
+                    3. Hembus
+                  </div>
+                  <div className={`py-1 rounded ${currentPhase.stepIndex === 3 ? 'bg-slate-700 text-white font-bold' : 'text-slate-500'}`}>
+                    4. Jeda
+                  </div>
                 </div>
+              </div>
+
+              {/* Controls */}
+              <div className="flex items-center gap-2 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setIsBreathingRunning(!isBreathingRunning)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 transition cursor-pointer"
+                >
+                  {isBreathingRunning ? (
+                    <>
+                      <Pause className="w-3.5 h-3.5" />
+                      <span>Jeda</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="w-3.5 h-3.5" />
+                      <span>Lanjutkan</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={resetBreathing}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100 transition cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  <span>Ulangi</span>
+                </button>
               </div>
             </div>
           )}
 
-          {/* TAB 2: VOCAL & FACIAL RELAXATION */}
+          {/* TAB 2: ARTIKULASI & POSTUR (CLEAN UNIFIED CARDS) */}
           {activeTab === 'vocal' && (
-            <div className="space-y-4 my-auto">
-              <div className="text-center space-y-1">
-                <h4 className="text-base font-bold text-slate-900">Senam Otot Wajah & Artikulasi Vokal</h4>
+            <div className="space-y-3.5 my-auto">
+              <div className="text-center space-y-0.5">
+                <h4 className="text-sm font-bold text-slate-900">Tips Relaksasi Wajah & Artikulasi</h4>
                 <p className="text-xs text-slate-500">
-                  Otot wajah yang tegang membuat suara terdengar kaku dan bergetar. Lakukan 3 langkah kilat ini:
+                  Lakukan 3 hal sederhana ini sebelum simulasi dimulai:
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 gap-2.5">
-                {/* Step 1 */}
-                <div className="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-sm shrink-0">
+              <div className="space-y-2.5">
+                {/* Item 1 */}
+                <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200 flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 font-bold text-xs">
                     1
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-amber-950 flex items-center gap-1.5">
-                      <Smile className="w-3.5 h-3.5 text-amber-600" />
-                      Tarik Senyum Lebar ke Kamera (3 Detik)
+                    <h5 className="text-xs font-bold text-slate-900">
+                      Lafalkan Huruf Vokal "A - I - U - E - O"
                     </h5>
-                    <p className="text-xs text-amber-900/80 mt-0.5">
-                      Tersenyumlah tulus ke arah kamera selama 3 detik. Otak merespons senyuman fisik dengan melepaskan hormon endorfin yang meredakan gugup.
+                    <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                      Buka mulut secara wajar dan ucapkan vokal dengan jelas untuk melemaskan otot rahang agar kata-kata tidak terdengar bergumam.
                     </p>
                   </div>
                 </div>
 
-                {/* Step 2 */}
-                <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200/80 flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
+                {/* Item 2 */}
+                <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200 flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-slate-200 text-slate-800 flex items-center justify-center shrink-0 font-bold text-xs">
                     2
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-blue-950 flex items-center gap-1.5">
-                      <Volume2 className="w-3.5 h-3.5 text-blue-600" />
-                      Latihan Artikulasi Suara: "A - I - U - E - O"
+                    <h5 className="text-xs font-bold text-slate-900">
+                      Arahkan Pandangan ke Kamera & Tersenyum Wajar
                     </h5>
-                    <p className="text-xs text-blue-900/80 mt-0.5">
-                      Ucapkan huruf vokal dengan mulut terbuka lebar dan suara terdengar jelas. Ini melemaskan rahang agar kata-kata tidak bergumam.
+                    <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                      Lihat langsung ke arah lensa kamera komputer atau laptop saat menjawab untuk menjaga kontak mata yang profesional.
                     </p>
                   </div>
                 </div>
 
-                {/* Step 3 */}
-                <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/80 flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shrink-0">
+                {/* Item 3 */}
+                <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200 flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center shrink-0 font-bold text-xs">
                     3
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                      Bahu Tegak & Rileks (Power Pose)
+                    <h5 className="text-xs font-bold text-slate-900">
+                      Postur Duduk Tegak dan Bahu Rileks
                     </h5>
-                    <p className="text-xs text-emerald-900/80 mt-0.5">
-                      Tarik bahu ke belakang, tegakkan punggung, dan jatuhkan bahu secara santai. Postur tegak mengirim sinyal ketenangan dan wibawa ke pewawancara.
+                    <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
+                      Tegakkan punggung secara alami tanpa kaku. Postur yang baik melancarkan pernapasan sehingga intonasi suara terdengar mantap.
                     </p>
                   </div>
                 </div>
@@ -288,49 +318,71 @@ export const PreInterviewWarmupModal: React.FC<PreInterviewWarmupModalProps> = (
             </div>
           )}
 
-          {/* TAB 3: AFFIRMATIONS */}
-          {activeTab === 'affirmation' && (
-            <div className="space-y-4 my-auto text-center">
-              <div className="space-y-1">
-                <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold border border-indigo-200">
-                  <Flame className="w-3.5 h-3.5 text-amber-500" />
-                  Mantra Penguat Diri
-                </span>
-                <h4 className="text-base font-bold text-slate-900">Kamu Lebih Siap Dari yang Kamu Duga!</h4>
+          {/* TAB 3: KESIAPAN MENTAL (PRACTICAL VOCATIONAL REMINDERS) */}
+          {activeTab === 'mindset' && (
+            <div className="space-y-4 my-auto">
+              <div className="text-center space-y-0.5">
+                <h4 className="text-sm font-bold text-slate-900">Poin Kunci Menghadapi Wawancara</h4>
+                <p className="text-xs text-slate-500">
+                  Ingat 3 prinsip penting saat menjawab pertanyaan:
+                </p>
               </div>
 
-              <div className="bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50 border border-blue-200/80 rounded-2xl p-5 text-left space-y-3 shadow-2xs">
-                <p className="text-sm font-semibold text-slate-800 leading-relaxed">
-                  "Saya sudah berpraktik dan belajar berbulan-bulan di sekolah maupun magang. Saya memiliki keterampilan teknis yang nyata. Wawancara ini hanyalah obrolan profesional untuk menceritakan apa yang sudah pernah saya kerjakan."
-                </p>
+              <div className="bg-slate-50 border border-slate-200/90 rounded-xl p-4 space-y-3">
+                <div className="space-y-1">
+                  <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                    1. Ceritakan Pengalaman Nyata
+                  </span>
+                  <p className="text-xs text-slate-600 pl-5 leading-relaxed">
+                    Kaitkan jawaban dengan apa yang pernah Anda praktikkan langsung di bengkel, lab sekolah, atau saat Praktik Kerja Lapangan (PKL).
+                  </p>
+                </div>
 
-                <div className="pt-2 border-t border-blue-200/60 flex items-center justify-between text-xs text-slate-600">
-                  <span className="font-semibold text-blue-700">Fokus Bidang: {field.shortName}</span>
-                  <span>✨ Percayai Prosesmu</span>
+                <div className="space-y-1 pt-2 border-t border-slate-200/60">
+                  <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                    2. Sampaikan dengan Runtut (Metode STAR)
+                  </span>
+                  <p className="text-xs text-slate-600 pl-5 leading-relaxed">
+                    Sebutkan situasinya, apa tugas yang diberikan, tindakan SOP yang Anda ambil, dan bagaimana hasilnya.
+                  </p>
+                </div>
+
+                <div className="space-y-1 pt-2 border-t border-slate-200/60">
+                  <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                    3. Bersikap Jujur dan Mau Belajar
+                  </span>
+                  <p className="text-xs text-slate-600 pl-5 leading-relaxed">
+                    Bila ada hal yang belum Anda ketahui secara mendalam, akui dengan jujur dan tunjukkan komitmen kuat untuk segera mempelajarinya.
+                  </p>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                Ingat: Pewawancara tidak mencari manusia sempurna yang hafal kamus, mereka mencari rekan kerja yang <strong>jujur, disiplin, dan mau belajar</strong>.
-              </p>
+              <div className="text-center">
+                <span className="inline-block px-3 py-1 rounded-full text-[11px] font-medium bg-slate-100 text-slate-600 border border-slate-200/80">
+                  Target Bidang: <strong className="text-slate-800">{field.name}</strong>
+                </span>
+              </div>
             </div>
           )}
         </div>
 
-        {/* Modal Footer */}
-        <div className="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-3">
+        {/* Clean Modal Footer */}
+        <div className="p-4 bg-slate-50/90 border-t border-slate-200 flex items-center justify-between gap-3">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/70 transition cursor-pointer"
+            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 transition cursor-pointer"
           >
-            Lewati Pemanasan
+            Lewati Persiapan
           </button>
 
           <button
             onClick={onStartInterview}
-            className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs sm:text-sm font-bold shadow-md hover:shadow-lg transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-semibold shadow-xs hover:shadow-sm transition cursor-pointer"
           >
-            <span>Saya Siap, Mulai Wawancara!</span>
+            <span>Mulai Simulasi Wawancara</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -338,3 +390,4 @@ export const PreInterviewWarmupModal: React.FC<PreInterviewWarmupModalProps> = (
     </div>
   );
 };
+
