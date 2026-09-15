@@ -6,7 +6,7 @@ import {
   CheckCircle2, AlertTriangle, XCircle, RotateCcw, Copy, 
   Check, ArrowRight, Eye, ChevronDown, ChevronUp, Award, 
   Printer, FileText, History, Clock, BookmarkCheck,
-  Sparkles, Activity, MessageSquareQuote, Zap, Brain, ThumbsUp, Volume2
+  Activity, MessageSquareQuote, Zap, Brain, ThumbsUp, Volume2
 } from 'lucide-react';
 
 interface InterviewSummaryProps {

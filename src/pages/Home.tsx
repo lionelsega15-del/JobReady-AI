@@ -1,8 +1,8 @@
 import React from 'react';
 import { PageView } from '../types';
 import { 
-  Briefcase, Video, Mic, ArrowRight, Eye, 
-  Camera, CheckCircle2, ShieldCheck, Clock, Award, Check, Play, Brain, HeartHandshake
+  Video, ArrowRight, Eye, Camera, CheckCircle2, Check, Brain,
+  Wrench, Network, UtensilsCrossed, Calculator, Users
 } from 'lucide-react';
 
 interface HomeProps {

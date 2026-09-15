@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { PageView } from '../types';
 import { 
   Camera, CameraOff, Mic, MicOff, Play, Square, RotateCcw, 
-  Eye, Sparkles, Volume2, ShieldCheck, ArrowRight, ArrowLeft, 
+  Eye, Volume2, ShieldCheck, ArrowRight, ArrowLeft, 
   CheckCircle2, Clock, MessageSquareQuote, Video as VideoIcon, AlertCircle
 } from 'lucide-react';
 
