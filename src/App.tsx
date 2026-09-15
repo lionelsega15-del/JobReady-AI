@@ -16,7 +16,7 @@ export function App() {
   }, [currentPage]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
+    <div className="min-h-screen flex flex-col bg-[#faf9f6] text-slate-800 font-sans selection:bg-amber-200 selection:text-amber-900">
       <Navbar currentPage={currentPage} onNavigate={setCurrentPage} />
       
       <main className="flex-1 flex flex-col">

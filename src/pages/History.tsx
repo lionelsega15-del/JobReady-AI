@@ -151,7 +151,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ onNavigate }) => {
       <div className="flex items-center justify-between">
         <button
           onClick={() => onNavigate('interview')}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition btn-bouncy cursor-pointer"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           <span>Kembali ke Simulasi Wawancara</span>
@@ -159,7 +159,7 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ onNavigate }) => {
 
         <button
           onClick={() => onNavigate('interview')}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-2xs transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white text-xs font-black shadow-warm-orange btn-bouncy transition cursor-pointer"
         >
           <Briefcase className="w-3.5 h-3.5" />
           <span>Mulai Simulasi Baru</span>
@@ -168,68 +168,68 @@ export const HistoryPage: React.FC<HistoryPageProps> = ({ onNavigate }) => {
 
       {/* Header Banner */}
       <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-800 text-xs font-semibold mb-2">
-          <Clock className="w-3.5 h-3.5 text-blue-600" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-orange-100 border border-orange-200 text-orange-900 text-xs font-black mb-2">
+          <Clock className="w-3.5 h-3.5 text-orange-600" />
           <span>Rekam Jejak Evaluasi Mandiri</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-          Riwayat Latihan Wawancara
+          Riwayat & Rapor Latihan Wawancara
         </h1>
         <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl">
           Pantau perkembangan skor, durasi latihan, dan catatan evaluasi dari setiap sesi latihan yang pernah Anda jalani di perangkat ini.
         </p>
       </div>
 
-      {/* Statistics Overview Cards */}
+      {/* Statistics Overview Cards (Harmonized Warm Pastels) */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-medium mb-1">
+        <div className="bg-orange-50/70 rounded-3xl border-2 border-orange-200/80 p-5 shadow-soft">
+          <div className="flex items-center justify-between text-orange-950 text-xs font-bold mb-1">
             <span>Total Sesi Latihan</span>
-            <Briefcase className="w-4 h-4 text-blue-600" />
+            <Briefcase className="w-4 h-4 text-orange-600" />
           </div>
           <div className="text-2xl font-black text-slate-900">
-            {stats.totalSessions} <span className="text-xs font-normal text-slate-500">sesi</span>
+            {stats.totalSessions} <span className="text-xs font-bold text-slate-500">sesi</span>
           </div>
-          <div className="text-[11px] text-slate-400 mt-1">
+          <div className="text-[11px] text-slate-500 mt-1 font-medium">
             {stats.totalQuestionsAnswered} total pertanyaan dijawab
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-medium mb-1">
+        <div className="bg-emerald-50/70 rounded-3xl border-2 border-emerald-200/80 p-5 shadow-soft">
+          <div className="flex items-center justify-between text-emerald-950 text-xs font-bold mb-1">
             <span>Rata-Rata Skor</span>
             <TrendingUp className="w-4 h-4 text-emerald-600" />
           </div>
           <div className="text-2xl font-black text-slate-900">
-            {stats.averageScore} <span className="text-xs font-normal text-slate-500">/ 100</span>
+            {stats.averageScore} <span className="text-xs font-bold text-slate-500">/ 100</span>
           </div>
-          <div className="text-[11px] text-slate-400 mt-1">
-            {stats.averageScore >= 80 ? 'Predikat: Sangat Siap' : stats.averageScore >= 55 ? 'Predikat: Cukup Siap' : 'Perlu Pemantapan'}
+          <div className="text-[11px] text-slate-500 mt-1 font-medium">
+            {stats.averageScore >= 80 ? 'Predikat: Sangat Siap ⭐' : stats.averageScore >= 55 ? 'Predikat: Cukup Siap 👍' : 'Perlu Pemantapan 💡'}
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-medium mb-1">
+        <div className="bg-amber-50/70 rounded-3xl border-2 border-amber-200/80 p-5 shadow-soft">
+          <div className="flex items-center justify-between text-amber-950 text-xs font-bold mb-1">
             <span>Skor Tertinggi</span>
-            <Award className="w-4 h-4 text-amber-500" />
+            <Award className="w-4 h-4 text-amber-600" />
           </div>
-          <div className="text-2xl font-black text-blue-700">
-            {stats.highestScore} <span className="text-xs font-normal text-slate-500">/ 100</span>
+          <div className="text-2xl font-black text-orange-600">
+            {stats.highestScore} <span className="text-xs font-bold text-slate-500">/ 100</span>
           </div>
-          <div className="text-[11px] text-slate-400 mt-1">
+          <div className="text-[11px] text-slate-500 mt-1 font-medium">
             Pencapaian terbaik Anda
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-slate-200/90 p-4 shadow-2xs">
-          <div className="flex items-center justify-between text-slate-500 text-xs font-medium mb-1">
+        <div className="bg-indigo-50/70 rounded-3xl border-2 border-indigo-200/80 p-5 shadow-soft">
+          <div className="flex items-center justify-between text-indigo-950 text-xs font-bold mb-1">
             <span>Bidang Terfavorit</span>
             <BookOpen className="w-4 h-4 text-indigo-600" />
           </div>
-          <div className="text-base sm:text-lg font-bold text-slate-900 truncate">
+          <div className="text-base sm:text-lg font-black text-slate-900 truncate">
             {stats.mostPracticedField || '-'}
           </div>
-          <div className="text-[11px] text-slate-400 mt-1">
+          <div className="text-[11px] text-slate-500 mt-1 font-medium">
             Paling sering dilatih
           </div>
         </div>

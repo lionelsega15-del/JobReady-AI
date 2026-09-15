@@ -3,23 +3,23 @@ import { ShieldCheck, BookOpen, GraduationCap, CheckCircle2, Heart } from 'lucid
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-slate-950 text-slate-300 border-t border-slate-850 mt-auto pt-12 pb-8">
+    <footer className="bg-slate-900 text-slate-300 border-t border-slate-800 mt-auto pt-12 pb-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           {/* Brand Col */}
           <div className="md:col-span-1 space-y-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-sm">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-warm-orange">
                 <GraduationCap className="w-4 h-4" />
               </div>
               <span className="font-bold text-white text-lg tracking-tight">JobReady</span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Platform latihan mandiri wawancara kerja tatap muka kamera dan dialog audio AI untuk siswa SMK/SMA menuju dunia usaha dan industri (DUDI).
+              Platform latihan mandiri wawancara kerja tatap muka kamera dan dialog audio interaktif untuk siswa SMK/SMA menuju dunia usaha dan industri (DUDI).
             </p>
-            <div className="pt-1 flex items-center gap-2 text-[11px] text-emerald-400">
-              <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-              <span>100% Gratis & Privasi Terjaga</span>
+            <div className="pt-1 flex items-center gap-2 text-[11px] text-emerald-400 font-medium">
+              <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-emerald-400" />
+              <span>100% Bebas Biaya & Menjaga Privasi Siswa</span>
             </div>
           </div>
 

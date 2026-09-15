@@ -247,7 +247,7 @@ export const MirrorPracticePage: React.FC<MirrorPracticePageProps> = ({ onNaviga
       <div className="flex items-center justify-between gap-3 mb-4">
         <button
           onClick={() => onNavigate('home')}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-900 transition btn-bouncy cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Kembali ke Beranda</span>
@@ -255,7 +255,7 @@ export const MirrorPracticePage: React.FC<MirrorPracticePageProps> = ({ onNaviga
 
         <button
           onClick={() => onNavigate('interview')}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white text-xs font-black shadow-warm-orange btn-bouncy transition cursor-pointer"
         >
           <span>Lanjut ke Simulasi Wawancara Asli</span>
           <ArrowRight className="w-3.5 h-3.5" />
@@ -265,20 +265,20 @@ export const MirrorPracticePage: React.FC<MirrorPracticePageProps> = ({ onNaviga
       {/* Main Container */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         {/* LEFT / TOP: The Digital Mirror Viewport (7 Cols) */}
-        <div className="lg:col-span-7 bg-slate-900 rounded-3xl p-3 sm:p-4 text-white shadow-xl relative overflow-hidden flex flex-col">
+        <div className="lg:col-span-7 bg-slate-900 rounded-3xl p-3.5 sm:p-5 text-white shadow-soft border-2 border-indigo-300/40 relative overflow-hidden flex flex-col">
           {/* Eye Contact Guide Banner */}
-          <div className="relative z-20 flex items-center justify-between gap-2 px-3 py-1.5 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 text-xs mb-3">
+          <div className="relative z-20 flex items-center justify-between gap-2 px-3.5 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-xs mb-3">
             <div className="flex items-center gap-2">
               {/* Pulsing Eye-Contact Dot */}
               <span className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
               </span>
-              <span className="text-emerald-300 font-bold text-[11px]">
+              <span className="text-emerald-300 font-extrabold text-[11px]">
                 Target Kontak Mata
               </span>
             </div>
-            <span className="text-[11px] text-slate-300 hidden sm:inline">
+            <span className="text-[11px] text-slate-300 hidden sm:inline font-medium">
               Tatap ke arah titik ini (lensa kamera) saat berbicara
             </span>
           </div>
@@ -340,12 +340,12 @@ export const MirrorPracticePage: React.FC<MirrorPracticePageProps> = ({ onNaviga
           </div>
 
           {/* Controls Under Video */}
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+          <div className="mt-3.5 flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-1.5">
               <button
                 type="button"
                 onClick={toggleCamera}
-                className={`p-2 rounded-xl text-xs font-medium transition cursor-pointer ${
+                className={`p-2.5 rounded-full text-xs font-medium transition cursor-pointer btn-bouncy ${
                   cameraActive ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-red-500/30 text-red-300'
                 }`}
                 title={cameraActive ? 'Matikan Kamera' : 'Nyalakan Kamera'}
@@ -356,7 +356,7 @@ export const MirrorPracticePage: React.FC<MirrorPracticePageProps> = ({ onNaviga
               <button
                 type="button"
                 onClick={toggleMic}
-                className={`p-2 rounded-xl text-xs font-medium transition cursor-pointer ${
+                className={`p-2.5 rounded-full text-xs font-medium transition cursor-pointer btn-bouncy ${
                   micActive ? 'bg-white/10 hover:bg-white/20 text-white' : 'bg-red-500/30 text-red-300'
                 }`}
                 title={micActive ? 'Matikan Mikrofon' : 'Nyalakan Mikrofon'}
@@ -369,7 +369,7 @@ export const MirrorPracticePage: React.FC<MirrorPracticePageProps> = ({ onNaviga
             {!isRecording ? (
               <button
                 onClick={startRecording}
-                className="flex items-center gap-2 px-5 py-2 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white text-xs sm:text-sm font-bold shadow-lg transition-all cursor-pointer"
+                className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white text-xs sm:text-sm font-black shadow-warm-orange btn-bouncy transition-all cursor-pointer"
               >
                 <Play className="w-4 h-4 fill-white" />
                 <span>{hasRecorded ? 'Rekam Ulang (60s)' : 'Mulai Rekam Pitch (60s)'}</span>
@@ -377,7 +377,7 @@ export const MirrorPracticePage: React.FC<MirrorPracticePageProps> = ({ onNaviga
             ) : (
               <button
                 onClick={stopRecording}
-                className="flex items-center gap-2 px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs sm:text-sm font-bold border border-red-500/50 transition cursor-pointer"
+                className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-slate-800 hover:bg-slate-700 text-white text-xs sm:text-sm font-bold border border-red-500/50 btn-bouncy transition cursor-pointer"
               >
                 <Square className="w-4 h-4 fill-red-500 text-red-500" />
                 <span>Selesai Bicara ({recordingSeconds}s)</span>
@@ -389,21 +389,21 @@ export const MirrorPracticePage: React.FC<MirrorPracticePageProps> = ({ onNaviga
         {/* RIGHT: Practice Guide & Instant Feedback (5 Cols) */}
         <div className="lg:col-span-5 space-y-4">
           {/* Guide Card */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-5 shadow-xs space-y-3">
-            <div className="flex items-center gap-2 text-blue-700">
-              <VideoIcon className="w-5 h-5 text-blue-600" />
-              <h3 className="font-extrabold text-sm tracking-tight text-slate-900">
+          <div className="bg-white rounded-3xl border-2 border-amber-200/80 p-5 shadow-soft space-y-3">
+            <div className="flex items-center gap-2 text-orange-600">
+              <VideoIcon className="w-5 h-5 text-orange-500" />
+              <h3 className="font-black text-sm tracking-tight text-slate-900">
                 Latihan Elevator Pitch 60 Detik
               </h3>
             </div>
 
-            <p className="text-xs text-slate-600">
-              Mode ini dibuat agar kamu bebas membiasakan diri berbicara di depan kamera <strong>tanpa takut dinilai salah</strong>.
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Mode ini dibuat agar kamu bebas membiasakan diri berbicara di hadapan kamera <strong>tanpa takut dinilai salah</strong>.
             </p>
 
-            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 space-y-2">
-              <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">
-                Panduan 4 Poin Pembuka:
+            <div className="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 space-y-2">
+              <span className="text-[11px] font-black text-amber-950 uppercase tracking-wider block">
+                🎯 4 Poin Pembuka Bebas Canggung:
               </span>
               <ol className="text-xs text-slate-700 space-y-1.5 list-decimal list-inside font-medium">
                 <li>Sebutkan nama lengkap & jurusan SMK-mu</li>
@@ -415,41 +415,41 @@ export const MirrorPracticePage: React.FC<MirrorPracticePageProps> = ({ onNaviga
           </div>
 
           {/* Real-time Transcription or Post-Pitch Review */}
-          <div className="bg-white rounded-3xl border border-slate-200 p-5 shadow-xs space-y-3">
+          <div className="bg-white rounded-3xl border-2 border-amber-200/80 p-5 shadow-soft space-y-3">
             <h4 className="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center justify-between">
               <span>{isRecording ? 'Transkrip Suara Terdeteksi:' : 'Hasil Latihan Pitch:'}</span>
               {hasRecorded && !isRecording && (
-                <span className="text-emerald-700 font-semibold text-[11px] flex items-center gap-1">
+                <span className="text-emerald-700 font-black text-[11px] flex items-center gap-1">
                   <CheckCircle2 className="w-3.5 h-3.5" /> Selesai
                 </span>
               )}
             </h4>
 
             {isRecording ? (
-              <div className="min-h-[90px] p-3 rounded-2xl bg-blue-50/50 border border-blue-100 text-xs text-slate-800 leading-relaxed italic">
+              <div className="min-h-[90px] p-4 rounded-2xl bg-orange-50/50 border border-orange-200 text-xs text-slate-800 leading-relaxed italic">
                 {transcript ? transcript : 'Mendengarkan ucapanmu... Bicaralah dengan santai dan jelas.'}
               </div>
             ) : hasRecorded ? (
               <div className="space-y-3">
                 {/* Instant Metrics Badge */}
                 <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-2">
-                    <span className="text-[10px] text-slate-500 font-semibold block">Durasi</span>
+                  <div className="bg-orange-50/70 border border-orange-200 rounded-2xl p-2.5">
+                    <span className="text-[10px] text-orange-950 font-bold block">Durasi</span>
                     <span className="text-sm font-black text-slate-900">{durationSec}s</span>
                   </div>
-                  <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-2">
-                    <span className="text-[10px] text-slate-500 font-semibold block">Kecepatan</span>
-                    <span className="text-sm font-black text-blue-700">{estimatedWpm} WPM</span>
+                  <div className="bg-sky-50/70 border border-sky-200 rounded-2xl p-2.5">
+                    <span className="text-[10px] text-sky-950 font-bold block">Kecepatan</span>
+                    <span className="text-sm font-black text-sky-700">{estimatedWpm} WPM</span>
                   </div>
-                  <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-2">
-                    <span className="text-[10px] text-slate-500 font-semibold block">Gumaman</span>
-                    <span className={`text-sm font-black ${fillerCount > 2 ? 'text-amber-600' : 'text-emerald-600'}`}>
+                  <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-2.5">
+                    <span className="text-[10px] text-emerald-950 font-bold block">Gumaman</span>
+                    <span className={`text-sm font-black ${fillerCount > 2 ? 'text-amber-600' : 'text-emerald-700'}`}>
                       {fillerCount}x
                     </span>
                   </div>
                 </div>
 
-                <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 max-h-28 overflow-y-auto">
+                <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-700 max-h-28 overflow-y-auto">
                   <strong className="block text-[11px] text-slate-500 mb-1">Transkrip Lengkap:</strong>
                   {transcript || '(Transkrip suara belum terdeteksi, pastikan mikrofon aktif).'}
                 </div>
@@ -459,7 +459,7 @@ export const MirrorPracticePage: React.FC<MirrorPracticePageProps> = ({ onNaviga
                 </p>
               </div>
             ) : (
-              <div className="min-h-[80px] flex items-center justify-center text-center p-3 rounded-2xl bg-slate-50 border border-dashed border-slate-200 text-xs text-slate-400">
+              <div className="min-h-[80px] flex items-center justify-center text-center p-4 rounded-2xl bg-amber-50/40 border border-dashed border-amber-200 text-xs text-slate-500">
                 Tekan tombol "Mulai Rekam Pitch (60s)" untuk mencoba bicara di cermin.
               </div>
             )}

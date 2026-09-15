@@ -447,46 +447,46 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
       )}
 
       {/* Main question card */}
-      <div className={`rounded-2xl transition-all duration-300 p-6 sm:p-8 shadow-sm mb-5 relative ${
+      <div className={`rounded-3xl transition-all duration-300 p-6 sm:p-8 shadow-soft mb-5 relative ${
         isCriticalTime
           ? 'bg-white border-2 border-rose-500 animate-border-urgent ring-4 ring-rose-400/30 shadow-rose-200/50'
-          : 'bg-white border border-slate-200/90'
+          : 'bg-white border-2 border-amber-200/80'
       }`}>
         {/* Recruiter Persona Header */}
-        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-100 text-xs text-slate-500">
+        <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-amber-100 text-xs text-slate-500">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center font-bold text-xs">
-              <UserCheck className="w-4 h-4 text-blue-600" />
+            <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xs">
+              <UserCheck className="w-4 h-4 text-orange-600" />
             </div>
             <div>
-              <span className="font-semibold text-slate-800">Tim Penguji Rekrutmen Vokasi</span>
+              <span className="font-extrabold text-slate-800">Tim Asesor Rekrutmen Industri</span>
               <span className="text-slate-400 text-[11px] block sm:inline sm:ml-2 sm:before:content-['•'] sm:before:mr-2">
                 Simulasi Wawancara Kejuruan
               </span>
             </div>
           </div>
-          <span className="text-[11px] text-slate-400 font-medium hidden sm:block">
-            Standar DUDI
+          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-900 border border-amber-200 hidden sm:block">
+            Standar DUDI ⭐⭐⭐
           </span>
         </div>
 
-        <div className="flex items-start gap-3 mb-5">
-          <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm shrink-0 mt-0.5">
+        <div className="flex items-start gap-3.5 mb-5">
+          <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center font-black text-sm shrink-0 mt-0.5 shadow-warm-orange">
             {currentIndex + 1}
           </div>
           <div className="flex-1">
-            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug">
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 leading-snug">
               {question.question}
             </h3>
 
-            <div className="mt-2.5 flex items-center gap-2">
+            <div className="mt-3 flex items-center gap-2">
               <button
                 type="button"
                 onClick={handleSpeakQuestion}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer border ${
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer border btn-bouncy ${
                   isSpeakingQuestion
-                    ? 'bg-blue-600 text-white border-blue-600 animate-pulse'
-                    : 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+                    ? 'bg-orange-500 text-white border-orange-500 animate-pulse'
+                    : 'bg-orange-50 text-orange-700 border-orange-200 hover:bg-orange-100'
                 }`}
                 title="Dengarkan pembacaan pertanyaan dengan suara Bahasa Indonesia"
               >
@@ -502,10 +502,10 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           <button
             type="button"
             onClick={() => setShowTips(!showTips)}
-            className="flex items-center gap-1.5 text-xs font-semibold text-blue-700 hover:text-blue-800 transition cursor-pointer"
+            className="flex items-center gap-1.5 text-xs font-bold text-amber-800 hover:text-orange-600 transition cursor-pointer"
           >
-            <Lightbulb className="w-4 h-4 text-amber-500" />
-            <span>{showTips ? 'Sembunyikan Panduan Menjawab' : 'Lihat Petunjuk Rekruter'}</span>
+            <Lightbulb className="w-4 h-4 text-amber-500 fill-amber-400" />
+            <span>{showTips ? 'Sembunyikan Panduan Menjawab' : 'Lihat Petunjuk STAR Rekruter'}</span>
           </button>
 
           {showTips && (
@@ -628,9 +628,9 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
             <button
               type="submit"
               disabled={!isMinimumMet}
-              className={`w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm transition shadow-2xs ${
+              className={`w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3 rounded-full font-black text-sm transition ${
                 isMinimumMet
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer active:scale-[0.99]'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-warm-orange btn-bouncy cursor-pointer'
                   : 'bg-slate-200 text-slate-400 cursor-not-allowed'
               }`}
             >
