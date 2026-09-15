@@ -4,7 +4,7 @@ import { INTERVIEW_QUESTIONS } from '../../data/interview-questions';
 import { getScoreBadge, analyzeConfidenceAndFluency } from '../../lib/feedback-engine';
 import { 
   CheckCircle2, AlertTriangle, XCircle, RotateCcw, Copy, 
-  Check, ArrowRight, Eye, ChevronDown, ChevronUp, Award, 
+  Check, ArrowRight, ChevronDown, ChevronUp, Award, 
   Printer, FileText, History, Clock, BookmarkCheck,
   Activity, MessageSquareQuote, Zap, Brain, ThumbsUp, Volume2
 } from 'lucide-react';
@@ -17,7 +17,6 @@ interface InterviewSummaryProps {
   totalSessionDuration?: number;
   onRestart: () => void;
   onSelectOtherField: () => void;
-  onGoToColorblind?: () => void;
   onGoToHistory?: () => void;
 }
 
@@ -29,7 +28,6 @@ export const InterviewSummary: React.FC<InterviewSummaryProps> = ({
   totalSessionDuration = 0,
   onRestart,
   onSelectOtherField,
-  onGoToColorblind,
   onGoToHistory,
 }) => {
   const [copied, setCopied] = useState<boolean>(false);

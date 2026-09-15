@@ -1,7 +1,7 @@
 import React from 'react';
 import { PageView } from '../types';
 import { 
-  Video, ArrowRight, Eye, Camera, CheckCircle2, Check, Brain,
+  Video, ArrowRight, Camera, CheckCircle2, Check, Brain,
   Wrench, Network, UtensilsCrossed, Calculator, Users
 } from 'lucide-react';
 
@@ -54,15 +54,6 @@ export const Home: React.FC<HomeProps> = ({ onNavigate }) => {
             >
               <Camera className="w-4 h-4 text-slate-600" />
               <span>Mode Cermin (Latihan 60s)</span>
-            </button>
-
-            <button
-              onClick={() => onNavigate('colorblind')}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-sm sm:text-base border border-slate-200 shadow-2xs transition active:scale-98 cursor-pointer"
-              title="Tes buta warna Ishihara syarat kerja pabrik/bengkel"
-            >
-              <Eye className="w-4 h-4 text-slate-500" />
-              <span>Tes Buta Warna</span>
             </button>
           </div>
 

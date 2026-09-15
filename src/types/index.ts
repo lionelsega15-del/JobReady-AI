@@ -1,4 +1,4 @@
-export type PageView = 'home' | 'interview' | 'colorblind' | 'history' | 'mirror';
+export type PageView = 'home' | 'interview' | 'history' | 'mirror';
 
 export interface FillerWordOccurrence {
   word: string;

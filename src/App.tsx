@@ -5,7 +5,6 @@ import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { InterviewPage } from './pages/Interview';
 import { HistoryPage } from './pages/History';
-import { ColorblindTestPage } from './pages/ColorblindTest';
 import { MirrorPracticePage } from './pages/MirrorPractice';
 
 export function App() {
@@ -24,7 +23,6 @@ export function App() {
         {currentPage === 'home' && <Home onNavigate={setCurrentPage} />}
         {currentPage === 'interview' && <InterviewPage onNavigate={setCurrentPage} />}
         {currentPage === 'history' && <HistoryPage onNavigate={setCurrentPage} />}
-        {currentPage === 'colorblind' && <ColorblindTestPage onNavigate={setCurrentPage} />}
         {currentPage === 'mirror' && <MirrorPracticePage onNavigate={setCurrentPage} />}
       </main>
 
